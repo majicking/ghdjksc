@@ -331,7 +331,9 @@ public class MineFragment extends Fragment {
         daipingjia = (TextView) viewLayout.findViewById(R.id.daipingjia_num);
         tuikuang = (TextView) viewLayout.findViewById(R.id.tuikuan_num);
         viewLayout.findViewById(R.id.twocode).setOnClickListener(v -> {
-            showPopWindow();
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                showPopWindow();
+            }
         });
     }
 

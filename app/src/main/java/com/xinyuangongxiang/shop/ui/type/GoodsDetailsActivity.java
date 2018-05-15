@@ -1,63 +1,23 @@
 package com.xinyuangongxiang.shop.ui.type;
 
 
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.net.Uri;
-
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.readystatesoftware.viewbadger.BadgeView;
-import com.xinyuangongxiang.shop.common.StringUtils;
-
-import com.xinyuangongxiang.shop.MainFragmentManager;
 import com.xinyuangongxiang.shop.R;
-
 import com.xinyuangongxiang.shop.adapter.VpAdapter;
-import com.xinyuangongxiang.shop.bean.GoodsDetails;
-import com.xinyuangongxiang.shop.bean.StoreInfo;
-import com.xinyuangongxiang.shop.common.AnimateFirstDisplayListener;
-import com.xinyuangongxiang.shop.common.Constants;
 import com.xinyuangongxiang.shop.common.DialogHelper;
 import com.xinyuangongxiang.shop.common.MyExceptionHandler;
-import com.xinyuangongxiang.shop.common.MyShopApplication;
-import com.xinyuangongxiang.shop.common.ShopHelper;
-import com.xinyuangongxiang.shop.common.SystemHelper;
-import com.xinyuangongxiang.shop.common.T;
-import com.xinyuangongxiang.shop.custom.NCGoodsSpecPopupWindow;
-import com.xinyuangongxiang.shop.http.RemoteDataHandler;
-import com.xinyuangongxiang.shop.http.ResponseData;
-import com.xinyuangongxiang.shop.ncinterface.INCOnNumModify;
-import com.xinyuangongxiang.shop.ncinterface.INCOnStringModify;
-import com.xinyuangongxiang.shop.newpackage.ProgressDialog;
-
-import org.apache.http.HttpStatus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 
 
 /**

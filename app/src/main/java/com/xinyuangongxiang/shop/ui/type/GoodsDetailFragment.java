@@ -546,160 +546,157 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         final long starttime = System.currentTimeMillis();
         progressDialog = ProgressDialog.showLoadingProgress(getActivity(), "正在加载中...");
         progressDialog.show();
-        RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
+        RemoteDataHandler.asyncDataStringGet(url, data -> {
 
 //                viewList.clear();
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String goods_info = obj.getString("goods_info");// 商品信息
-                        GoodsDetails goodsBean = GoodsDetails.newInstanceList(goods_info);
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject obj = new JSONObject(json);
+                    String goods_info = obj.getString("goods_info");// 商品信息
+                    GoodsDetails goodsBean = GoodsDetails.newInstanceList(goods_info);
 
-                        //显示商品信息
-                        showGoodsInfo(goodsBean);
+                    //显示商品信息
+                    showGoodsInfo(goodsBean);
 
-                        //控制收藏按钮状态
-                        String is_favorate = obj.optString("is_favorate");
-                        if (is_favorate.equals("true")) {
-                            //已收藏
-                            btnGoodsFav.setSelected(true);
-                        } else {
-                            //未收藏
-                            btnGoodsFav.setSelected(false);
-                        }
+                    //控制收藏按钮状态
+                    String is_favorate = obj.optString("is_favorate");
+                    if (is_favorate.equals("true")) {
+                        //已收藏
+                        btnGoodsFav.setSelected(true);
+                    } else {
+                        //未收藏
+                        btnGoodsFav.setSelected(false);
+                    }
 
-                        //显示商品图片
-                        String goods_image = obj.getString("goods_image"); //商品图片
-                        String video_path = obj.optString("video_path", ""); //视频资源
+                    //显示商品图片
+                    String goods_image = obj.getString("goods_image"); //商品图片
+                    String video_path = obj.optString("video_path", ""); //视频资源
 //                        String video_path = "http://111.13.140.18/youku/656DBB491E357404DE463625/030008010057A045083F76003E8803A37A0BEB-7024-91AF-34FC-A52B56C8E4A2.mp4"; //视频资源
 //                        Logger.d(video_path);
-                        imageList.clear();
-                        if (com.xinyuangongxiang.shop.common.StringUtils.isEmpty(video_path)) {
-                            isAudio = false;
-                        } else {
-                            isAudio = true;
-                            imageList.add(video_path);
-                        }
-
-                        imageList.addAll(Arrays.asList(goods_image.split(",")));
-                        if (com.xinyuangongxiang.shop.common.StringUtils.isEmpty(video_path)) {
-                            goodsWapUrl = imageList.get(0);
-                        } else {
-                            goodsWapUrl = imageList.get(1);
-                        }
-                        initHeadImage();
-
-                        //显示促销
-                        String mansong_info = obj.getString("mansong_info");// 满即送信息
-                        String gift_array = obj.getString("gift_array");// 赠品数组
-                        showPromotion(mansong_info, gift_array);
-
-                        //店铺代金券
-                        String storeVoucher = obj.optString("voucher");
-                        initStoreVoucher(storeVoucher);
-
-                        //显示配送区域
-                        String goodsHairInfoJson = obj.getString("goods_hair_info");
-                        GoodsHairInfo goodsHairInfo = GoodsHairInfo.newInstance(goodsHairInfoJson);
-                        myApplication.setAreaName("全国");
-                        showHairInfo(goodsHairInfo);
-
-                        //显示服务信息
-                        String contractString = goodsBean.getContractlist();
-                        ArrayList<ContractDetail> contractDetailArrayList = ContractDetail.newInstanceList(contractString);
-                        if (contractDetailArrayList.size() > 0) {
-                            ContractDetailGridViewAdapter contractDetailGridViewAdapter = new ContractDetailGridViewAdapter(getActivity());
-                            contractDetailGridViewAdapter.setContractList(contractDetailArrayList);
-                            gvContract.setAdapter(contractDetailGridViewAdapter);
-                            llService.setVisibility(View.VISIBLE);
-                        } else {
-                            llService.setVisibility(View.GONE);
-                        }
-
-                        //店铺信息
-                        String store_info = obj.getString("store_info");// 店铺信息
-                        StoreInfo storeInfo = StoreInfo.newInstanceList(store_info);
-                        tvService.setText("由“" + storeInfo.getStoreName() + "”销售和发货，并享受售后服务");
-                        if (storeInfo.getIsOwnShop().equals("1")) {
-                            //自营店铺不显示店铺信息
-                            llStoreInfo.setVisibility(View.GONE);
-                        } else {
-                            tvStoreName.setText(storeInfo.getStoreName());
-                            store_id = storeInfo.getStoreId();
-                            storeName = storeInfo.getStoreName();
-                            JSONObject creditObj = new JSONObject(storeInfo.getStoreCredit());
-                            String desc = creditObj.getString("store_desccredit");
-                            JSONObject objDesc = new JSONObject(desc);
-                            setStoreCredit(objDesc.getString("credit"), objDesc.getString("percent_class"), tvStoreDescPoint, tvStoreDescText);
-                            String service = creditObj.getString("store_servicecredit");
-                            JSONObject objService = new JSONObject(service);
-                            setStoreCredit(objService.getString("credit"), objService.getString("percent_class"), tvStoreServicePoint, tvStoreServiceText);
-                            String delivery = creditObj.getString("store_deliverycredit");
-                            JSONObject objDelivery = new JSONObject(delivery);
-                            setStoreCredit(objDelivery.getString("credit"), objDelivery.getString("percent_class"), tvStoreDeliveryPoint, tvStoreDeliveryText);
-                            llStoreInfo.setVisibility(View.VISIBLE);
-                        }
-                        t_id = storeInfo.getMemberId();
-                        t_name = storeInfo.getMemberName();
-
-                        //评价
-                        String goodsEvaluateInfoString = obj.getString("goods_evaluate_info");
-                        JSONObject goodsEvaluateInfoObj = new JSONObject(goodsEvaluateInfoString);
-                        tvEvaluateGoodPercent.setText("好评率 " + goodsEvaluateInfoObj.getString("good_percent") + "%");
-                        tvEvaluateCount.setText("(" + goodsEvaluateInfoObj.getString("all") + "人评价)");
-                        String goodsEvalListString = obj.getString("goods_eval_list");
-                        ArrayList<GoodsEvaluateInfo> goodsEvaluateInfoList = GoodsEvaluateInfo.newInstanceList(goodsEvalListString);
-                        if (goodsEvaluateInfoList.size() > 0) {
-                            llEvaluateList.setVisibility(View.VISIBLE);
-                            goodsEvaluateListViewAdapter.setList(goodsEvaluateInfoList);
-                            goodsEvaluateListViewAdapter.notifyDataSetChanged();
-                        } else {
-                            llEvaluateList.setVisibility(View.GONE);
-                        }
-
-                        //显示推荐商品列表
-                        String goods_commend_list = obj.getString("goods_commend_list");
-                        ArrayList<CommendList> commendLists = CommendList.newInstanceList(goods_commend_list);
-                        commendAdapter.setCommendLists(commendLists);
-                        commendAdapter.notifyDataSetChanged();
-
-                        //虚拟商品
-                        if (is_virtual.equals("1")) {
-                            //虚拟商品不显示配送区域
-                            llHairInfo.setVisibility(View.GONE);
-                            //虚拟商品显示商家分店地址
-                            loadStoreO2oInfo();
-                        } else {
-                            llStoreO2o.setVisibility(View.GONE);
-                        }
-
-
-                        if (!is_virtual.equals("1")) {
-                            ifCanBuyS();
-                        } else {
-                            ifCanBuyV();
-                        }
-
-                        //初始化规格弹出窗口
-                        initSpec(goodsBean, obj.getString("spec_list"));
-                        goodsDetails = goodsBean;
-                        specList = obj.getString("spec_list");
-
-
-                        svMain.smoothScrollTo(0, 0);
-                    } catch (Exception e) {
-                        ProgressDialog.dismissDialog(progressDialog);
-                        e.printStackTrace();
+                    imageList.clear();
+                    if (com.xinyuangongxiang.shop.common.StringUtils.isEmpty(video_path)) {
+                        isAudio = false;
+                    } else {
+                        isAudio = true;
+                        imageList.add(video_path);
                     }
-                } else {
+
+                    imageList.addAll(Arrays.asList(goods_image.split(",")));
+                    if (com.xinyuangongxiang.shop.common.StringUtils.isEmpty(video_path)) {
+                        goodsWapUrl = imageList.get(0);
+                    } else {
+                        goodsWapUrl = imageList.get(1);
+                    }
+                    initHeadImage();
+
+                    //显示促销
+                    String mansong_info = obj.getString("mansong_info");// 满即送信息
+                    String gift_array = obj.getString("gift_array");// 赠品数组
+                    showPromotion(mansong_info, gift_array);
+
+                    //店铺代金券
+                    String storeVoucher = obj.optString("voucher");
+                    initStoreVoucher(storeVoucher);
+
+                    //显示配送区域
+                    String goodsHairInfoJson = obj.getString("goods_hair_info");
+                    GoodsHairInfo goodsHairInfo = GoodsHairInfo.newInstance(goodsHairInfoJson);
+                    myApplication.setAreaName("全国");
+                    showHairInfo(goodsHairInfo);
+
+                    //显示服务信息
+                    String contractString = goodsBean.getContractlist();
+                    ArrayList<ContractDetail> contractDetailArrayList = ContractDetail.newInstanceList(contractString);
+                    if (contractDetailArrayList.size() > 0) {
+                        ContractDetailGridViewAdapter contractDetailGridViewAdapter = new ContractDetailGridViewAdapter(getActivity());
+                        contractDetailGridViewAdapter.setContractList(contractDetailArrayList);
+                        gvContract.setAdapter(contractDetailGridViewAdapter);
+                        llService.setVisibility(View.VISIBLE);
+                    } else {
+                        llService.setVisibility(View.GONE);
+                    }
+
+                    //店铺信息
+                    String store_info = obj.getString("store_info");// 店铺信息
+                    StoreInfo storeInfo = StoreInfo.newInstanceList(store_info);
+                    tvService.setText("由“" + storeInfo.getStoreName() + "”销售和发货，并享受售后服务");
+                    if (storeInfo.getIsOwnShop().equals("1")) {
+                        //自营店铺不显示店铺信息
+                        llStoreInfo.setVisibility(View.GONE);
+                    } else {
+                        tvStoreName.setText(storeInfo.getStoreName());
+                        store_id = storeInfo.getStoreId();
+                        storeName = storeInfo.getStoreName();
+                        JSONObject creditObj = new JSONObject(storeInfo.getStoreCredit());
+                        String desc = creditObj.getString("store_desccredit");
+                        JSONObject objDesc = new JSONObject(desc);
+                        setStoreCredit(objDesc.getString("credit"), objDesc.getString("percent_class"), tvStoreDescPoint, tvStoreDescText);
+                        String service = creditObj.getString("store_servicecredit");
+                        JSONObject objService = new JSONObject(service);
+                        setStoreCredit(objService.getString("credit"), objService.getString("percent_class"), tvStoreServicePoint, tvStoreServiceText);
+                        String delivery = creditObj.getString("store_deliverycredit");
+                        JSONObject objDelivery = new JSONObject(delivery);
+                        setStoreCredit(objDelivery.getString("credit"), objDelivery.getString("percent_class"), tvStoreDeliveryPoint, tvStoreDeliveryText);
+                        llStoreInfo.setVisibility(View.VISIBLE);
+                    }
+                    t_id = storeInfo.getMemberId();
+                    t_name = storeInfo.getMemberName();
+
+                    //评价
+                    String goodsEvaluateInfoString = obj.getString("goods_evaluate_info");
+                    JSONObject goodsEvaluateInfoObj = new JSONObject(goodsEvaluateInfoString);
+                    tvEvaluateGoodPercent.setText("好评率 " + goodsEvaluateInfoObj.getString("good_percent") + "%");
+                    tvEvaluateCount.setText("(" + goodsEvaluateInfoObj.getString("all") + "人评价)");
+                    String goodsEvalListString = obj.getString("goods_eval_list");
+                    ArrayList<GoodsEvaluateInfo> goodsEvaluateInfoList = GoodsEvaluateInfo.newInstanceList(goodsEvalListString);
+                    if (goodsEvaluateInfoList.size() > 0) {
+                        llEvaluateList.setVisibility(View.VISIBLE);
+                        goodsEvaluateListViewAdapter.setList(goodsEvaluateInfoList);
+                        goodsEvaluateListViewAdapter.notifyDataSetChanged();
+                    } else {
+                        llEvaluateList.setVisibility(View.GONE);
+                    }
+
+                    //显示推荐商品列表
+                    String goods_commend_list = obj.getString("goods_commend_list");
+                    ArrayList<CommendList> commendLists = CommendList.newInstanceList(goods_commend_list);
+                    commendAdapter.setCommendLists(commendLists);
+                    commendAdapter.notifyDataSetChanged();
+
+                    //虚拟商品
+                    if (is_virtual.equals("1")) {
+                        //虚拟商品不显示配送区域
+                        llHairInfo.setVisibility(View.GONE);
+                        //虚拟商品显示商家分店地址
+                        loadStoreO2oInfo();
+                    } else {
+                        llStoreO2o.setVisibility(View.GONE);
+                    }
+
+
+                    if (!is_virtual.equals("1")) {
+                        ifCanBuyS();
+                    } else {
+                        ifCanBuyV();
+                    }
+
+                    //初始化规格弹出窗口
+                    initSpec(goodsBean, obj.getString("spec_list"));
+                    goodsDetails = goodsBean;
+                    specList = obj.getString("spec_list");
+
+
+                    svMain.smoothScrollTo(0, 0);
+                } catch (Exception e) {
                     ProgressDialog.dismissDialog(progressDialog);
-                    ShopHelper.showApiError(getActivity(), json);
+                    e.printStackTrace();
                 }
+            } else {
                 ProgressDialog.dismissDialog(progressDialog);
+                ShopHelper.showApiError(getActivity(), json);
             }
+            ProgressDialog.dismissDialog(progressDialog);
         });
     }
 
@@ -1136,14 +1133,14 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             case R.id.buyStepID:
-
-                if (flag == false) {
-                    ShopHelper.showApiError(getActivity(), errorMsg);
-                } else {
-                    initSpec(goodsDetails, specList);
-                    pwSpec.showPopupWindow();
+                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                    if (flag == false) {
+                        ShopHelper.showApiError(getActivity(), errorMsg);
+                    } else {
+                        initSpec(goodsDetails, specList);
+                        pwSpec.showPopupWindow();
+                    }
                 }
-
                 break;
 
             case R.id.specNameID:
@@ -1307,6 +1304,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         myApplication = (MyShopApplication) getActivity().getApplicationContext();
+        ifCanBuyS();
     }
 
 
