@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/nc_white"
+    android:layout_height="match_parent"
+    android:id="@+id/ll_all_zhibao" >
+
+    <RelativeLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:background="@color/nc_black"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:id="@+id/zhibao_box">
+
+
+        <SurfaceView
+            android:id="@+id/camera_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <!-- status-->
+        <LinearLayout
+            android:id="@+id/app_video_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/app_video_status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/live_error"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_all_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="0px">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp"
+                android:id="@+id/ll_head">
+
+                <ImageView
+                    android:id="@+id/zhibo_head"
+                    android:layout_width="37dp"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="6dp" />
+
+                <TextView
+                    android:id="@+id/zhibo_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="13dp"
+                    android:textColor="@color/nc_white"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:lines="1"
+                    android:text=""/>
+                <ImageView
+                    android:id="@+id/zhibo_share"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/zhibo_share"/>
+                <ImageView
+                    android:id="@+id/zhibo_close"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="6dp"
+                    android:background="@drawable/zhibo_back"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_look"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp"
+                android:layout_below="@+id/ll_head"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="200dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:layout_height="22dp"
+                    android:background="@android:color/transparent"/>
+
+                <TextView
+                    android:id="@+id/zhibo_look_man"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:textColor="@color/nc_white"
+                    android:textSize="11dp"
+                    android:layout_marginLeft="11dp"
+                    android:text=" 人观看"
+                    android:lines="1"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/corners_bg"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/app_video_replay"
+                android:gravity="center"
+                android:visibility="gone"
+                android:background="#B3616161"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/app_video_replay_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_play_circle_outline_white_36dp"
+                    />
+            </LinearLayout>
+
+            <!-- loading-->
+            <ProgressBar
+                android:id="@+id/app_video_loading"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:indeterminateBehavior="repeat"
+                android:indeterminateOnly="true"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/ll_toke_layout"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:layout_above="@+id/app_video_bottom_box"
+                android:layout_toRightOf="@+id/app_video_replay"
+                android:layout_toEndOf="@+id/app_video_replay">
+
+                <ListView
+                    android:id="@+id/recycler_take"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:layout_height="wrap_content"
+                    android:divider="@null"
+                    android:scrollbars="none"
+                    android:dividerHeight="0dp"
+                    android:listSelector="@android:color/transparent"
+                    android:background="@android:color/transparent"/>
+
+            </LinearLayout>
+
+            <com.xinyuangongxiang.shop.lib.popupwindow.BubbleRelativeLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/brlBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:cornerRadius="10"
+                app:halfBaseOfLeg="18dp"
+                android:visibility="gone"
+                app:shadowColor="#64000000"
+                app:strokeWidth="5"
+                android:layout_above="@+id/app_video_bottom_box"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+
+            </com.xinyuangongxiang.shop.lib.popupwindow.BubbleRelativeLayout>
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/ll_shrutext"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:visibility="gone"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/et_take"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:focusable="true"-->
+                    <!--android:imeOptions="actionSend"-->
+                    <!--android:hint="输入点什么..."/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_send"-->
+                    <!--android:layout_width="55dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:textColor="@color/nc_white"-->
+                    <!--android:text="发送"-->
+                    <!--android:gravity="center"-->
+                    <!--android:background="#7F7F7F"-->
+                    <!--android:layout_gravity="center"/>-->
+            <!--</LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/app_video_bottom_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:padding="8dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+
+                <RelativeLayout
+                    android:id="@+id/llOrderNew"
+                    android:layout_width="52dp"
+                    android:layout_height="35dp">
+
+                    <TextView
+                        android:id="@+id/zhibo_goods"
+                        android:layout_width="52dp"
+                        android:layout_height="35dp"
+                        android:text="商品"
+                        android:gravity="center"
+                        android:textSize="12dp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/corners_bg_wr"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <TextView
+                        android:id="@+id/daifukuang_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:textSize="10dp"
+                        android:textColor="@color/nc_white"
+                        android:gravity="center"
+                        android:layout_marginTop="-5dp"
+                        android:background="@drawable/bg_num_yello"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/zhibo_et_talk"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="13dp"
+                    android:textColor="@color/nc_white"
+                    android:layout_weight="1"
+                    android:hint="   回复内容？"
+                    android:layout_gravity="center_horizontal"
+                    android:textColorHint="@color/nc_white"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/corners_bg"/>
+
+
+                <ImageView
+                    android:id="@+id/zhibo_zam"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/popupwindowtest"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/nc_black"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:text="全部商品"/>
+
+            <TextView
+                android:id="@+id/good_fenxiao_mun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="#ff0183"
+                android:text="10"/>
+
+        </LinearLayout>
+        <TextView
+            style="@style/NCLine1"  />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/goods_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

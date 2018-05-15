@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nc_bg"
+    android:orientation="vertical"
+    tools:context=".newpackage.HealthActivity">
+
+    <include layout="@layout/app_common_header" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/nc_green">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="45dp"
+            android:src="@drawable/mcc_20_b" />
+
+        <TextView
+            android:id="@+id/textview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:text="我的健康豆"
+            android:textColor="@color/app_white" />
+
+        <TextView
+            android:id="@+id/healthnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textview1"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:text="0.00个"
+            android:textColor="@color/app_white" />
+    </RelativeLayout>
+
+    <com.xinyuangongxiang.shop.custom.XListView
+        android:id="@+id/xlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.xinyuangongxiang.shop.custom.XListView>
+</LinearLayout>

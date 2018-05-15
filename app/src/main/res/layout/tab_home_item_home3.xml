@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg_color"
+    android:orientation="vertical"
+    tools:context=".CrashActivity" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/TextViewTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="#6D6D6D"
+                    android:visibility="gone"
+                    android:textSize="15dp" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/cart_listview_gap" />
+            </LinearLayout>
+
+            <com.xinyuangongxiang.shop.custom.MyGridView
+                android:id="@+id/gridview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:horizontalSpacing="1dp"
+                android:listSelector="@null"
+                android:numColumns="2"
+                android:verticalSpacing="1dp" />
+
+</LinearLayout>

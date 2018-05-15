@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nc_bg"
+    android:orientation="vertical">
+
+    <!-- 头部 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/nc_title_bg">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:src="@drawable/nc_icon_back" />
+
+
+            <LinearLayout
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@color/nc_white">
+
+                <Button
+                    android:padding="1dp"
+                    android:id="@+id/realorder"
+                    android:layout_width="100dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/nc_combin_btn_left_bg"
+                    android:text="实物订单"
+                    android:textColor="@drawable/nc_btn_text_color" />
+
+                <Button
+                    android:padding="2dp"
+                    android:id="@+id/virtualorder"
+                    android:layout_width="100dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/nc_combin_btn_right_bg"
+                    android:text="虚拟订单"
+                    android:textColor="@drawable/nc_btn_text_color" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+    <!-- 搜索 -->
+    <LinearLayout
+        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@drawable/nc_bg_border_bottom"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <EditText
+            android:id="@+id/editsearchorder"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/nc_bg"
+            android:hint="输入商品标题或订单号进行搜索"
+            android:textColorHint="@color/nc_background_transport"
+            android:padding="3dp"
+            android:textColor="@color/nc_text"
+            android:textSize="14dp" />
+
+        <ImageButton
+            android:id="@+id/searchorder"
+            style="@style/NCImageButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/nc_icon_search" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab"
+        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/app_red"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/app_red"
+        app:tabTextColor="#000000" />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

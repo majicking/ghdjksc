@@ -1,0 +1,1 @@
+include ':app', ':ijkplayer-java', ':giraffeplayer', ':AlivcBubblingAnimationViewRelease1.0.0', ':AlivcLiveRecord-release1.0.0'

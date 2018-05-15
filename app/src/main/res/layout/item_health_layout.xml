@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/nc_white"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/tvDesc"
+        style="@style/NCText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/tvSn"
+        style="@style/NCText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/tvAvAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:textColor="@color/nc_red"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tvAddTimeText"
+        style="@style/NCText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:textSize="12dp" />
+</RelativeLayout>

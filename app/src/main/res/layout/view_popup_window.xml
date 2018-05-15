@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/nc_activity_write"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll_takephone"
+        android:layout_width="105dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"  >
+
+        <ImageView
+            android:id="@+id/iv_takephone"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="5dp"
+            android:state_pressed="true"
+            android:background="@drawable/view_popup_windown_item_bg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/nc_black"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:text="翻转"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="105dp"
+        android:visibility="gone"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"  >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/jingxiang_no"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/nc_black"
+            android:layout_gravity="center_vertical"
+            android:text="翻转"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_meiyan"
+        android:layout_width="105dp"
+        android:layout_height="35dp"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"  >
+
+        <ImageView
+            android:id="@+id/iv_meiyan"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:clickable="true"
+            android:background="@drawable/meiyan_no"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/nc_black"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:text="美颜"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_shanguandeng"
+        android:layout_width="105dp"
+        android:layout_height="35dp"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"  >
+
+        <ImageView
+            android:id="@+id/iv_shanguandeng"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/shanguandeng_no"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/nc_black"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:text="闪光灯"/>
+
+    </LinearLayout>
+
+</LinearLayout>

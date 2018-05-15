@@ -1,0 +1,204 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'android-apt'
+def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
+android {
+    /**
+     enable： 启用ABI拆分机制
+     exclude： 默认情况下所有ABI都包括在内，你可以移除一些ABI。
+     include：指明要包含哪些ABI
+     reset()：重置ABI列表为只包含一个空字符串（这可以实现，在与include一起使用来可以表示要使用哪一个ABI，而不是要忽略哪一些ABI）
+     universalApk：指示是否打包一个通用版本（包含所有的ABI）。默认值为 false。
+     例如：我们项目主要提供xxhdpi的图片资源，而项目中引用到了很多第三方库(v7、v4、google Service 等Libarry资源)我们无法使用到，
+     那么我们可以通过这种方法来去除那些资源。这样我们的APK又减小了非常多。*/
+    /*  splits {
+          abi {
+              enable true
+              reset()
+              include "armeabi", "armeabi-v7a"
+              universalApk true
+          }
+      }*/
+
+    signingConfigs {
+        debug {
+        }
+        release {
+            storeFile file("keystore.jks")//这个文件需要放在modele所在根目录下
+            keyAlias "key"
+            keyPassword "shopnc"
+            storePassword "shopnc"
+        }
+
+    }
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        applicationId "com.xinyuangongxiang.shop"
+        versionCode 1
+        versionName "1.0.0"
+        multiDexEnabled true
+        flavorDimensions "versionCode"
+        buildConfigField "String", "PROTOCOL", '"http://"'
+//        47.104.66.170
+//        http://192.168.1.252/wap/
+//        buildConfigField "String", "HOST", '"192.168.1.252"'
+//        buildConfigField "String", "WAP_URL", '"192.168.1.252/wap/"'
+//        buildConfigField "String", "IM_HOST", '"192.168.1.252:33"'
+
+        /* buildConfigField "String", "HOST", '"47.104.66.170"'
+         buildConfigField "String", "WAP_URL", '"47.104.66.170/wap/"'
+         buildConfigField "String", "IM_HOST", '"47.104.66.170:8090"'*/
+
+        buildConfigField "String", "HOST", '"www.guohanhealth.com"'
+        buildConfigField "String", "WAP_URL", '"www.guohanhealth.com/wap/"'
+        buildConfigField "String", "IM_HOST", '"www.guohanhealth.com:33"'
+
+        buildConfigField "String", "PORT", '"80"'
+        buildConfigField "String", "APP", '"/mobile"'
+        resValue "string", "app_name", "国翰大健康"
+
+        manifestPlaceholders.put("UMENG_APPKEY", "566e3d5167e58e2442001aee")
+        manifestPlaceholders.put("QQ_APP_ID", "1106827816")
+
+        buildConfigField "String", "WX_APP_ID", '"wx5eb3be4a208fa171"'
+        buildConfigField "String", "WX_APP_SECRET", '"0d73c4852ffd9745bd74e33bf725b0d2"'
+        buildConfigField "String", "WEIBO_APP_KEY", '"3821500010"'
+        buildConfigField "String", "WEIBO_APP_SECRET", '"1ed988c7770d20a09218584ca8a3ed3b"'
+        buildConfigField "String", "QQ_APP_ID", '"1106827816"'
+        buildConfigField "String", "QQ_APP_KEY", '"bqZ64PGbWvu3otQo"'
+
+        resValue "string", "more_aboutus_appname", "国翰大健康 Android客户端"
+        resValue "string", "more_aboutus_version", "版本：3.1.0"
+        resValue "string", "app_copyright", "Copyright © 2007–2016"
+        resValue "string", "app_copreserved", "天津市网城天创科技有限责任公司, All Rights Reserved"
+
+        ndk {
+//            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
+
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    productFlavors {
+        google {
+
+        }
+        baidu {
+
+        }
+    }
+    productFlavors.all { flavor ->
+        manifestPlaceholders.put("UMENG_CHANNEL_VALUE", name)
+    }
+
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            zipAlignEnabled false
+//            shrinkResources true  //删除无用资源
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "华翰商城${defaultConfig.versionName}_${buildTime()}_${variant.productFlavors[0].name}.apk"
+                }
+            }
+        }
+        debug {
+            signingConfig signingConfigs.debug
+
+        }
+
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.android.support:recyclerview-v7:22.+'
+    api 'com.android.support:support-v4:23.0.1'
+    api 'com.android.support:cardview-v7:23.1.1'
+    api 'com.android.support:design:23.4.0'
+    api files('libs/barcode_core.jar')
+    api files('libs/ormlite-android-4.48.jar')
+    api files('libs/ormlite-core-4.48.jar')
+    api files('libs/socketio.jar')
+    api files('libs/universal-image-loader-1.9.3.jar')
+    api files('libs/WebSocket.jar')
+    api files('libs/httpmime-4.1.3.jar')
+    api files('libs/mta-sdk-1.6.2.jar')
+    api files('libs/SocialSDK_WeiXin_1.jar')
+    api files('libs/glide-3.6.1.jar')
+    api files('libs/gson-2.2.1.jar')
+    api files('libs/okhttputils.jar')
+    api files('libs/android-viewbadger.jar')
+    api files('libs/fastjson-1.2.7.jar')
+    api files('libs/baidumapapi_v3_5_0.jar')
+    api files('libs/locSDK_5.2.jar')
+    api files('libs/pushservice-5.0.0.66.jar')
+    api files('libs/alivc-player-2.1.0.jar')
+    api files('libs/httpclient-4.2.5.jar')
+    api files('libs/httpcore-4.2.4.jar')
+    //    api files('libs/alipaySdk-20180403.jar')
+    api 'org.apache.commons:commons-lang3:3.4'
+    api 'com.squareup.okhttp:okhttp:2.4.0'
+    api 'com.squareup.okio:okio:1.5.0'
+    /*log打印*/
+    api 'com.orhanobut:logger:1.11'
+    /*视频播放*/
+    api project(':giraffeplayer')
+    /*异常处理*/
+    api 'com.android.support:multidex:1.0.0'
+    /*广告图*/
+    api 'com.bigkoo:convenientbanner:2.0.5'
+    //    /*recyclerviewheader 控件*/
+    //    api 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
+    /*获取视频图片*/
+    api 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.11'
+    /*滚动播放*/
+    api 'com.github.danylovolokh:list-visibility-utils:0.2.0'
+    /*动画*/
+    api 'io.reactivex:rxandroid:1.1.0'
+    api project(':AlivcBubblingAnimationViewRelease1.0.0')
+    /**/
+    api project(':AlivcLiveRecord-release1.0.0')
+    //选择按钮
+    api 'com.zcw:togglebutton-library:1.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    api 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    implementation 'com.android.support:appcompat-v7:24.1.1'
+    //加载动画
+    api 'com.wang.avi:library:1.0.0'
+
+}

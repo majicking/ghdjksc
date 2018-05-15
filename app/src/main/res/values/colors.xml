@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 新版颜色 -->
+    <color name="nc_white">#FFFFFF</color>
+    <color name="nc_black">#000000</color>
+    <color name="nc_blue">#7BADEE</color>
+    <color name="nc_red">#ED5968</color>
+    <color name="nc_red_dark">#DB4453</color>
+    <color name="nc_green">#28B779</color>
+    <color name="nc_yellow">#FFFF00</color>
+    <color name="nc_pink">#EC87BF</color>
+    <color name="nc_orange">#FB6E52</color>
+    <color name="nc_purple">#AC92ED</color>
+    <color name="nc_bg">#F5F5F5</color>
+    <color name="nc_bg_light">#FCFCFC</color>
+    <color name="nc_bg_dark">#EEEEEE</color>
+    <color name="nc_btn_bg_dark">#DDDDDD</color>
+    <color name="nc_fg">#CCD1D9</color>
+    <color name="nc_text">#7F7F7F</color>
+    <color name="nc_text_dark">#555555</color>
+    <color name="nc_text_hint">#D5D5D5</color>
+    <color name="nc_border">#E3E3E3</color>
+    <color name="nc_border1">#E5E5E5</color>
+    <color name="nc_title_bg">#FFFFFF</color>
+    <color name="nc_btn_bg">#ED5968</color>
+    <color name="nc_background_transport">#99000000</color>
+    <color name="nc_white_transport">#E6FFFFFF</color>
+    <color name="nc_text_blue">#0080FF</color>
+    <color name="nc_activity_explain">#ECECEC</color>
+
+    <!-- 老版颜色 -->
+    <color name="app_red">#FF0000</color>
+    <color name="app_white">#FFFFFF</color>
+    <color name="app_gray">#C0C0C0</color>
+    <color name="app_black">#000000</color>
+    <color name="app_bg_color">#F0EFF4</color>
+    <color name="app_bg_w_color">#FFFFFF</color>
+    <color name="app_bg_h_color">#FAFAFA</color>
+    <color name="touming_bg_color">#00000000</color>
+    <color name="text_sole">#F00931</color>
+    <color name="text_tuangou">#FF8E31</color>
+    <color name="text_xianshi">#1BA2E1</color>
+    <color name="text_xuni">#7E64D4</color>
+    <color name="text_Fcode">#4081E2</color>
+    <color name="text_yuyue">#EA4646</color>
+    <color name="text_yushou">#2DBBA2</color>
+    <color name="black">#6D6D6D</color>
+    <color name="touming_color">#00000000</color>
+    <color name="ban_touming_color">#E0000000</color>
+    <color name="voucher_01">#FFB401</color>
+    <color name="voucher_02">#7AB900</color>
+    <color name="voucher_03">#7AB900</color>
+    <color name="voucher_04">#E53F39</color>
+    <color name="encode_view">#ffffffff</color>
+    <color name="possible_result_points">#c0ffbd21</color>
+    <!-- Android standard ICS color -->
+    <color name="result_minor_text">#ffc0c0c0</color>
+    <color name="result_points">#c099cc00</color>
+    <!-- Android standard ICS color -->
+    <color name="result_text">#ffffffff</color>
+    <color name="result_view">#b0000000</color>
+    <color name="status_text">#ffffffff</color>
+    <color name="viewfinder_laser">#ffcc0000</color>
+    <!-- Android standard ICS color -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="translucent">#00000000</color>
+    <color name="c7">#383838</color>
+    <color name="c9">#cc3333</color>
+</resources>

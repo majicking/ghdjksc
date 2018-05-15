@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/nc_bg"
+    tools:context=".newpackage.PredAddFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"></RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+
+        <EditText
+            android:inputType="number|numberDecimal"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/app_gray"
+            android:id="@+id/rechargenumber"
+            android:hint="请输入充值金额"
+            android:textColorHint="@color/app_gray"
+            android:textCursorDrawable="@null"
+            android:background="@null"
+            android:padding="@dimen/dimen_2"
+            android:layout_marginRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+             />
+    </RelativeLayout>
+<View
+    android:layout_margin="15dp"
+    android:background="@color/app_gray"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"/>
+    <Button
+        android:id="@+id/recharge"
+        style="@style/NCCornerButtonMain"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:text="确认充值" />
+</LinearLayout>

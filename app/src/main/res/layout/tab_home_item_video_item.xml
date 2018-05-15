@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/nc_white"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_zhibao0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fengxiao_r_title_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:lines="1"
+                android:text=" "
+                android:textColor="#0B0B0B"
+                android:textSize="14dp" />
+
+            <ImageView
+                android:layout_width="39dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/zhibo" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fengxiao_r_brief_0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:padding="3dp"
+            android:text=" "
+            android:textColor="#989898"
+            android:textSize="12dp" />
+
+        <ImageView
+            android:id="@+id/fengxiao_r_img_0"
+            android:layout_width="113dp"
+            android:layout_height="113dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitXY"  />
+
+    </LinearLayout>
+
+
+</LinearLayout>

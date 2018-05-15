@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/nc_bg"
+    android:layout_height="match_parent"
+    tools:context=".newpackage.PredOtherFragment">
+
+    <!-- 列表空背景 -->
+
+    <com.xinyuangongxiang.shop.custom.MyListEmpty
+        android:id="@+id/myListEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        ></com.xinyuangongxiang.shop.custom.MyListEmpty>
+
+    <!-- 订单列表 -->
+    <com.xinyuangongxiang.shop.custom.XListView
+        android:id="@+id/xlistview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:fadingEdge="none"
+        android:scrollbars="none" />
+</FrameLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:background="@color/nc_white"
+    android:layout_height="65dp">
+
+        <com.xinyuangongxiang.shop.ui.fenxiao.MyEditText
+            android:id="@+id/zhibo_my_et_talk"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="13dp"
+            android:textColor="@color/nc_black"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/shape"
+            android:hint="说点什么..."
+            android:textColorHint="@color/nc_black"
+            android:singleLine="true"
+            android:focusable="true"
+            android:imeOptions="actionSend" />
+
+
+        <TextView
+            android:id="@+id/tv_zhibo_send"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:background="#7F7F7F"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textColor="@color/nc_white"
+            android:layout_gravity="center"
+            android:text="发送"/>
+
+
+</LinearLayout>

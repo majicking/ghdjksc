@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.xinyuangongxiang.shop.ui.store.newStoreInFoActivity">
+
+    <item
+        android:id="@+id/action_home"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/home_w"
+        android:title="首页" />
+
+    <item
+        android:id="@+id/action_cart"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:icon="@drawable/cart_w"
+        android:title="购物车"/>
+
+    <item
+        android:id="@+id/action_shop"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:icon="@drawable/member_w"
+        android:title="我的商城"/>
+
+    <item
+        android:id="@+id/action_message"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:icon="@drawable/message_w"
+        android:title="消息"/>
+</menu>
+
