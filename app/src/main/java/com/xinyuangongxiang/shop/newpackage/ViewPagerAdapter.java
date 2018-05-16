@@ -21,10 +21,24 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    public ViewPagerAdapter(Context context, FragmentManager fm,String[] titles) {
+    public ViewPagerAdapter(Context context, FragmentManager fm, String[] titles) {
         super(fm);
         this.context = context;
         this.titles = titles;
+        notifyDataSetChanged();
+    }
+
+    public void updataAdapter(List<Fragment> fragments, String[] titles) {
+
+        if (fragments != null && fragments.size() > 0)
+            this.fragments = fragments;
+        else{
+            this.fragments.clear();
+        }
+        if (titles != null && titles.length > 0)
+            this.titles = titles;
+        else
+            this.titles=null;
         notifyDataSetChanged();
     }
 

@@ -1,5 +1,6 @@
 package com.xinyuangongxiang.shop.ui.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -71,13 +72,13 @@ public class ModifyPaypwdStep2Activity extends BaseActivity {
     }
 
     public void btnSubmitClick(View view) {
-        if(!btnSubmit.isActivated()) {
+        if (!btnSubmit.isActivated()) {
             return;
         }
 
         String password = etPassword.getText().toString();
         String password1 = etPassword1.getText().toString();
-        if(!password.equals(password1)) {
+        if (!password.equals(password1)) {
             ShopHelper.showMessage(ModifyPaypwdStep2Activity.this, "两次密码输入不一致");
             return;
         }
@@ -91,6 +92,8 @@ public class ModifyPaypwdStep2Activity extends BaseActivity {
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
+                    if (getIntent().getStringExtra("type").equals(Constants.SETTINGPWD))
+                        setResult(Constants.BUNDERPAYPWD, new Intent().putExtra("pwd", password));
                     ShopHelper.showMessage(ModifyPaypwdStep2Activity.this, "支付密码修改成功");
                     finish();
                 } else {

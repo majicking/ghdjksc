@@ -99,7 +99,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
     private int goodsNum = 1; //商品数量
     private int goodsLimit = 0;
     private String is_fcode;//是否为F码商品 1是 0否
-    private String is_virtual;//是否为虚拟商品 1-是 0-否
+    private String is_virtual = "0";//是否为虚拟商品 1-是 0-否
     private String ifcart = "0";//购物车购买标志 1购物车 0不是
     private String store_id = "";//记录店铺ID
     private String storeName = "";//记录店铺名称
@@ -705,6 +705,9 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
      * 初始化规格
      */
     private void initSpec(final GoodsDetails goodsBean, final String specList) {
+        if (goodsBean == null) {
+            return;
+        }
         incOnNumModify = new INCOnNumModify() {
             @Override
             public void onModify(int num) {
@@ -1304,7 +1307,11 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         myApplication = (MyShopApplication) getActivity().getApplicationContext();
-        ifCanBuyS();
+        if (!is_virtual.equals("1")) {
+            ifCanBuyS();
+        } else {
+            ifCanBuyV();
+        }
     }
 
 

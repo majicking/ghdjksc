@@ -174,7 +174,7 @@ public class ModifyPaypwdStep1Activity extends BaseActivity {
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    startActivity(new Intent(ModifyPaypwdStep1Activity.this, ModifyPaypwdStep2Activity.class));
+                    startActivity(new Intent(ModifyPaypwdStep1Activity.this, ModifyPaypwdStep2Activity.class).putExtra("type",Constants.SETTINGPWD));
                     finish();
                 } else {
                     ShopHelper.showApiError(ModifyPaypwdStep1Activity.this, json);

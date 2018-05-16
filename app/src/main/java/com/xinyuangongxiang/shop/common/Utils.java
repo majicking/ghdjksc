@@ -455,8 +455,8 @@ public class Utils {
                 HashMap<String, Object> map = new HashMap<String, Object>();
                 if (Values.equals("wxpay")) {
                     social_share_sb_wechat.setVisibility(View.VISIBLE);
-                } else if (Values.equals("alipay")) {
-                    social_sb_wzhifubao.setVisibility(View.VISIBLE);
+//                } else if (Values.equals("alipay")) {
+//                    social_sb_wzhifubao.setVisibility(View.VISIBLE);
                 } else if (Values.equals("alipay_native")) {//TODO Modify 支付宝原生支付
                     social_share_sb_zhifubao.setVisibility(View.VISIBLE);
                 }

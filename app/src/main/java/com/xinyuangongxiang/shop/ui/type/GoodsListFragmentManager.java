@@ -464,62 +464,56 @@ public class GoodsListFragmentManager extends FragmentActivity {
         etPriceTo.setText("");
 
         String url = Constants.URL_SEARCH_ADV;
-        RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    try {
-                        JSONObject objJson = new JSONObject(json);
+        RemoteDataHandler.asyncDataStringGet(url, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject objJson = new JSONObject(json);
 
-                        //地区
-                        String areaListJson = objJson.getString("area_list");
-                        if (!areaListJson.equals("[]")) {
-                            final ArrayList<CityList> areaList = CityList.newInstanceList(areaListJson);
-                            CityList defaultCityInfo = new CityList();
-                            defaultCityInfo.setArea_id("0");
-                            defaultCityInfo.setArea_name("不限");
-                            areaList.add(0, defaultCityInfo);
-                            AreaSpinnerAdapter adapter = new AreaSpinnerAdapter(GoodsListFragmentManager.this);
-                            adapter.setAreaList(areaList);
+                    //地区
+                    String areaListJson = objJson.getString("area_list");
+                    if (!areaListJson.equals("[]")) {
+                        final ArrayList<CityList> areaList = CityList.newInstanceList(areaListJson);
+                        CityList defaultCityInfo = new CityList();
+                        defaultCityInfo.setArea_id("0");
+                        defaultCityInfo.setArea_name("不限");
+                        areaList.add(0, defaultCityInfo);
+                        AreaSpinnerAdapter adapter = new AreaSpinnerAdapter(GoodsListFragmentManager.this);
+                        adapter.setAreaList(areaList);
 
-                            final Spinner spAreaList = (Spinner) viewPopScreen.findViewById(R.id.spAreaList);
-                            spAreaList.setAdapter(adapter);
-                            spAreaList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                @Override
-                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                    CityList areaInfo = (CityList) spAreaList.getItemAtPosition(i);
-                                    tvArea.setText(areaInfo.getArea_name());
-                                    etAreaId.setText(areaInfo.getArea_id());
-                                }
+                        final Spinner spAreaList = (Spinner) viewPopScreen.findViewById(R.id.spAreaList);
+                        spAreaList.setAdapter(adapter);
+                        spAreaList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                CityList areaInfo = (CityList) spAreaList.getItemAtPosition(i);
+                                tvArea.setText(areaInfo.getArea_name());
+                                etAreaId.setText(areaInfo.getArea_id());
+                            }
 
-                                @Override
-                                public void onNothingSelected(AdapterView<?> adapterView) {
-                                }
-                            });
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+                            }
+                        });
 
-                            tvArea.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    spAreaList.performClick();
-                                }
-                            });
-                        }
-
-                        //消保
-                        String contractListJson = objJson.getString("contract_list");
-                        if (!contractListJson.equals("[]")) {
-                            ArrayList<ContractInfo> contractList = ContractInfo.newInstanceList(contractListJson);
-                            ContractGridViewAdapter contractGridViewAdapter = new ContractGridViewAdapter(GoodsListFragmentManager.this);
-                            contractGridViewAdapter.setContractList(contractList);
-                            gvContract.setAdapter(contractGridViewAdapter);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+//                        tvArea.setOnClickListener(view ->
+//                                spAreaList.performClick()
+//                        );
                     }
-                } else {
-                    ShopHelper.showApiError(GoodsListFragmentManager.this, json);
+
+                    //消保
+                    String contractListJson = objJson.getString("contract_list");
+                    if (!contractListJson.equals("[]")) {
+                        ArrayList<ContractInfo> contractList = ContractInfo.newInstanceList(contractListJson);
+                        ContractGridViewAdapter contractGridViewAdapter = new ContractGridViewAdapter(GoodsListFragmentManager.this);
+                        contractGridViewAdapter.setContractList(contractList);
+                        gvContract.setAdapter(contractGridViewAdapter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+            } else {
+                ShopHelper.showApiError(GoodsListFragmentManager.this, json);
             }
         });
     }

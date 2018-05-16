@@ -53,7 +53,6 @@ public class OrderActivity extends FragmentActivity implements OrderFragment.OnF
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
         initView();
-
         initData();
     }
 
@@ -91,7 +90,7 @@ public class OrderActivity extends FragmentActivity implements OrderFragment.OnF
         }
 
         viewpager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab));
-        adapter = new ViewPagerAdapter(this, getSupportFragmentManager(), fragmentlist,titles);
+        adapter = new ViewPagerAdapter(this, getSupportFragmentManager(), fragmentlist, titles);
         viewpager.setAdapter(adapter);
         tab.setupWithViewPager(viewpager);
         notitydata();
@@ -101,8 +100,9 @@ public class OrderActivity extends FragmentActivity implements OrderFragment.OnF
         searchtext = editsearchorder.getText().toString().trim();
         fragmentlist.clear();
         for (int i = 0; i < titles.length; i++) {
-            fragmentlist.add(OrderFragment.newInstance(titles[i], ordertype[i], TextUtils.isEmpty(searchtext) ? "" : searchtext, url,select));
+            fragmentlist.add(OrderFragment.newInstance(titles[i], ordertype[i], TextUtils.isEmpty(searchtext) ? "" : searchtext, url, select));
         }
+        adapter.updataAdapter(fragmentlist, titles);
         adapter.notifyDataSetChanged();
     }
 
@@ -166,8 +166,6 @@ public class OrderActivity extends FragmentActivity implements OrderFragment.OnF
     public void onFragmentInteraction(String title, String flag) {
 
     }
-
-
 
 
 }

@@ -64,6 +64,7 @@ import com.xinyuangongxiang.shop.common.StringUtils;
 import com.xinyuangongxiang.shop.common.SystemHelper;
 import com.xinyuangongxiang.shop.common.T;
 import com.xinyuangongxiang.shop.common.Utils;
+import com.xinyuangongxiang.shop.custom.CustomDialog;
 import com.xinyuangongxiang.shop.http.HttpHelper;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler.Callback;
@@ -71,6 +72,10 @@ import com.xinyuangongxiang.shop.http.ResponseData;
 import com.xinyuangongxiang.shop.ncinterface.DataCallback;
 import com.xinyuangongxiang.shop.newpackage.OrderActivity;
 import com.xinyuangongxiang.shop.newpackage.ProgressDialog;
+import com.xinyuangongxiang.shop.ui.mine.BindMobileActivity;
+import com.xinyuangongxiang.shop.ui.mine.ModifyPasswordStep1Activity;
+import com.xinyuangongxiang.shop.ui.mine.ModifyPaypwdStep1Activity;
+import com.xinyuangongxiang.shop.ui.mine.SettingActivity;
 import com.xinyuangongxiang.shop.xrefresh.utils.LogUtils;
 import com.zcw.togglebutton.ToggleButton;
 
@@ -83,6 +88,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import rx.Observable;
+import rx.Subscriber;
 
 import static com.xinyuangongxiang.shop.common.Constants.ORDERNUMBER;
 import static com.xinyuangongxiang.shop.common.Constants.ORDERTYPE;
@@ -142,6 +150,9 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
     private TextView areaInfoID, addressID, trueNameID, mobPhoneID, invInfoID, noAreaInfoID, tvGoodsFreight, textViewGoodsTotal, textVoucher, textviewAllPrice, tvRpacket, tvRpacketButton;
 
     private RadioButton ifshowOnpayID, ifshowOffpayID;
+
+    private boolean ifshow_offpay = false;
+    private boolean allow_offpay = false;
 
     private LinearLayout predepositLayoutID, storeCartListID, addressInFoLayoutID, llRpacket;
 
@@ -334,12 +345,12 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
             @Override
             public void onToggle(boolean on) {
                 isyck = on;
-                showEiditPassword();
                 if (on) {
                     if_pd_pay = "1";
                 } else {
                     if_pd_pay = "0";
                 }
+                showEiditPassword();
 
             }
         });
@@ -347,20 +358,20 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
             @Override
             public void onToggle(boolean on) {
                 isczk = on;
-                showEiditPassword();
+
                 if (on) {
                     if_rcb_pay = "1";
                 } else {
                     if_rcb_pay = "0";
                 }
-
+                showEiditPassword();
             }
         });
         toggle_jkd.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
                 isjkd = on;
-                showEiditPassword();
+
 
                 if (on) {
                     healthbean_pay = "1";
@@ -368,6 +379,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                     healthbean_pay = "0";
                 }
 //                showToast(healthbean_pay);
+                showEiditPassword();
             }
         });
         num_yck = (TextView) findViewById(R.id.textview_yck);
@@ -459,6 +471,14 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         //记录发票hash
                         vat_hash = buyStep1.getVat_hash();
 
+                        //判断是否显示货到付款
+                        if (buyStep1.getIfshow_offpay().equals("true")) {
+                            ifshow_offpay = true;
+//                            ifshowOffpayID.setVisibility(View.VISIBLE);
+                        } else {
+                            ifshow_offpay = false;
+//                            ifshowOffpayID.setVisibility(View.GONE);
+                        }
                         //判断显示隐藏收货地址
                         if (addressDetails != null) {
                             noAreaInfoID.setVisibility(View.GONE);
@@ -494,12 +514,6 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                             invInfoID.setText(inv_info.getContent() == null ? "" : inv_info.getContent());
                         }
 
-                        //判断是否显示货到付款
-                        if (buyStep1.getIfshow_offpay().equals("true")) {
-                            ifshowOffpayID.setVisibility(View.VISIBLE);
-                        } else {
-                            ifshowOffpayID.setVisibility(View.GONE);
-                        }
 //
 //                        BuyStepInfo buyStepInfo = JSONParser.JSON2Object(json, BuyStepInfo.class);
 //                        if (buyStepInfo != null) {
@@ -782,7 +796,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
 
                     if (updateAddress != null) {
                         //判断是否显示货到付款
-                        if (updateAddress.getAllow_offpay().equals("1")) {
+                        if (updateAddress.getAllow_offpay().equals("1") && ifshow_offpay) {
                             ifshowOffpayID.setVisibility(View.VISIBLE);
                         } else {
                             ifshowOffpayID.setVisibility(View.GONE);
@@ -1028,17 +1042,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
 //						Intent mIntent = new Intent(Constants.APP_BORADCASTRECEIVER);
 //						sendBroadcast(mIntent);
                 } else {
-                    try {
-                        JSONObject obj = new JSONObject(jsons);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(BuyStep1Activity.this, error, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    showToast("支付宝出错了");
+                    ShopHelper.showApiError(mActivity, jsons);
 //						Toast.makeText(BuyStep1Activity.this, getString(R.string.datas_loading_fail_prompt), Toast.LENGTH_SHORT).show();;
                 }
             }
@@ -1201,6 +1205,90 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         super.onPause();
     }
 
+    String mobile;
+
+    /**
+     * 获得是否设置支付密码信息
+     */
+    private void loadPaypwdInfo() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("key", myApplication.getLoginKey());
+        RemoteDataHandler.asyncLoginPostDataString(Constants.URL_MEMBER_ACCOUNT_GET_PAYPWD_INFO, params, myApplication, new RemoteDataHandler.Callback() {
+            @Override
+            public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
+                if (data.getCode() == HttpStatus.SC_OK) {
+                    try {
+                        JSONObject object = new JSONObject(json);
+                        if (object.optBoolean("state")) {  //设置了密码 直接验证
+                            String password = editPasswordID.getText().toString().trim();
+                            CheackPassword(password);
+                        } else { //没有设置密码
+                            CustomDialog.Builder builder = new CustomDialog.Builder(mActivity);
+                            builder.setTitle("提示")
+                                    .setMessage("请设置支付密码")
+                                    .setPositiveButton("设置", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        Intent intent = new Intent(mActivity, ModifyPaypwdStep1Activity.class);
+                                        intent.putExtra("mobile", mobile);
+                                        intent.putExtra("type", Constants.SETTINGPWD);
+                                        startActivity(intent);
+                                    })
+                                    .setNegativeButton("暂不", ((dialog, which) -> {
+                                        dialog.dismiss();
+                                    }))
+                                    .create().show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ShopHelper.showApiError(mActivity, json);
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 获取绑定手机信息
+     */
+    private void loadMobile() {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("key", myApplication.getLoginKey());
+        RemoteDataHandler.asyncLoginPostDataString(Constants.URL_MEMBER_ACCOUNT_GET_MOBILE_INFO, params, myApplication, new RemoteDataHandler.Callback() {
+            @Override
+            public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
+                if (data.getCode() == HttpStatus.SC_OK) {
+                    try {
+                        JSONObject object = new JSONObject(json);
+                        if (object.optBoolean("state")) { //绑定了手机
+                            mobile = object.optString("mobile");
+                            loadPaypwdInfo();
+                        } else { //没有绑定
+                            CustomDialog.Builder builder = new CustomDialog.Builder(mActivity);
+                            builder.setTitle("提示")
+                                    .setMessage("为保证您的资金安全，请先绑定手机号码后，再设置支付密码")
+                                    .setPositiveButton("绑定", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        startActivityForResult(new Intent(mActivity, BindMobileActivity.class).putExtra("type", Constants.SETTINGPWD), Constants.RESULT_FLAG_BIND_MOBILE);
+                                    })
+                                    .setNegativeButton("暂不", ((dialog, which) -> {
+                                        dialog.dismiss();
+                                    }))
+                                    .create().show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ShopHelper.showApiError(mActivity, json);
+                }
+            }
+        });
+    }
 
     /**
      * 验证支付密码
@@ -1221,23 +1309,19 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 if (data.getCode() == HttpStatus.SC_OK) {
                     if (json.equals("1")) {
                         sendBuyStep2Data(password);
+                    } else if (json.equals("2")) {
+                        loadMobile();
+//                        setPwd();
                     }
 
                 } else {
 
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(BuyStep1Activity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(myApplication, json);
                 }
             }
         });
     }
+
 
     /**
      * 获取PopupWindow实例
@@ -1324,12 +1408,16 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
             noAreaInfoID.setVisibility(View.GONE);
             //更新收货地址
             updataAddress(city_id, area_id);
-        } else if (resultCode == Constants.SELECT_ADDRESS_NULL) {
+        } else if (resultCode == Constants.SELECT_ADDRESS_NULL) {//添加地址为空
             addressInFoLayoutID.setVisibility(View.GONE);
             noAreaInfoID.setVisibility(View.VISIBLE);
             if (!alertDialog.isShowing()) {
                 alertDialog.show();
             }
+        } else if (resultCode == Constants.BUNDERMOBILE) {//设置密码
+            loadMobile();
+        } else if (resultCode == Constants.BUNDERPAYPWD) {
+            T.showShort(mActivity, data == null ? "没有设置密码" : data.getStringExtra("pwd"));
         }
 
     }
@@ -1351,11 +1439,13 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 if (isyck || isjkd || isczk) {
 
                     String password = editPasswordID.getText().toString().trim();
-                    if (StringUtil.isNoEmpty(password)) {
-                        CheackPassword(password);
-                    } else {
-                        showToast("亲,支付密码不能为空哟!");
-                    }
+//                    if (StringUtil.isNoEmpty(password)) {
+                    CheackPassword(password);
+//                    } else {
+//                        showToast("亲,支付密码不能为空哟!");
+//                    }
+//                } else {
+//                    sendBuyStep2Data("");
                 } else {
                     sendBuyStep2Data("");
                 }

@@ -273,6 +273,7 @@ public class PredAddFragment extends Fragment {
             if (payPopupWindow != null && payPopupWindow.isShowing()) {
                 payPopupWindow.dismiss();
             }
+            onButtonPressed("error",2);
         }, listener);
         if (payPopupWindow == null) {
             payPopupWindow = Utils.initPopupWindow(context, view, listener);

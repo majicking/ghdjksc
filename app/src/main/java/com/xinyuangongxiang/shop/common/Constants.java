@@ -845,6 +845,11 @@ public final class Constants {
     public static final String HEALTHLIST = URL_CONTEXTPATH + "act=healthbean&op=HealthBeanLog&pages=";
     //获取健康豆
     public static final String HEALTHNUMBER = URL_CONTEXTPATH + "act=healthbean&op=GetHealthbeanValue&key=";
-
+    //订单-绑定手机
+    public static final int  BUNDERMOBILE =  10001;
+    //订单-设置支付密码
+    public static final int  BUNDERPAYPWD =  10002;
+    //订单-绑定手机
+    public static final String  SETTINGPWD =  "settingpwd";
 
 }

@@ -1,5 +1,6 @@
 package com.xinyuangongxiang.shop.ui.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -176,6 +177,12 @@ public class BindMobileActivity extends BaseActivity {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
                     ShopHelper.showMessage(BindMobileActivity.this, "手机验证成功");
+                    if (getIntent().getStringExtra("type").equals(Constants.SETTINGPWD)){
+                        Intent intent = new Intent(mActivity, ModifyPaypwdStep1Activity.class);
+                        intent.putExtra("mobile", etMobile.getText().toString());
+                        intent.putExtra("type", Constants.SETTINGPWD);
+                        startActivity(intent);
+                    }
                     finish();
                 } else {
                     ShopHelper.showApiError(BindMobileActivity.this, json);
