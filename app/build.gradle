@@ -75,9 +75,9 @@ android {
         buildConfigField "String", "QQ_APP_KEY", '"bqZ64PGbWvu3otQo"'
 
         resValue "string", "more_aboutus_appname", "国翰大健康 Android客户端"
-        resValue "string", "more_aboutus_version", "版本：3.1.0"
+        resValue "string", "more_aboutus_version", "版本：${defaultConfig.versionName}"
         resValue "string", "app_copyright", "Copyright © 2007–2016"
-        resValue "string", "app_copreserved", "天津市网城天创科技有限责任公司, All Rights Reserved"
+        resValue "string", "app_copreserved", "霍尔果斯国翰大健康, All Rights Reserved"
 
         ndk {
 //            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
@@ -90,17 +90,17 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-    productFlavors {
-        google {
-
-        }
-        baidu {
-
-        }
-    }
-    productFlavors.all { flavor ->
-        manifestPlaceholders.put("UMENG_CHANNEL_VALUE", name)
-    }
+//    productFlavors {
+//        google {
+//
+//        }
+//        baidu {
+//
+//        }
+//    }
+//    productFlavors.all { flavor ->
+//        manifestPlaceholders.put("UMENG_CHANNEL_VALUE", name)
+//    }
 
 
     buildTypes {
@@ -112,7 +112,7 @@ android {
 //            shrinkResources true  //删除无用资源
             android.applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "华翰商城${defaultConfig.versionName}_${buildTime()}_${variant.productFlavors[0].name}.apk"
+                    outputFileName = "国翰大健康${defaultConfig.versionName}_${buildTime()}.apk"
                 }
             }
         }

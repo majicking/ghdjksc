@@ -1,5 +1,6 @@
 package com.xinyuangongxiang.shop.ui.mine;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,6 +38,7 @@ import com.xinyuangongxiang.shop.common.T;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler.Callback;
 import com.xinyuangongxiang.shop.http.ResponseData;
+import com.xinyuangongxiang.shop.newpackage.ProgressDialog;
 import com.xinyuangongxiang.shop.xrefresh.utils.LogUtils;
 
 import org.apache.http.HttpStatus;
@@ -183,7 +185,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.put("username", username);
         params.put("password", password);
         params.put("client", "android");
+        Dialog dialog = ProgressDialog.showLoadingProgress(mActivity, "登陆中...");
+        dialog.show();
         RemoteDataHandler.asyncPostDataString(url, params, data -> {
+            ProgressDialog.dismissDialog(dialog);
             String json = data.getJson();
             if (data.getCode() == HttpStatus.SC_OK) {
                 ShopHelper.login(LoginActivity.this, myApplication, json);
@@ -216,8 +221,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void loginQq(String token, String openid, String nickname, String avatar) {
         String url = Constants.URL_CONNECT_QQ + "&token=" + token + "&open_id=" + openid + "&nickname=" + nickname + "&avatar=" + avatar + "&client=android";
         LogUtils.i("qq_login_url" + url);
+        Dialog dialog = ProgressDialog.showLoadingProgress(mActivity, "QQ登陆中...");
+        dialog.show();
         RemoteDataHandler.asyncDataStringGet(url, data -> {
 //                Log.e("qq_login_response", data.toString());
+            ProgressDialog.dismissDialog(dialog);
             String json = data.getJson();
             if (data.getCode() == HttpStatus.SC_OK) {
                 ShopHelper.login(LoginActivity.this, myApplication, json);
@@ -237,7 +245,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      */
     private void loginWeibo(String accessToken, String userId) {
         String url = Constants.URL_CONNECT_WEIBO + "&accessToken=" + accessToken + "&userID=" + userId + "&client=android";
+        Dialog dialog = ProgressDialog.showLoadingProgress(mActivity, "微博登陆中...");
+        dialog.show();
         RemoteDataHandler.asyncDataStringGet(url, data -> {
+            ProgressDialog.dismissDialog(dialog);
             String json = data.getJson();
 //                LogHelper.e("json", json);
 //                LogHelper.e("data", data.toString());
@@ -255,7 +266,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      */
     private void loginWx(String access_token, String openid) {
         String url = Constants.URL_CONNECT_WX + "&access_token=" + access_token + "&openid=" + openid + "&client=android";
+        Dialog dialog = ProgressDialog.showLoadingProgress(mActivity, "微信登陆中...");
+        dialog.show();
         RemoteDataHandler.asyncDataStringGet(url, data -> {
+            ProgressDialog.dismissDialog(dialog);
             String json = data.getJson();
             if (data.getCode() == HttpStatus.SC_OK) {
                 ShopHelper.login(LoginActivity.this, myApplication, json);
@@ -266,48 +280,48 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-
-    //授权
-    private UMAuthListener umAuthListener = new UMAuthListener() {
-
-        @Override
-        public void onStart(SHARE_MEDIA share_media) {
-
-        }
-
-        @Override
-        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            if (data != null) {
-                if (platform == SHARE_MEDIA.QQ) {
-                    token = data.get("access_token");
-                    openid = data.get("openid");
-                    UMShareAPI.get(LoginActivity.this).getPlatformInfo(LoginActivity.this, platform, userinfo);
-
-                } else if (platform == SHARE_MEDIA.WEIXIN) {
-                    String access_token = data.get("access_token");
-                    String openid = data.get("openid");
-                    loginWx(access_token, openid);
-
-                } else if (platform == SHARE_MEDIA.SINA) {
-                    String accessToken = data.get("access_token");
-                    String userId = data.get("uid");
-                    loginWeibo(accessToken, userId);
-                }
-
-            }
-
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            Toast.makeText(getApplicationContext(), "授权失败", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform, int action) {
-            Toast.makeText(getApplicationContext(), "取消授权", Toast.LENGTH_SHORT).show();
-        }
-    };
+//
+//    //授权
+//    private UMAuthListener umAuthListener = new UMAuthListener() {
+//
+//        @Override
+//        public void onStart(SHARE_MEDIA share_media) {
+//
+//        }
+//
+//        @Override
+//        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+//            if (data != null) {
+//                if (platform == SHARE_MEDIA.QQ) {
+//                    token = data.get("access_token");
+//                    openid = data.get("openid");
+//                    UMShareAPI.get(LoginActivity.this).getPlatformInfo(LoginActivity.this, platform, userinfo);
+//
+//                } else if (platform == SHARE_MEDIA.WEIXIN) {
+//                    String access_token = data.get("access_token");
+//                    String openid = data.get("openid");
+//                    loginWx(access_token, openid);
+//
+//                } else if (platform == SHARE_MEDIA.SINA) {
+//                    String accessToken = data.get("access_token");
+//                    String userId = data.get("uid");
+//                    loginWeibo(accessToken, userId);
+//                }
+//
+//            }
+//
+//        }
+//
+//        @Override
+//        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+//            Toast.makeText(getApplicationContext(), "授权失败", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onCancel(SHARE_MEDIA platform, int action) {
+//            Toast.makeText(getApplicationContext(), "取消授权", Toast.LENGTH_SHORT).show();
+//        }
+//    };
 
 
     //获取用户信息
@@ -333,7 +347,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         @Override
         public void onCancel(SHARE_MEDIA share_media, int i) {
-
+            Toast.makeText(getApplicationContext(), "取消授权", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -368,6 +382,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     //授权
     private void authorization(SHARE_MEDIA share_media) {
         UMShareAPI.get(this).getPlatformInfo(this, share_media, new UMAuthListener() {
+
             @Override
             public void onStart(SHARE_MEDIA share_media) {
                 LogUtils.i("onStart " + "授权开始");

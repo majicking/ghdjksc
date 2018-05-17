@@ -33,7 +33,6 @@ import com.xinyuangongxiang.shop.common.MyShopApplication;
 import com.xinyuangongxiang.shop.common.ShopHelper;
 import com.xinyuangongxiang.shop.custom.MyGridView;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler;
-import com.xinyuangongxiang.shop.http.ResponseData;
 import com.xinyuangongxiang.shop.scannercode.android.CaptureActivity;
 import com.xinyuangongxiang.shop.ui.home.SearchActivity;
 
@@ -397,7 +396,6 @@ public class GoodsListFragmentManager extends FragmentActivity {
             setSelectBtnState(btnScreenGroupbuy);
             setSelectBtnState(btnScreenXianshi);
             setSelectBtnState(btnScreenOwnShop);
-
             initScreen(viewPopScreen);
 
             TextView tvBackground = (TextView) viewPopScreen.findViewById(R.id.tvBackground);
@@ -496,9 +494,9 @@ public class GoodsListFragmentManager extends FragmentActivity {
                             }
                         });
 
-//                        tvArea.setOnClickListener(view ->
-//                                spAreaList.performClick()
-//                        );
+                        tvArea.setOnClickListener(view ->
+                                spAreaList.performClick()
+                        );
                     }
 
                     //消保

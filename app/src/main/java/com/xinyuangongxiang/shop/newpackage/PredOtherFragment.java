@@ -127,7 +127,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
                 pdrechargeListViewAdapter = new PdrechargeListViewAdapter(getActivity());
                 xlistview.setAdapter(pdrechargeListViewAdapter);
                 xlistview.setOnItemClickListener((parent, view, position, id) -> {
-                    if (pdrechargeInfoArrayList.get(position).getPaymentState().equals("0")){
+                    if (pdrechargeInfoArrayList.get(position-1).getPaymentState().equals("0")){
                         Dialog dialog=ProgressDialog.showLoadingProgress(context,"请稍后...");
                         dialog.show();
                         Utils.loadingPaymentListData(o -> {
@@ -146,7 +146,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
                                                 T.showShort(context, "没有支付方式，请后台配置");
                                                 return;
                                             }
-                                            OrderPay(size, arr, pdrechargeInfoArrayList.get(position).getSn());
+                                            OrderPay(size, arr, pdrechargeInfoArrayList.get(position-1).getSn());
                                         } catch (JSONException e1) {
                                             e1.printStackTrace();
                                         }

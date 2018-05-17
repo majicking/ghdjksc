@@ -49,6 +49,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        tools:replace="icon,label,theme"
         android:theme="@style/MyTheme.Basic">
 
         <!-- 百度地图 -->
@@ -372,9 +373,9 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="${UMENG_APPKEY}" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+        <!--<meta-data-->
+            <!--android:name="UMENG_CHANNEL"-->
+            <!--android:value="${UMENG_CHANNEL_VALUE}" />-->
 
         <activity android:name=".ui.store.newStoreInFoActivity" />
         <activity android:name=".ui.store.StoreGoodsListFragmentManager" />

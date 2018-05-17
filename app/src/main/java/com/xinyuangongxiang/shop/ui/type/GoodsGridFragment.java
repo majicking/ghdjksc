@@ -1,7 +1,9 @@
 package com.xinyuangongxiang.shop.ui.type;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +18,9 @@ import com.xinyuangongxiang.shop.adapter.GoodsListViewAdapter;
 import com.xinyuangongxiang.shop.bean.GoodsList;
 import com.xinyuangongxiang.shop.common.Constants;
 import com.xinyuangongxiang.shop.common.MyExceptionHandler;
+import com.xinyuangongxiang.shop.common.ShopHelper;
 import com.xinyuangongxiang.shop.custom.MyGridView;
+import com.xinyuangongxiang.shop.custom.MyListEmpty;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler.Callback;
 import com.xinyuangongxiang.shop.http.ResponseData;
@@ -45,7 +49,7 @@ public class GoodsGridFragment extends Fragment {
     private TextView tvLoadMore;
     private MyGridView gvGoodsGrid;
     private ArrayList<GoodsList> goodsLists;
-    private TextView tvNoResult;
+    private MyListEmpty myListEmpty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +64,8 @@ public class GoodsGridFragment extends Fragment {
         goodsLists = new ArrayList<GoodsList>();
         gvGoodsGrid.setAdapter(goodsListViewAdapter);
         loadingGoodsListData();
-        tvNoResult = (TextView) viewLayout.findViewById(R.id.tvNoResult);
+        myListEmpty = (MyListEmpty) viewLayout.findViewById(R.id.myListEmpty);
+        myListEmpty.setListEmpty(R.drawable.nc_icon_order, "没有找到符合条件的商品", "更换筛选条件找到你想要的商品");
 
         svGoodsGrid.setOnTouchListener(new View.OnTouchListener() {
             private int lastY = 0;
@@ -94,45 +99,53 @@ public class GoodsGridFragment extends Fragment {
         RemoteDataHandler.asyncDataStringGet(url, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
-
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
-                    tvLoadMore.setVisibility(View.GONE);
-
-                    String json = data.getJson();
-
-                    if (data.isHasMore()) {
-                        loadMore = true;
-                    } else {
-                        loadMore = false;
-                    }
-
-                    if (pageno == 1) {
-                        goodsLists.clear();
-                    }
-
-                    try {
-
-                        JSONObject obj = new JSONObject(json);
-                        String array = obj.getString("goods_list");
-                        if (array != "" && !array.equals("array") && array != null && !array.equals("[]")) {
-                            ArrayList<GoodsList> list = GoodsList.newInstanceList(array);
-                            goodsLists.addAll(list);
-                            goodsListViewAdapter.setGoodsLists(goodsLists);
-                            goodsListViewAdapter.notifyDataSetChanged();
-                            svGoodsGrid.scrollTo(0, svGoodsGrid.getScrollY() + 100);
+                    if (!TextUtils.isEmpty(json)) {
+                        tvLoadMore.setVisibility(View.GONE);
+                        if (data.isHasMore()) {
+                            loadMore = true;
                         } else {
-                            if (pageno == 1) {
-                                tvNoResult.setVisibility(View.VISIBLE);
-                            }
+                            loadMore = false;
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        if (pageno == 1) {
+                            goodsLists.clear();
+                        }
+
+                        if (myListEmpty != null)
+                            myListEmpty.setVisibility(View.GONE);
+                        try {
+                            JSONObject obj = new JSONObject(json);
+                            String array = obj.getString("goods_list");
+                            if (array != "" && !array.equals("array") && array != null && !array.equals("[]")) {
+                                ArrayList<GoodsList> list = GoodsList.newInstanceList(array);
+                                goodsLists.addAll(list);
+                                goodsListViewAdapter.setGoodsLists(goodsLists);
+                                goodsListViewAdapter.notifyDataSetChanged();
+                                svGoodsGrid.scrollTo(0, svGoodsGrid.getScrollY() + 100);
+                            } else {
+                                if (pageno==1)
+                                myListEmpty.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        myListEmpty.setVisibility(View.VISIBLE);
+                        ShopHelper.showApiError(context, json);
                     }
                 } else {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });
+    }
+
+    Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 }

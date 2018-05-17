@@ -30,17 +30,19 @@ public class EvaluatePhotoAdapter extends BaseAdapter {
     private HashMap<String, List<ImageFile>> itemImageBean;
 
 
-    public EvaluatePhotoAdapter(Context ctx ,String res_id,HashMap<String, List<ImageFile>> itemImageBean){
+    public EvaluatePhotoAdapter(Context ctx, String res_id, HashMap<String, List<ImageFile>> itemImageBean) {
         this.inflater = LayoutInflater.from(ctx);
         this.ctx = ctx;
         this.itemImageBean = itemImageBean;
         this.res_id = res_id;
 
     }
-    public HashMap<String, List<ImageFile>> getItemImageBean(){
+
+    public HashMap<String, List<ImageFile>> getItemImageBean() {
         return this.itemImageBean;
     }
-    public void setItemImageBean(HashMap<String, List<ImageFile>> itemImageBean){
+
+    public void setItemImageBean(HashMap<String, List<ImageFile>> itemImageBean) {
         this.itemImageBean = itemImageBean;
     }
 
@@ -70,9 +72,10 @@ public class EvaluatePhotoAdapter extends BaseAdapter {
             if (i == 5) {
                 iv.setVisibility(View.GONE);
             }
-        } else{
+        } else {
             Glide.with(ctx)
-                    .load(itemImageBean.get(res_id).get(i).getFile_url())
+                    .load(itemImageBean.get(res_id)
+                            .get(i).getFile_url())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ic_launcher)  //设置占位图
                     .error(R.drawable.ic_launcher)      //加载错误图

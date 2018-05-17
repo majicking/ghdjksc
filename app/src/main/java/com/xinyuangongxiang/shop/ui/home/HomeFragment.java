@@ -376,47 +376,44 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
      * 初始化加载数据
      */
     public void loadUIData() {
-        RemoteDataHandler.asyncDataStringGet(Constants.URL_HOME, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                mPullRefreshScrollView.onRefreshComplete();//加载完成下拉控件取消显示
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    HomeView.removeAllViews(); //删除homeview所有View
-                    tab_home_item_video.removeAllViews(); //删除homeview所有View
-                    try {
-                        String json = data.getJson();
-                        JSONArray arr = new JSONArray(json);
+        RemoteDataHandler.asyncDataStringGet(Constants.URL_HOME, data -> {
+            mPullRefreshScrollView.onRefreshComplete();//加载完成下拉控件取消显示
+            if (data.getCode() == HttpStatus.SC_OK) {
+                HomeView.removeAllViews(); //删除homeview所有View
+                tab_home_item_video.removeAllViews(); //删除homeview所有View
+                try {
+                    String json = data.getJson();
+                    JSONArray arr = new JSONArray(json);
 //                        Logger.d(json);
-                        int size = null == arr ? 0 : arr.length();
+                    int size = null == arr ? 0 : arr.length();
 
-                        for (int i = 0; i < size; i++) {
+                    for (int i = 0; i < size; i++) {
 
-                            JSONObject obj = arr.getJSONObject(i);
-                            JSONObject JsonObj = new JSONObject(obj.toString());
+                        JSONObject obj = arr.getJSONObject(i);
+                        JSONObject JsonObj = new JSONObject(obj.toString());
 
-                            if (!JsonObj.isNull("home1")) {
-                                showHome1(JsonObj);
-                            } else if (!JsonObj.isNull("home2")) {
-                                showHome2(JsonObj);
-                            } else if (!JsonObj.isNull("home4")) {
-                                showHome4(JsonObj);
-                            } else if (!JsonObj.isNull("home3")) {
-                                showHome3(JsonObj);
-                            } else if (!JsonObj.isNull("adv_list")) {
-                                showAdvList(JsonObj);
-                            } else if (!JsonObj.isNull("goods")) {
-                                showGoods(JsonObj);
-                            } else if (!JsonObj.isNull("video_list")) {     //视频接口
-                                showVideoView(JsonObj);
-                            }
+                        if (!JsonObj.isNull("home1")) {
+                            showHome1(JsonObj);
+                        } else if (!JsonObj.isNull("home2")) {
+                            showHome2(JsonObj);
+                        } else if (!JsonObj.isNull("home4")) {
+                            showHome4(JsonObj);
+                        } else if (!JsonObj.isNull("home3")) {
+                            showHome3(JsonObj);
+                        } else if (!JsonObj.isNull("adv_list")) {
+                            showAdvList(JsonObj);
+                        } else if (!JsonObj.isNull("goods")) {
+                            showGoods(JsonObj);
+                        } else if (!JsonObj.isNull("video_list")) {     //视频接口
+                            showVideoView(JsonObj);
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-
-                } else {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+            } else {
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
             }
         });
     }

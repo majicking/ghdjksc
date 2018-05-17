@@ -19,6 +19,8 @@ import com.xinyuangongxiang.shop.adapter.GoodsListViewAdapter;
 import com.xinyuangongxiang.shop.bean.GoodsList;
 import com.xinyuangongxiang.shop.common.Constants;
 import com.xinyuangongxiang.shop.common.MyExceptionHandler;
+import com.xinyuangongxiang.shop.common.ShopHelper;
+import com.xinyuangongxiang.shop.custom.MyListEmpty;
 import com.xinyuangongxiang.shop.custom.XListView;
 import com.xinyuangongxiang.shop.custom.XListView.IXListViewListener;
 import com.xinyuangongxiang.shop.http.RemoteDataHandler;
@@ -50,7 +52,7 @@ public class GoodsListFragment extends Fragment implements IXListViewListener {
 
     private ArrayList<GoodsList> goodsLists;
 
-    private TextView tvNoResult;
+    private MyListEmpty myListEmpty;
     private RelativeLayout rl_main_list;
     private Button top_btn;
 
@@ -104,7 +106,8 @@ public class GoodsListFragment extends Fragment implements IXListViewListener {
             }
         });
 
-        tvNoResult = (TextView) view.findViewById(R.id.tvNoResult);
+        myListEmpty = (MyListEmpty) view.findViewById(R.id.myListEmpty);
+        myListEmpty.setListEmpty(R.drawable.nc_icon_order, "没有找到符合条件的商品", "更换筛选条件找到你想要的商品");
 
         top_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,10 +147,8 @@ public class GoodsListFragment extends Fragment implements IXListViewListener {
             public void dataLoaded(ResponseData data) {
 
                 listViewID.stopLoadMore();
-
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
-                    String json = data.getJson();
                     if (!TextUtils.isEmpty(json)) {
                         if (!data.isHasMore()) {
                             listViewID.setPullLoadEnable(false);
@@ -158,6 +159,8 @@ public class GoodsListFragment extends Fragment implements IXListViewListener {
                             goodsLists.clear();
                         }
 
+                        if (myListEmpty != null)
+                            myListEmpty.setVisibility(View.GONE);
                         try {
 
                             JSONObject obj = new JSONObject(json);
@@ -168,16 +171,18 @@ public class GoodsListFragment extends Fragment implements IXListViewListener {
                                 goodsListViewAdapter.setGoodsLists(goodsLists);
                                 goodsListViewAdapter.notifyDataSetChanged();
                             } else {
-                                if (pageno == 1) {
-                                    tvNoResult.setVisibility(View.VISIBLE);
-                                }
+                                if (pageno == 1)
+                                    myListEmpty.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     } else {
-                        Toast.makeText(context, context.getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                        myListEmpty.setVisibility(View.VISIBLE);
+                        ShopHelper.showApiError(context, json);
                     }
+                } else {
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });

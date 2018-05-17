@@ -24,6 +24,7 @@ public class AreaSpinnerAdapter extends BaseAdapter {
     public AreaSpinnerAdapter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
+        areaList = new ArrayList<>();
     }
 
     @Override
@@ -42,7 +43,11 @@ public class AreaSpinnerAdapter extends BaseAdapter {
     }
 
     public void setAreaList(ArrayList<CityList> areaList) {
-        this.areaList = areaList;
+        if (areaList != null && areaList.size() > 0)
+            this.areaList = areaList;
+        else
+            this.areaList.clear();
+        notifyDataSetChanged();
     }
 
     @Override

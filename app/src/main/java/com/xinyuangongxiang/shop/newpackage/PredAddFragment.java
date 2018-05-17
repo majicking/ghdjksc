@@ -125,6 +125,7 @@ public class PredAddFragment extends Fragment {
         params.put("key", MyShopApplication.getInstance().getLoginKey());
         params.put("pdr_amount", rechargetext);
         Dialog dialog = ProgressDialog.showLoadingProgress(context, "正在生成订单...");
+        dialog.show();
         RemoteDataHandler.asyncLoginPostDataString(url, params, MyShopApplication.getInstance(), data -> {
             ProgressDialog.dismissDialog(dialog);
             String result = data.getJson();
@@ -133,6 +134,7 @@ public class PredAddFragment extends Fragment {
                     String pay_sn = JSONParser.getStringFromJsonString("pay_sn", result);
                     if (!TextUtils.isEmpty(pay_sn)) {
                         Dialog dialog1 = ProgressDialog.showLoadingProgress(context, "正在处理订单...");
+                        dialog1.show();
                         Utils.loadingPaymentListData(o -> {
                                     ProgressDialog.dismissDialog(dialog1);
                                     ResponseData data1 = (ResponseData) o;

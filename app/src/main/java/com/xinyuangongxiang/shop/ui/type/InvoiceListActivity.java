@@ -284,6 +284,7 @@ public class InvoiceListActivity extends BaseActivity  {
         }
         params.put("inv_content", inv_content);
         Dialog dialog= ProgressDialog.showLoadingProgress(InvoiceListActivity.this,"加载中...");
+        dialog.show();
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {

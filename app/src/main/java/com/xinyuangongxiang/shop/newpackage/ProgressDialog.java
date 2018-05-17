@@ -40,7 +40,7 @@ public class ProgressDialog {
         window.setGravity(Gravity.CENTER);
         window.setAttributes(lp);
 //        window.setWindowAnimations(R.style.dialogAnimation);
-        loadingDialog.show();
+//        loadingDialog.show();
 
         return loadingDialog;
     }

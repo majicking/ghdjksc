@@ -629,6 +629,7 @@ public class VirtualOrderListViewAdapter extends BaseAdapter {
         params.put("key", myApplication.getLoginKey());
         params.put("order_id", order_id);
         Dialog dialog= ProgressDialog.showLoadingProgress(context,"处理中...");
+        dialog.show();
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication,
                 data -> {
             ProgressDialog.dismissDialog(dialog);

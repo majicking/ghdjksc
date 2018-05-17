@@ -1,5 +1,6 @@
 package com.xinyuangongxiang.shop.ui.store;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.xinyuangongxiang.shop.common.Constants;
 import com.xinyuangongxiang.shop.common.LoadImage;
 import com.xinyuangongxiang.shop.common.MyExceptionHandler;
 import com.xinyuangongxiang.shop.common.MyShopApplication;
+import com.xinyuangongxiang.shop.common.ShopHelper;
 import com.xinyuangongxiang.shop.common.SystemHelper;
 import com.xinyuangongxiang.shop.custom.MyGridView;
 import com.xinyuangongxiang.shop.custom.ViewFlipperScrollView;
@@ -54,7 +56,7 @@ import java.util.List;
 
 /**
  * 店铺首页fragment
- *
+ * <p>
  * Created by huting on 2015/12/29.
  */
 public class StoreIndexFragment extends Fragment implements GestureDetector.OnGestureListener, View.OnTouchListener {
@@ -103,7 +105,9 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
     private DisplayImageOptions options = SystemHelper.getDisplayImageOptions();
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
-    public StoreIndexFragment() {}
+    public StoreIndexFragment() {
+    }
+
     public static StoreIndexFragment newInstance(String store_id) {
         StoreIndexFragment fragment = new StoreIndexFragment();
         Bundle args = new Bundle();
@@ -135,32 +139,33 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
 
     /**
      * 初始化控件
+     *
      * @param layout
      */
-    private void initView(View layout){
-        btnCollectOrder = (Button)layout.findViewById(R.id.btnCollectOrder);
-        btnSaleOrder = (Button)layout.findViewById(R.id.btnSaleOrder);
+    private void initView(View layout) {
+        btnCollectOrder = (Button) layout.findViewById(R.id.btnCollectOrder);
+        btnSaleOrder = (Button) layout.findViewById(R.id.btnSaleOrder);
 
-        textSaleCount = (TextView)layout.findViewById(R.id.textSaleCount);
-        textMoney = (TextView)layout.findViewById(R.id.textMoney);
-        textSaleCountOne = (TextView)layout.findViewById(R.id.textSaleCountOne);
-        textSaleCountTwo = (TextView)layout.findViewById(R.id.textSaleCountTwo);
+        textSaleCount = (TextView) layout.findViewById(R.id.textSaleCount);
+        textMoney = (TextView) layout.findViewById(R.id.textMoney);
+        textSaleCountOne = (TextView) layout.findViewById(R.id.textSaleCountOne);
+        textSaleCountTwo = (TextView) layout.findViewById(R.id.textSaleCountTwo);
 
-        ret1 = (RelativeLayout)layout.findViewById(R.id.ret1);
-        ret2 = (RelativeLayout)layout.findViewById(R.id.ret2);
-        ret3 = (RelativeLayout)layout.findViewById(R.id.ret3);
-        llRank = (LinearLayout)layout.findViewById(R.id.llRank);
+        ret1 = (RelativeLayout) layout.findViewById(R.id.ret1);
+        ret2 = (RelativeLayout) layout.findViewById(R.id.ret2);
+        ret3 = (RelativeLayout) layout.findViewById(R.id.ret3);
+        llRank = (LinearLayout) layout.findViewById(R.id.llRank);
 
         //店铺轮播
         viewflipper = (ViewFlipper) layout.findViewById(R.id.viewflipper);
         dian = (LinearLayout) layout.findViewById(R.id.dian);
         myScrollView = (ViewFlipperScrollView) layout.findViewById(R.id.viewFlipperScrollViewID);
 
-        imgBig = (ImageView)layout.findViewById(R.id.imgBig);
-        imgSmallOne = (ImageView)layout.findViewById(R.id.imgSmallOne);
-        imgSmallTwo = (ImageView)layout.findViewById(R.id.imgSmallTwo);
+        imgBig = (ImageView) layout.findViewById(R.id.imgBig);
+        imgSmallOne = (ImageView) layout.findViewById(R.id.imgSmallOne);
+        imgSmallTwo = (ImageView) layout.findViewById(R.id.imgSmallTwo);
 
-        sotreGoodsGridViewID = (MyGridView)layout.findViewById(R.id.sotreGoodsGridViewID);
+        sotreGoodsGridViewID = (MyGridView) layout.findViewById(R.id.sotreGoodsGridViewID);
         goodsListViewAdapter = new StoreGoodsMyGridViewListAdapter(getActivity());
         sotreGoodsGridViewID.setAdapter(goodsListViewAdapter);
 
@@ -209,9 +214,10 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
 
     /**
      * 初始化数据（店铺排行榜）
+     *
      * @param type
      */
-    private void initOrderData(String type){
+    private void initOrderData(String type) {
         String url = Constants.URL_STORE_RANKING;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
@@ -238,19 +244,11 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
                             }
                         }
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });
@@ -259,7 +257,7 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
     /**
      * 初始化界面数据(店主推荐)
      */
-    private void initData(String store_id){
+    private void initData(String store_id) {
         String url = Constants.URL_STORE_INFO + "&store_id=" + store_id + "&key=" + myApplication.getLoginKey();
 
         RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
@@ -302,34 +300,47 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
         });
     }
 
+    Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
     /**
      * 排行界面的初始化
+     *
      * @param jsonObj
      */
-    private void showRankingView(JSONObject jsonObj,int i){
-        if (!jsonObj.equals("[]") && i == 0) {
-           StoreIndexHome1 bean = StoreIndexHome1.newInstanceList(jsonObj);
-           LoadImage.loadImg(getActivity(),imgBig,bean.getGoods_image_url());
+    private void showRankingView(JSONObject jsonObj, int i) {
+        try {
+            if (!jsonObj.equals("[]") && i == 0) {
+                StoreIndexHome1 bean = StoreIndexHome1.newInstanceList(jsonObj);
+                LoadImage.loadImg(context, imgBig, bean.getGoods_image_url());
 
-            ret1.setVisibility(View.VISIBLE);
-            textSaleCount.setText("已售" + bean.getGoods_salenum());
-            textMoney.setText("￥"+bean.getGoods_price());
-            OnImageViewClick(imgBig, bean.getGoods_id());
+                ret1.setVisibility(View.VISIBLE);
+                textSaleCount.setText("已售" + bean.getGoods_salenum());
+                textMoney.setText("￥" + bean.getGoods_price());
+                OnImageViewClick(imgBig, bean.getGoods_id());
 
-        }else if(!jsonObj.equals("[]") && i == 1){
-            StoreIndexHome1 bean = StoreIndexHome1.newInstanceList(jsonObj);
-            LoadImage.loadImg(getActivity(), imgSmallOne, bean.getGoods_image_url());
+            } else if (!jsonObj.equals("[]") && i == 1) {
+                StoreIndexHome1 bean = StoreIndexHome1.newInstanceList(jsonObj);
+                LoadImage.loadImg(context, imgSmallOne, bean.getGoods_image_url());
 
-            ret2.setVisibility(View.VISIBLE);
-            textSaleCountOne.setText("已售" + bean.getGoods_salenum());
-            OnImageViewClick(imgSmallOne, bean.getGoods_id());
+                ret2.setVisibility(View.VISIBLE);
+                textSaleCountOne.setText("已售" + bean.getGoods_salenum());
+                OnImageViewClick(imgSmallOne, bean.getGoods_id());
 
-        }else if(!jsonObj.equals("[]") && i == 2){
-            StoreIndexHome1 bean = StoreIndexHome1.newInstanceList(jsonObj);
-            LoadImage.loadImg(getActivity(), imgSmallTwo, bean.getGoods_image_url());
-            ret3.setVisibility(View.VISIBLE);
-            textSaleCountTwo.setText("已售" + bean.getGoods_salenum());
-            OnImageViewClick(imgSmallTwo, bean.getGoods_id());
+            } else if (!jsonObj.equals("[]") && i == 2) {
+                StoreIndexHome1 bean = StoreIndexHome1.newInstanceList(jsonObj);
+                LoadImage.loadImg(getActivity(), imgSmallTwo, bean.getGoods_image_url());
+                ret3.setVisibility(View.VISIBLE);
+                textSaleCountTwo.setText("已售" + bean.getGoods_salenum());
+                OnImageViewClick(imgSmallTwo, bean.getGoods_id());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -365,7 +376,7 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
         myScrollView.setGestureDetector(mGestureDetector);
 
         viewfalg = viewList.size();
-        if ( viewfalg > 1) {
+        if (viewfalg > 1) {
             dian_select(currentPage);
             mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 4000);
         }
