@@ -9,12 +9,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
-import com.xinyuangongxiang.shop.common.MyShopApplication;
-import com.xinyuangongxiang.shop.common.T;
-import com.xinyuangongxiang.shop.http.RemoteDataHandler;
-import com.xinyuangongxiang.shop.http.ResponseData;
-import com.xinyuangongxiang.shop.ncinterface.DataCallback;
-import com.xinyuangongxiang.shop.xrefresh.utils.LogUtils;
+import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.T;
+import com.guohanhealth.shop.http.RemoteDataHandler;
+import com.guohanhealth.shop.http.ResponseData;
+import com.guohanhealth.shop.ncinterface.DataCallback;
+import com.guohanhealth.shop.xrefresh.utils.LogUtils;
 
 import org.apache.http.HttpStatus;
 

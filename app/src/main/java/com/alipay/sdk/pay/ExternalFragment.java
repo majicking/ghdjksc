@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xinyuangongxiang.shop.R;
+import com.guohanhealth.shop.R;
 
 
 /**
