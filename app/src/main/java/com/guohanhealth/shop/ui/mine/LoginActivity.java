@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,35 +15,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.umeng.socialize.UMAuthListener;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-//
-//import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-//import com.sina.weibo.sdk.auth.sso.SsoHandler;
-//import com.umeng.qq.tencent.Tencent;
-//import com.umeng.socialize.UMAuthListener;
-//import com.umeng.socialize.UMShareAPI;
-//import com.umeng.socialize.bean.SHARE_MEDIA;
-//import com.umeng.socialize.sina.auth.AuthInfo;
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.common.Constants;
-import com.guohanhealth.shop.common.LogHelper;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
-import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.newpackage.ProgressDialog;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareConfig;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+
 
 /**
  * 登录页面
@@ -78,6 +72,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
 
     private UMShareAPI mShareAPI = null;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -335,9 +330,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            String nickname = map.get("screen_name");
-            String avatar = map.get("profile_image_url");
-            loginQq(token, openid, nickname, avatar);
+
         }
 
         @Override
@@ -363,6 +356,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         SHARE_MEDIA platform = null;
         switch (view.getId()) {
             case R.id.btnQQ:
+
                 platform = SHARE_MEDIA.QQ;
                 break;
             case R.id.btnWeiXin:
@@ -381,59 +375,115 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     //授权
     private void authorization(SHARE_MEDIA share_media) {
-        UMShareAPI.get(this).getPlatformInfo(this, share_media, new UMAuthListener() {
+        if (!UMShareAPI.get(LoginActivity.this).isInstall(this, share_media)) {
+            Toast.makeText(LoginActivity.this, "未安装客户端", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        Observable.create((Observable.OnSubscribe<Integer>) subscriber -> {
+            subscriber.onNext(1);
+            subscriber.onCompleted();
+        }).subscribe(new Observer<Integer>() {
             @Override
-            public void onStart(SHARE_MEDIA share_media) {
-                LogUtils.i("onStart " + "授权开始");
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA platform, int i, Map<String, String> map) {
-                LogUtils.i("onComplete " + "授权完成");
-                if (map != null) {
-                    //sdk是6.4.4的,但是获取值的时候用的是6.2以前的(access_token)才能获取到值,未知原因
-                    String uid = map.get("uid");
-                    String openid = map.get("openid");//微博没有
-                    String unionid = map.get("unionid");//微博没有
-                    String access_token = map.get("access_token");
-                    String refresh_token = map.get("refresh_token");//微信,qq,微博都没有获取到
-                    String expires_in = map.get("expires_in");
-                    String name = map.get("name");
-                    String gender = map.get("gender");
-                    String iconurl = map.get("iconurl");
-
-                    if (platform == SHARE_MEDIA.QQ) {
-                        token = map.get("access_token");
-//                        openid = map.get("openid");
-                        UMShareAPI.get(LoginActivity.this).getPlatformInfo(LoginActivity.this, platform, userinfo);
-
-                    } else if (platform == SHARE_MEDIA.WEIXIN) {
-//                        String access_token = map.get("access_token");
-//                        String openid = map.get("openid");
-                        loginWx(access_token, openid);
-
-                    } else if (platform == SHARE_MEDIA.SINA) {
-                        String accessToken = map.get("access_token");
-                        String userId = map.get("uid");
-                        loginWeibo(accessToken, userId);
+            public void onNext(Integer integer) {
+                UMShareAPI.get(LoginActivity.this).deleteOauth(LoginActivity.this, share_media, new UMAuthListener() {
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+                        LogUtils.i("onStart " + "删除授权开始");
                     }
 
+                    @Override
+                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                        if (map != null && map.size() > 0) {
+                            for (Map.Entry e : map.entrySet()) {
+                                LogUtils.i("key " + e.getKey() + "VALUE=" + e.getValue());
+
+                            }
+                        }
+                        LogUtils.i("onStart " + "删除授权完成" + i);
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                        LogUtils.i("onStart " + "删除授权错误");
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA share_media, int i) {
+                        LogUtils.i("onStart " + "删除授权取消");
+                    }
+
+                });
+            }
+
+            @Override
+            public void onCompleted() {
+                UMShareConfig config = new UMShareConfig();
+                config.isNeedAuthOnGetUserInfo(true);
+                UMShareAPI.get(LoginActivity.this).setShareConfig(config);
+                UMShareAPI.get(LoginActivity.this).getPlatformInfo(LoginActivity.this, share_media, new UMAuthListener() {
+
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+                        LogUtils.i("onStart " + "授权开始");
+//                UMShareAPI.get(LoginActivity.this).
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA platform, int i, Map<String, String> map) {
+                        if (map != null && map.size() > 0) {
+                            for (Map.Entry e : map.entrySet()) {
+                                LogUtils.i("key " + e.getKey() + "VALUE=" + e.getValue());
+                            }
+                        }
+
+                        LogUtils.i("onComplete " + "授权完成");
+                        if (map != null) {
+                            //sdk是6.4.4的,但是获取值的时候用的是6.2以前的(access_token)才能获取到值,未知原因
+                            uid = map.get("uid");
+                            openid = map.get("openid");//微博没有
+                            String unionid = map.get("unionid");//微博没有
+                            token = map.get("access_token");
+                            String refresh_token = map.get("refresh_token");//微信,qq,微博都没有获取到
+                            String expires_in = map.get("expires_in");
+                            String name = map.get("name");
+                            String gender = map.get("gender");
+                            String iconurl = map.get("iconurl");
+                            if (platform == SHARE_MEDIA.QQ) {
+                                String nickname = map.get("screen_name");
+                                String avatar = map.get("profile_image_url");
+                                loginQq(token, openid, nickname, avatar);
+//                        UMShareAPI.get(LoginActivity.this).getPlatformInfo(LoginActivity.this, platform, userinfo);
+                            } else if (platform == SHARE_MEDIA.WEIXIN) {
+                                loginWx(token, openid);
+                            } else if (platform == SHARE_MEDIA.SINA) {
+                                loginWeibo(token, uid);
+                            }
+
 //                    Toast.makeText(getApplicationContext(), "name=" + name + ",gender=" + gender, Toast.LENGTH_SHORT).show();
-                }
+                        }
 
 
-                //拿到信息去请求登录接口。。。
+                        //拿到信息去请求登录接口。。。
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                        LogUtils.i("onError " + "授权失败" + i);
+                        Toast.makeText(mActivity, "授权失败" + i, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA share_media, int i) {
+                        LogUtils.i("onCancel " + "授权取消");
+                        Toast.makeText(mActivity, "授权取消" + i, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
             @Override
-            public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                LogUtils.i("onError " + "授权失败" + i);
-            }
-
-            @Override
-            public void onCancel(SHARE_MEDIA share_media, int i) {
-                LogUtils.i("onCancel " + "授权取消");
+            public void onError(Throwable e) {
             }
         });
     }

@@ -16,13 +16,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.readystatesoftware.viewbadger.BadgeView;
-
-import com.guohanhealth.shop.R;
-
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
@@ -32,11 +29,10 @@ import com.guohanhealth.shop.ui.home.HomeFragment;
 import com.guohanhealth.shop.ui.mine.MineFragment;
 import com.guohanhealth.shop.ui.mine.UpdateManager;
 import com.guohanhealth.shop.ui.type.OneTypeFragment;
-
+import com.readystatesoftware.viewbadger.BadgeView;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 
 /**
@@ -47,10 +43,8 @@ import java.util.HashMap;
  * @Email KingKong@QQ.COM
  */
 public class MainFragmentManager extends FragmentActivity {
-
     // 定义一个变量，来标识是否退出
     private static boolean isExit = false;
-
     /**
      * 定义首页、分类、购物车、我的Fragment
      */
@@ -58,7 +52,6 @@ public class MainFragmentManager extends FragmentActivity {
     private OneTypeFragment typeFragment;
     private MineFragment mineFragment;
     private CartFragment cartFragment;
-
     /**
      * 定义首页、分类、购物车、我的tab的图标
      */
@@ -66,18 +59,13 @@ public class MainFragmentManager extends FragmentActivity {
     private RadioButton btnClassID;
     private RadioButton btnCartID;
     private RadioButton btnMineID;
-
-
     private Button btn3;
     private BadgeView badge;
-
     private MyShopApplication myApplication;
-
     /**
      * 对Fragment进行管理
      */
     private FragmentManager fragmentManager;
-
     Handler mHandler = new Handler() {
 
         @Override
@@ -91,12 +79,9 @@ public class MainFragmentManager extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
-
         MyExceptionHandler.getInstance().setContext(this);
         fragmentManager = getSupportFragmentManager();
-
         myApplication = (MyShopApplication) getApplicationContext();
-
         initViews();
     }
 
@@ -124,13 +109,13 @@ public class MainFragmentManager extends FragmentActivity {
             } else if (action.equals(Constants.SHOW_HOME_URL)) {
                 HomeIn();//显示首页
                 btnHomeID.setChecked(true);
-            }else if(action.equals(Constants.SHOW_Classify_URL)){
+            } else if (action.equals(Constants.SHOW_Classify_URL)) {
                 TupeIn();//显示分类页面
                 btnClassID.setChecked(true);
-            }else if(action.equals(Constants.SHOW_Mine_URL)){
+            } else if (action.equals(Constants.SHOW_Mine_URL)) {
                 MineIn();//显示我的商城页面
                 btnMineID.setChecked(true);
-            }else if(action.equals(Constants.SHOW_CART_NUM)){
+            } else if (action.equals(Constants.SHOW_CART_NUM)) {
                 setCartNumShow();
             }
         }
@@ -178,52 +163,45 @@ public class MainFragmentManager extends FragmentActivity {
         btnMineID = (RadioButton) this.findViewById(R.id.btnMineID);
 
         btn3 = (Button) this.findViewById(R.id.btn3);
-        badge= new BadgeView(this, btn3);
+        badge = new BadgeView(this, btn3);
         badge.setTextSize(10);
         badge.setVisibility(View.GONE);
         badge.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-        if(!(myApplication.getLoginKey().equals("null")||myApplication.getLoginKey().equals(""))){
+        if (!(myApplication.getLoginKey().equals("null") || myApplication.getLoginKey().equals(""))) {
             setCartNumShow();
         }
-
         MyRadioButtonClickListener listener = new MyRadioButtonClickListener();
         btnHomeID.setOnClickListener(listener);
         btnClassID.setOnClickListener(listener);
         btnCartID.setOnClickListener(listener);
         btnMineID.setOnClickListener(listener);
-
         //首次进入显示首页界面
         HomeIn();
-
         //判断是否有新版本
         versionUpdate();
-
     }
 
-    public void   setCartNumShow(){
-        String url=Constants.URL_GET_CART_NUM;
+    public void setCartNumShow() {
+        String url = Constants.URL_GET_CART_NUM;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
-        RemoteDataHandler.asyncPostDataString(url,params,new Callback() {
+        RemoteDataHandler.asyncPostDataString(url, params, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
-                String json=data.getJson();
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    try{
-                        JSONObject obj=new JSONObject(json);
-                        String num=obj.getString("cart_count");
-//                        Log.i("QINM",num);
+                    try {
+                        JSONObject obj = new JSONObject(json);
+                        String num = obj.getString("cart_count");
                         badge.setText(num);
                         badge.show();
-                    }catch (JSONException e){
-                        Toast.makeText(MainFragmentManager.this,"获取购物车数量失败",Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        Toast.makeText(MainFragmentManager.this, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
                     }
 
                 }
             }
         });
-
-
     }
 
     /**
@@ -312,12 +290,11 @@ public class MainFragmentManager extends FragmentActivity {
                         e.printStackTrace();
                     }
                 } else {
-//						Toast.makeText(MainFragmentManager.this, R.string.load_error, Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(MainFragmentManager.this, "");
                 }
             }
         });
     }
-
 
     class MyRadioButtonClickListener implements View.OnClickListener {
         public void onClick(View v) {
@@ -360,5 +337,4 @@ public class MainFragmentManager extends FragmentActivity {
 //            System.exit(0);
         }
     }
-
 }

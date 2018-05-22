@@ -2,7 +2,6 @@ package com.guohanhealth.shop.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -28,36 +27,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.guohanhealth.shop.bean.Goods1Bean;
-import com.guohanhealth.shop.bean.Goods2Bean;
-import com.guohanhealth.shop.bean.Home5Bean;
-import com.guohanhealth.shop.bean.HomeMenuBtn;
-import com.guohanhealth.shop.common.JSONParser;
-import com.guohanhealth.shop.newpackage.CommonAdapter;
-import com.guohanhealth.shop.newpackage.OrderActivity;
-import com.guohanhealth.shop.newpackage.ViewHolder;
-import com.guohanhealth.shop.ui.mine.MyAssetActivity;
-import com.guohanhealth.shop.ui.type.GoodsBrowseActivity;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
 import com.guohanhealth.shop.MainFragmentManager;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.HomeActivityMyGridViewListAdapter;
 import com.guohanhealth.shop.bean.AdvertList;
+import com.guohanhealth.shop.bean.Goods1Bean;
+import com.guohanhealth.shop.bean.Goods2Bean;
 import com.guohanhealth.shop.bean.Home1Data;
 import com.guohanhealth.shop.bean.Home2Data;
 import com.guohanhealth.shop.bean.Home3Data;
+import com.guohanhealth.shop.bean.Home5Bean;
 import com.guohanhealth.shop.bean.HomeGoodsList;
+import com.guohanhealth.shop.bean.HomeMenuBtn;
 import com.guohanhealth.shop.bean.HomeVideo;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
 import com.guohanhealth.shop.common.Constants;
+import com.guohanhealth.shop.common.JSONParser;
 import com.guohanhealth.shop.common.JsonUtil;
 import com.guohanhealth.shop.common.LoadImage;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
-import com.guohanhealth.shop.common.ScreenUtil;
 import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.custom.MyGridView;
@@ -65,16 +54,23 @@ import com.guohanhealth.shop.custom.ViewFlipperScrollView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
 import com.guohanhealth.shop.http.ResponseData;
-import com.guohanhealth.shop.scannercode.android.CaptureActivity;
-import com.guohanhealth.shop.ui.fenxiao.FenXiaoAudeoListTabActivity;
 import com.guohanhealth.shop.library.PullToRefreshBase;
 import com.guohanhealth.shop.library.PullToRefreshBase.OnRefreshListener;
 import com.guohanhealth.shop.library.PullToRefreshScrollView;
+import com.guohanhealth.shop.newpackage.CommonAdapter;
+import com.guohanhealth.shop.newpackage.OrderActivity;
+import com.guohanhealth.shop.newpackage.ViewHolder;
+import com.guohanhealth.shop.scannercode.android.CaptureActivity;
+import com.guohanhealth.shop.ui.fenxiao.FenXiaoAudeoListTabActivity;
 import com.guohanhealth.shop.ui.mine.IMNewListActivity;
+import com.guohanhealth.shop.ui.mine.MyAssetActivity;
 import com.guohanhealth.shop.ui.mine.SigninActivity;
+import com.guohanhealth.shop.ui.type.GoodsBrowseActivity;
 import com.guohanhealth.shop.ui.type.GoodsDetailsActivity;
 import com.guohanhealth.shop.ui.type.GoodsListFragmentManager;
-import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -95,22 +91,13 @@ import static com.guohanhealth.shop.common.Constants.ORDERTYPE;
  */
 public class HomeFragment extends Fragment implements OnGestureListener, OnTouchListener {
     private MyShopApplication myApplication;
-
     private Intent intent = null;
-
     private TextView tvSearch;
     private Button btnCamera;
     private LinearLayout llIm;
     private TextView tvSearchD;
     private Button btnCameraD;
     private LinearLayout llImD;
-
-    private LinearLayout llHomeGoodsClassify;//商品分类
-    private LinearLayout llHomeCart;//购物车
-    private LinearLayout llHomeMine;//我的商城
-    private LinearLayout llHomeSignin;//每日签到
-
-
     private PullToRefreshScrollView mPullRefreshScrollView;
     private ViewFlipper viewflipper;
     private LinearLayout dian;
@@ -118,24 +105,18 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     private int currentPage = 0;
     private final int SHOW_NEXT = 0011;
     private float downNub;//记录按下时的距离
-
     private LinearLayout HomeView, tab_home_item_video;
-
     private static final int FLING_MIN_DISTANCE = 50;
     private static final int FLING_MIN_VELOCITY = 0;
-
     private GestureDetector mGestureDetector;
     private ViewFlipperScrollView myScrollView;
     private ArrayList<ImageView> viewList = new ArrayList<ImageView>();
     private Animation left_in, left_out, right_in, right_out;
-
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options = SystemHelper.getDisplayImageOptions();
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
-
     private LinearLayout homeSearch;
     private LinearLayout search;
-
     private Button toTopBtn;// 返回顶部的按钮
     private int scrollY = 0;// 标记上次滑动位置
     private View contentView;
@@ -145,14 +126,11 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View viewLayout = inflater.inflate(R.layout.main_home_view, container, false);
-
         MyExceptionHandler.getInstance().setContext(getActivity());
-
         initViewID(viewLayout);//注册控件ID
         mGestureDetector = new GestureDetector(this);
         viewflipper.setOnTouchListener(this);
         myScrollView.setGestureDetector(mGestureDetector);
-
         return viewLayout;
     }
 
@@ -161,59 +139,29 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
      */
     public void initViewID(View view) {
         myApplication = (MyShopApplication) getActivity().getApplicationContext();
-
         //搜索
         tvSearch = (TextView) view.findViewById(R.id.tvSearch);
-        tvSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), SearchActivity.class));
-            }
-        });
+        tvSearch.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), SearchActivity.class)));
         tvSearchD = (TextView) view.findViewById(R.id.tvSearchD);
-        tvSearchD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), SearchActivity.class));
-            }
-        });
+        tvSearchD.setOnClickListener(view13 -> startActivity(new Intent(getActivity(), SearchActivity.class)));
         //摄像头
         btnCamera = (Button) view.findViewById(R.id.btnCamera);
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
-            }
-        });
+        btnCamera.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), CaptureActivity.class)));
         btnCameraD = (Button) view.findViewById(R.id.btnCameraD);
-        btnCameraD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
-            }
-        });
+        btnCameraD.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), CaptureActivity.class)));
         //IM
         llIm = (LinearLayout) view.findViewById(R.id.llIm);
-        llIm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-//                    startActivity(new Intent(getActivity(), IMFriendsListActivity.class));
-                    startActivity(new Intent(getActivity(), IMNewListActivity.class));
-                }
+        llIm.setOnClickListener(view16 -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), IMNewListActivity.class));
             }
         });
         llImD = (LinearLayout) view.findViewById(R.id.llImD);
-        llImD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-//                    startActivity(new Intent(getActivity(), IMFriendsListActivity.class));
-                    startActivity(new Intent(getActivity(), IMNewListActivity.class));
-                }
+        llImD.setOnClickListener(view17 -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), IMNewListActivity.class));
             }
         });
-
         MyGridView gridView = (MyGridView) view.findViewById(R.id.gridemenu);
         CommonAdapter<HomeMenuBtn> adapter = new CommonAdapter<HomeMenuBtn>(context, HomeMenuBtn.getHomeBtn(), R.layout.home_menu_item) {
             @Override
@@ -236,7 +184,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     break;
                 case 1:
                     if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                        //startActivity(new Intent(getActivity(), OrderListActivity.class));
                         intent = new Intent(getActivity(), MainFragmentManager.class);
                         myApplication.sendBroadcast(new Intent(Constants.SHOW_CART_URL));
                         context.startActivity(intent);
@@ -277,56 +224,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     break;
             }
         });
-//        //商品分类
-//        llHomeGoodsClassify = (LinearLayout) view.findViewById(R.id.llHomeFavGoods);
-//        llHomeGoodsClassify.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                /*if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-//                    startActivity(new Intent(getActivity(), FavGoodsListActivity.class));
-//                }*/
-//
-//                intent = new Intent(getActivity(), MainFragmentManager.class);
-//                myApplication.sendBroadcast(new Intent(Constants.SHOW_Classify_URL));
-//                startActivity(intent);
-//            }
-//        });
-//        //购物车
-//        llHomeCart = (LinearLayout) view.findViewById(R.id.llHomeMyOrder);
-//        llHomeCart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-//                    //startActivity(new Intent(getActivity(), OrderListActivity.class));
-//                    intent = new Intent(getActivity(), MainFragmentManager.class);
-//                    myApplication.sendBroadcast(new Intent(Constants.SHOW_CART_URL));
-//                    startActivity(intent);
-//                }
-//            }
-//        });
-//        //我的商城
-//        llHomeMine = (LinearLayout) view.findViewById(R.id.llHomeMyAsset);
-//        llHomeMine.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                /*if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-//                    startActivity(new Intent(getActivity(), MyAssetActivity.class));
-//                }*/
-//                intent = new Intent(getActivity(), MainFragmentManager.class);
-//                myApplication.sendBroadcast(new Intent(Constants.SHOW_Mine_URL));
-//                startActivity(intent);
-//            }
-//        });
-//        //每日签到
-//        llHomeSignin = (LinearLayout) view.findViewById(R.id.llHomeSignin);
-//        llHomeSignin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-//                    startActivity(new Intent(getActivity(), SigninActivity.class));
-//                }
-//            }
-//        });
 
         mPullRefreshScrollView = (PullToRefreshScrollView) view.findViewById(R.id.pull_refresh_scrollview);
         viewflipper = (ViewFlipper) view.findViewById(R.id.viewflipper);
@@ -335,54 +232,35 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
 
         HomeView = (LinearLayout) view.findViewById(R.id.homeViewID);
         tab_home_item_video = (LinearLayout) view.findViewById(R.id.tab_home_item_video);
-
         left_in = AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_in);
         left_out = AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_out);
         right_in = AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_in);
         right_out = AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_out);
-
         homeSearch = (LinearLayout) view.findViewById(R.id.homeSearch);
         search = (LinearLayout) view.findViewById(R.id.search);
-
         homeSearch.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
             }
         });
-
         //下拉刷新监听
-
-        mPullRefreshScrollView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                toTopBtn.setVisibility(View.GONE);
-                search.setVisibility(View.GONE);
-                homeSearch.setVisibility(View.VISIBLE);
-                loadUIData();
-            }
+        mPullRefreshScrollView.setOnRefreshListener(refreshView -> {
+            toTopBtn.setVisibility(View.GONE);
+            search.setVisibility(View.GONE);
+            homeSearch.setVisibility(View.VISIBLE);
+            loadUIData();
         });
-
         scrollView = mPullRefreshScrollView.getRefreshableView();
         if (contentView == null) {
             contentView = scrollView.getChildAt(0);
         }
-
         toTopBtn = (Button) view.findViewById(R.id.top_btn);
-        toTopBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scrollView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.fullScroll(ScrollView.FOCUS_UP);
-                    }
-                });
-                toTopBtn.setVisibility(View.GONE);
-                search.setVisibility(View.GONE);
-                homeSearch.setVisibility(View.VISIBLE);
-            }
+        toTopBtn.setOnClickListener(view18 -> {
+            scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_UP));
+            toTopBtn.setVisibility(View.GONE);
+            search.setVisibility(View.GONE);
+            homeSearch.setVisibility(View.VISIBLE);
         });
-
         scrollView.setOnTouchListener(new OnTouchListener() {
             private int lastY = 0;
             private int touchEventId = -9983761;
@@ -402,7 +280,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     }
                 }
             };
-
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -411,28 +288,20 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 }
                 return false;
             }
-
             private void handleStop(Object view) {
                 ScrollView scroller = (ScrollView) view;
                 scrollY = scroller.getScrollY();
                 doOnBorderListener();
             }
         });
-
         loadUIData();
-
         //读取热门关键词
         getSearchHot();
-
         //读取搜素关键词列表
         getSearchKeyList();
     }
 
     private void doOnBorderListener() {
-//        LogUtils.i(ScreenUtil.getScreenViewBottomHeight(scrollView) + "  "
-//                + scrollView.getScrollY() + " " + ScreenUtil
-//                .getScreenHeight(context));
-
         // 底部判断
         if (contentView != null
                 && contentView.getMeasuredHeight() <= scrollView.getScrollY()
@@ -463,11 +332,8 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 try {
                     String json = data.getJson();
                     JSONArray arr = new JSONArray(json);
-//                        Logger.d(json);
                     int size = null == arr ? 0 : arr.length();
-
                     for (int i = 0; i < size; i++) {
-
                         JSONObject obj = arr.getJSONObject(i);
                         JSONObject JsonObj = new JSONObject(obj.toString());
                         if (!JsonObj.isNull("home1")) {
@@ -491,24 +357,18 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                         } else if (!JsonObj.isNull("goods2")) {     //抢购商品
                             showGoods2(JsonObj);
                         }
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             } else {
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), context.getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
     boolean endThread;
-
     /**
      * 显示商品块
-     *
      * @param jsonObj
      * @throws JSONException
      */
@@ -518,9 +378,7 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             JSONObject itemObj = new JSONObject(goodsJson);
             String item = itemObj.getString("item");
             String title = itemObj.getString("title");
-
             if (!item.equals("[]")) {
-
                 ArrayList<HomeGoodsList> goodsList = HomeGoodsList.newInstanceList(item);
                 View goodsView = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_goods, null);
                 TextView textView = (TextView) goodsView.findViewById(R.id.TextViewTitle);
@@ -541,28 +399,18 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     intent.putExtra("goods_id", goodsList.get(position).getGoods_id());
                     context.startActivity(intent);
                 });
-
-
-//                HomeGoodsMyGridViewListAdapter adapter = new HomeGoodsMyGridViewListAdapter(getActivity());
-//                adapter.setHomeGoodsList(goodsList);
-//                gridview.setAdapter(adapter);
-//                adapter.notifyDataSetChanged();
-
                 if (!title.equals("") && !title.equals("null") && title != null) {
                     textView.setVisibility(View.VISIBLE);
                     textView.setText(title);
                 } else {
                     textView.setVisibility(View.GONE);
                 }
-
                 HomeView.addView(goodsView);
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 限时商品
      */
@@ -595,7 +443,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                         oldprice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                         oldprice.setText("" + item.goods_price);
                         viewHolder.setText(R.id.endtime, item.activtime);
-
                     }
                 };
                 gridview.setAdapter(adapter);
@@ -617,7 +464,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                             for (int i = 0; i < list.size(); i++) {
                                 //拿到每件商品的时间差，转化为具体的多少天多少小时多少分多少秒
                                 //并保存在商品time这个属性内
-
                                 long counttime = list.get(i).time;
                                 long days = counttime / (60 * 60 * 24);
                                 long hours = (counttime - days * (60 * 60 * 24)) / (60 * 60);
@@ -646,16 +492,12 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     intent.putExtra("goods_id", list.get(position).goods_id);
                     context.startActivity(intent);
                 });
-
-
                 HomeView.addView(goodsView);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
     /**
      * 抢购商品
      */
@@ -692,15 +534,12 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 } else {
                     textView.setVisibility(View.GONE);
                 }
-
                 HomeView.addView(goodsView);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
     /**
      * 显示广告块
      *
@@ -712,21 +551,16 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             String advertJson = jsonObj.getString("adv_list");
             JSONObject itemObj = new JSONObject(advertJson);
             String item = itemObj.getString("item");
-
             if (!item.equals("[]")) {
-
                 ArrayList<AdvertList> advertList = AdvertList.newInstanceList(item);
-
                 if (advertList.size() > 0 && advertList != null) {
                     initHeadImage(advertList);
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 显示Home1
      *
@@ -740,14 +574,12 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             View home1View = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_home1, null);
             TextView textView = (TextView) home1View.findViewById(R.id.TextViewHome1Title01);
             ImageView imageView = (ImageView) home1View.findViewById(R.id.ImageViewHome1Imagepic01);
-
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
             } else {
                 textView.setVisibility(View.GONE);
             }
-
             imageLoader.displayImage(bean.getImage(), imageView, options, animateFirstListener);
             OnImageViewClick(imageView, bean.getType(), bean.getData());
             HomeView.addView(home1View);
@@ -755,7 +587,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             e.printStackTrace();
         }
     }
-
     /**
      * 显示Home2
      *
@@ -768,32 +599,26 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             Home2Data bean = Home2Data.newInstanceDetelis(home2Json);
             View home2View = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_home2_left, null);
             TextView textView = (TextView) home2View.findViewById(R.id.TextViewTitle);
-
             ImageView imageViewSquare = (ImageView) home2View.findViewById(R.id.ImageViewSquare);
             ImageView imageViewRectangle1 = (ImageView) home2View.findViewById(R.id.ImageViewRectangle1);
             ImageView imageViewRectangle2 = (ImageView) home2View.findViewById(R.id.ImageViewRectangle2);
-
             imageLoader.displayImage(bean.getSquare_image(), imageViewSquare, options, animateFirstListener);
             imageLoader.displayImage(bean.getRectangle1_image(), imageViewRectangle1, options, animateFirstListener);
             imageLoader.displayImage(bean.getRectangle2_image(), imageViewRectangle2, options, animateFirstListener);
-
             OnImageViewClick(imageViewSquare, bean.getSquare_type(), bean.getSquare_data());
             OnImageViewClick(imageViewRectangle1, bean.getRectangle1_type(), bean.getRectangle1_data());
             OnImageViewClick(imageViewRectangle2, bean.getRectangle2_type(), bean.getRectangle2_data());
-
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
             } else {
                 textView.setVisibility(View.GONE);
             }
-
             HomeView.addView(home2View);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 显示Home3
      *
@@ -813,23 +638,19 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             adapter.setHome3Datas(home3Datas);
             gridview.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
             } else {
                 textView.setVisibility(View.GONE);
             }
-
             HomeView.addView(home3View);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 显示Home4
-     *
      * @param jsonObj
      * @throws JSONException
      */
@@ -839,36 +660,28 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             Home2Data bean = Home2Data.newInstanceDetelis(home2Json);
             View home4View = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_home2_rehit, null);
             TextView textView = (TextView) home4View.findViewById(R.id.TextViewTitle);
-
             ImageView imageViewSquare = (ImageView) home4View.findViewById(R.id.ImageViewSquare);
             ImageView imageViewRectangle1 = (ImageView) home4View.findViewById(R.id.ImageViewRectangle1);
             ImageView imageViewRectangle2 = (ImageView) home4View.findViewById(R.id.ImageViewRectangle2);
-
             imageLoader.displayImage(bean.getSquare_image(), imageViewSquare, options, animateFirstListener);
             imageLoader.displayImage(bean.getRectangle1_image(), imageViewRectangle1, options, animateFirstListener);
             imageLoader.displayImage(bean.getRectangle2_image(), imageViewRectangle2, options, animateFirstListener);
-
             OnImageViewClick(imageViewSquare, bean.getSquare_type(), bean.getSquare_data());
             OnImageViewClick(imageViewRectangle1, bean.getRectangle1_type(), bean.getRectangle1_data());
             OnImageViewClick(imageViewRectangle2, bean.getRectangle2_type(), bean.getRectangle2_data());
-
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
             } else {
                 textView.setVisibility(View.GONE);
             }
-
             HomeView.addView(home4View);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
     /**
      * 显示Home5  楼层布局
-     *
      * @param jsonObj
      * @throws JSONException
      */
@@ -883,17 +696,14 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             ImageView img2 = (ImageView) homeView.findViewById(R.id.img2);
             ImageView img3 = (ImageView) homeView.findViewById(R.id.img3);
             ImageView img4 = (ImageView) homeView.findViewById(R.id.img4);
-
             imageLoader.displayImage(bean.getSquare_image(), img1, options, animateFirstListener);
             imageLoader.displayImage(bean.getRectangle1_image(), img2, options, animateFirstListener);
             imageLoader.displayImage(bean.getRectangle2_image(), img3, options, animateFirstListener);
             imageLoader.displayImage(bean.getRectangle3_image(), img4, options, animateFirstListener);
-
             OnImageViewClick(img1, bean.getSquare_type(), bean.getSquare_data());
             OnImageViewClick(img2, bean.getRectangle1_type(), bean.getRectangle1_data());
             OnImageViewClick(img3, bean.getRectangle2_type(), bean.getRectangle2_data());
             OnImageViewClick(img4, bean.getRectangle3_type(), bean.getRectangle3_data());
-
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
                 title1.setVisibility(View.VISIBLE);
                 title1.setText(bean.getTitle());
@@ -913,16 +723,12 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
         }
     }
 
-
     public void initHeadImage(ArrayList<AdvertList> list) {
-
         mHandler.removeMessages(SHOW_NEXT);
-
         //清除已有视图防止重复
         viewflipper.removeAllViews();
         dian.removeAllViews();
         viewList.clear();
-
         for (int i = 0; i < list.size(); i++) {
             AdvertList bean = list.get(i);
             ImageView imageView = new ImageView(HomeFragment.this.getActivity());
@@ -932,13 +738,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             imageLoader.displayImage(bean.getImage(), imageView, options, animateFirstListener);
             viewflipper.addView(imageView);
             OnImageViewClick(imageView, bean.getType(), bean.getData());
-
-//            ImageView dianimageView = new ImageView(HomeFragment.this.getActivity());
-//            LayoutParams params = new LinearLayout.LayoutParams(
-//                    LinearLayout.LayoutParams.MATCH_PARENT, 3, 1);
-//            dianimageView.setLayoutParams(params);
-////            imageView.setScaleType(ScaleType.FIT_XY);
-//            dianimageView.setBackgroundResource(R.drawable.dian_select);
             ImageView localImageView = new ImageView(HomeFragment.this.getActivity());
             localImageView.setId(i);
             ImageView.ScaleType localScaleType = ImageView.ScaleType.FIT_XY;
@@ -952,11 +751,7 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             dian.addView(localImageView);
             viewList.add(localImageView);
         }
-
-        //mGestureDetector = new GestureDetector(this);
         viewflipper.setOnTouchListener(this);
-        //myScrollView.setGestureDetector(mGestureDetector);
-
         if (viewList.size() > 1) {
             dian_select(currentPage);
             mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3800);
@@ -1068,7 +863,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     private void dian_select(int id) {
         ImageView img = viewList.get(id);
         img.setImageResource(R.drawable.point_focused);
-//        img.setSelected(true);
     }
 
     /**
@@ -1078,7 +872,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
      */
     private void dian_unselect(int id) {
         ImageView img = viewList.get(id);
-//        img.setSelected(false);
         img.setImageResource(R.drawable.point_unfocused);
     }
 
@@ -1104,7 +897,7 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                         if (searchHotName != null && !searchHotName.equals("")) {
                             tvSearch.setHint(searchHotName);
                         } else {
-                            tvSearch.setHint(getActivity().getResources().getString(R.string.default_search_text));
+                            tvSearch.setHint(context.getResources().getString(R.string.default_search_text));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1165,43 +958,28 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 showPreviousView();
                 showNext = true;
             }
-        }/*else if (e1.getY() - e2.getY() > FLING_MIN_DISTANCE
-                &&  Math.abs(velocityY) > FLING_MIN_VELOCITY){
-            search.setVisibility(View.VISIBLE);
-            homeSearch.setVisibility(View.GONE);
-
-        }else if(e2.getY() - e1.getY() >= 300
-                && Math.abs(velocityY) > FLING_MIN_VELOCITY){
-            homeSearch.setVisibility(View.VISIBLE);
-            search.setVisibility(View.GONE);
-        }*/
+        }
         return false;
     }
-
     @Override
     public void onLongPress(MotionEvent arg0) {
     }
-
     @Override
     public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
                             float arg3) {
         return false;
     }
-
     @Override
     public void onShowPress(MotionEvent arg0) {
     }
-
     @Override
     public boolean onSingleTapUp(MotionEvent arg0) {
         return false;
     }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return mGestureDetector.onTouchEvent(event);
     }
-
     /*首页中直播咨询和点播入口*/
     public void showVideoView(JSONObject jsonObj) {
         try {
@@ -1214,24 +992,19 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     Button fenxiao_more = (Button) VideoView.findViewById(R.id.fenxiao_more);
                     ImageView fenxiao_logo = (ImageView) VideoView.findViewById(R.id.fenxiao_logo);
                     LinearLayout ll_item = (LinearLayout) VideoView.findViewById(R.id.ll_item);
-
                     LinearLayout ll_zhibao1 = (LinearLayout) VideoView.findViewById(R.id.ll_zhibao1);
                     TextView fengxiao_r_title_1 = (TextView) VideoView.findViewById(R.id.fengxiao_r_title_1);
                     TextView fengxiao_r_brief_1 = (TextView) VideoView.findViewById(R.id.fengxiao_r_brief_1);
                     ImageView fengxiao_r_img_1 = (ImageView) VideoView.findViewById(R.id.fengxiao_r_img_1);
-
                     LinearLayout ll_zhibao2 = (LinearLayout) VideoView.findViewById(R.id.ll_zhibao2);
                     TextView fengxiao_r_title_2 = (TextView) VideoView.findViewById(R.id.fengxiao_r_title_2);
                     TextView fengxiao_r_brief_2 = (TextView) VideoView.findViewById(R.id.fengxiao_r_brief_2);
                     ImageView fengxiao_r_img_2 = (ImageView) VideoView.findViewById(R.id.fengxiao_r_img_2);
-
                     LinearLayout ll_zhibao3 = (LinearLayout) VideoView.findViewById(R.id.ll_zhibao3);
                     TextView fengxiao_r_title_3 = (TextView) VideoView.findViewById(R.id.fengxiao_r_title_3);
                     TextView fengxiao_r_brief_3 = (TextView) VideoView.findViewById(R.id.fengxiao_r_brief_3);
                     ImageView fengxiao_r_img_3 = (ImageView) VideoView.findViewById(R.id.fengxiao_r_img_3);
-
                     fenxiao_title.setText(homeVideo.getVideo_modules_name());
-
                     fenxiao_title.setOnClickListener(new FenXiaoAudeoListTabOnclienr(""));
                     fenxiao_more.setOnClickListener(new FenXiaoAudeoListTabOnclienr(""));
                     fenxiao_logo.setOnClickListener(new FenXiaoAudeoListTabOnclienr(""));
@@ -1239,8 +1012,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     if (!com.guohanhealth.shop.common.StringUtils.isEmpty(logo)) {
                         LoadImage.loadImg(getActivity(), fenxiao_logo, logo);
                     }
-
-
                     int size = homeVideo.getItem().size();
                     for (int i = 0; i < size; i++) {
                         if (i == 0) {
@@ -1273,21 +1044,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                             fengxiao_r_brief_3.setOnClickListener(new FenXiaoAudeoListTabOnclienr(homeVideo.getItem().get(i).getCate_id()));
                             fengxiao_r_img_3.setOnClickListener(new FenXiaoAudeoListTabOnclienr(homeVideo.getItem().get(i).getCate_id()));
                         }
-
-//                        View VideoView_item = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_video_item, null);
-//                        LinearLayout ll_zhibao0 = (LinearLayout)VideoView_item.findViewById(R.id.ll_zhibao0);
-//                        TextView fengxiao_r_title_0 = (TextView)VideoView_item.findViewById(R.id.fengxiao_r_title_0);
-//                        TextView fengxiao_r_brief_0 = (TextView)VideoView_item.findViewById(R.id.fengxiao_r_brief_0);
-//                        ImageView fengxiao_r_img_0 = (ImageView)VideoView_item.findViewById(R.id.fengxiao_r_img_0);
-//                        fengxiao_r_title_0.setText(homeVideo.getItem().get(i).getCate_name());
-//                        fengxiao_r_brief_0.setText(homeVideo.getItem().get(i).getCate_description());
-//                        LoadImage.loadImg(getActivity(),fengxiao_r_img_0,homeVideo.getItem().get(i).getCate_image());
-//
-//                        ll_zhibao0.setOnClickListener(new FenXiaoAudeoListTabOnclienr(homeVideo.getItem().get(i).getCate_id()));
-//                        fengxiao_r_title_0.setOnClickListener(new FenXiaoAudeoListTabOnclienr(homeVideo.getItem().get(i).getCate_id()));
-//                        fengxiao_r_brief_0.setOnClickListener(new FenXiaoAudeoListTabOnclienr(homeVideo.getItem().get(i).getCate_id()));
-//                        fengxiao_r_img_0.setOnClickListener(new FenXiaoAudeoListTabOnclienr(homeVideo.getItem().get(i).getCate_id()));
-//                        ll_item.addView(VideoView_item);
                     }
                     tab_home_item_video.addView(VideoView);
                 }
@@ -1299,13 +1055,10 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
 
 
     public class FenXiaoAudeoListTabOnclienr implements View.OnClickListener {
-
         private String mCate_id;
-
         public FenXiaoAudeoListTabOnclienr(String cate_id) {
             this.mCate_id = cate_id;
         }
-
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getActivity(), FenXiaoAudeoListTabActivity.class);
@@ -1315,7 +1068,6 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     }
 
     private Context context;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

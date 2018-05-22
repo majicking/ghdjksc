@@ -36,10 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.pay.PayResult;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.orhanobut.logger.Logger;
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.RpacketListSpinnerAdapter;
@@ -59,7 +55,6 @@ import com.guohanhealth.shop.common.JSONParser;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
-import com.guohanhealth.shop.common.StringUtil;
 import com.guohanhealth.shop.common.StringUtils;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.common.T;
@@ -73,10 +68,12 @@ import com.guohanhealth.shop.ncinterface.DataCallback;
 import com.guohanhealth.shop.newpackage.OrderActivity;
 import com.guohanhealth.shop.newpackage.ProgressDialog;
 import com.guohanhealth.shop.ui.mine.BindMobileActivity;
-import com.guohanhealth.shop.ui.mine.ModifyPasswordStep1Activity;
 import com.guohanhealth.shop.ui.mine.ModifyPaypwdStep1Activity;
-import com.guohanhealth.shop.ui.mine.SettingActivity;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.orhanobut.logger.Logger;
 import com.zcw.togglebutton.ToggleButton;
 
 import org.apache.http.HttpStatus;
@@ -88,9 +85,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import rx.Observable;
-import rx.Subscriber;
 
 import static com.guohanhealth.shop.common.Constants.ORDERNUMBER;
 import static com.guohanhealth.shop.common.Constants.ORDERTYPE;
