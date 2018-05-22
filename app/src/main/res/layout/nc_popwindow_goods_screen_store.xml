@@ -81,13 +81,13 @@
                 android:textSize="14dp" />
         </LinearLayout>
 
-        <com.xinyuangongxiang.shop.custom.MyGridView
+        <com.guohanhealth.shop.custom.MyGridView
             android:id="@+id/gvContract"
             android:numColumns="3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </com.xinyuangongxiang.shop.custom.MyGridView>
+        </com.guohanhealth.shop.custom.MyGridView>
 
         <Button
             android:id="@+id/btnScreenSave"

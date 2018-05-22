@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/nc_bg"
     android:orientation="vertical"
-    tools:context="com.xinyuangongxiang.shop.ui.mine.MyAssetActivity">
+    tools:context="com.guohanhealth.shop.ui.mine.MyAssetActivity">
 
     <include layout="@layout/app_common_header" />
 

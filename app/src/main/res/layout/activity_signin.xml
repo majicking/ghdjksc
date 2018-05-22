@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/nc_bg"
     android:orientation="vertical"
-    tools:context="com.xinyuangongxiang.shop.ui.mine.SigninActivity">
+    tools:context="com.guohanhealth.shop.ui.mine.SigninActivity">
 
     <include layout="@layout/app_common_header" />
 

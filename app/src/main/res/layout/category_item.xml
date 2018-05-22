@@ -37,7 +37,7 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
-    <com.xinyuangongxiang.shop.custom.UnableScrollGridView
+    <com.guohanhealth.shop.custom.UnableScrollGridView
         android:id="@+id/gv_category_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -45,7 +45,7 @@
             android:textSize="18dp" />
     </RelativeLayout>
 
-    <com.xinyuangongxiang.shop.custom.CustomScrollView
+    <com.guohanhealth.shop.custom.CustomScrollView
         android:id="@+id/SView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -210,7 +210,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <com.xinyuangongxiang.shop.custom.ViewFlipperScrollView
+            <com.guohanhealth.shop.custom.ViewFlipperScrollView
                 android:id="@+id/viewFlipperScrollViewID"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -238,9 +238,9 @@
                         android:gravity="center"
                         android:orientation="horizontal" />
                 </LinearLayout>
-            </com.xinyuangongxiang.shop.custom.ViewFlipperScrollView>
+            </com.guohanhealth.shop.custom.ViewFlipperScrollView>
 
-            <com.xinyuangongxiang.shop.custom.MyGridView
+            <com.guohanhealth.shop.custom.MyGridView
                 android:id="@+id/sotreGoodsGridViewID"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -254,6 +254,6 @@
                 android:focusable="false"
                 android:verticalSpacing="5dp" />
         </LinearLayout>
-    </com.xinyuangongxiang.shop.custom.CustomScrollView>
+    </com.guohanhealth.shop.custom.CustomScrollView>
 
 </LinearLayout>

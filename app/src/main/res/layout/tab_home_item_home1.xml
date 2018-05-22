@@ -1,10 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/app_bg_color"
-    android:orientation="vertical"
-    tools:context=".CrashActivity" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +10,7 @@
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
         android:orientation="vertical"
-        android:padding="5dp" >
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/TextViewHome1Title01"

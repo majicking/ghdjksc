@@ -3,11 +3,11 @@
     android:layout_height="match_parent"
     android:background="@color/nc_bg">
 
-    <com.xinyuangongxiang.shop.library.PullToRefreshScrollView
+    <com.guohanhealth.shop.library.PullToRefreshScrollView
         android:id="@+id/pull_refresh_scrollview"
-        android:scrollbars="none"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -19,7 +19,7 @@
                 android:layout_height="@dimen/main_home_adv_height">
 
                 <!-- 幻灯图片 -->
-                <com.xinyuangongxiang.shop.custom.ViewFlipperScrollView
+                <com.guohanhealth.shop.custom.ViewFlipperScrollView
                     android:id="@+id/viewFlipperScrollViewID"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
@@ -44,7 +44,7 @@
                             android:background="#00000000"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:paddingBottom="5dp" >
+                            android:paddingBottom="5dp">
 
                             <LinearLayout
                                 android:id="@+id/dian"
@@ -57,7 +57,7 @@
                         </LinearLayout>
 
                     </FrameLayout>
-                </com.xinyuangongxiang.shop.custom.ViewFlipperScrollView>
+                </com.guohanhealth.shop.custom.ViewFlipperScrollView>
 
 
                 <!-- 搜索框 -->
@@ -128,14 +128,21 @@
 
             </RelativeLayout>
 
+            <com.guohanhealth.shop.custom.MyGridView
+                android:id="@+id/gridemenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="4"
+                android:verticalSpacing="3dp"></com.guohanhealth.shop.custom.MyGridView>
             <!-- 首页4个功能按钮 -->
             <LinearLayout
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@color/nc_white"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/llHomeFavGoods"
@@ -274,7 +281,7 @@
                 android:layout_height="fill_parent"
                 android:orientation="vertical" />
         </LinearLayout>
-    </com.xinyuangongxiang.shop.library.PullToRefreshScrollView>
+    </com.guohanhealth.shop.library.PullToRefreshScrollView>
 
     <Button
         android:id="@+id/top_btn"
@@ -286,19 +293,19 @@
         android:layout_marginRight="6dp"
         android:background="@drawable/top_btn_bg"
         android:gravity="center"
-        android:textStyle="bold"
         android:textColor="@android:color/white"
+        android:textStyle="bold"
         android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="center_vertical"
-        android:visibility="gone"
         android:layout_alignParentTop="true"
         android:background="#ED5968"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="0dp"

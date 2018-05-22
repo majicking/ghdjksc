@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.xinyuangongxiang.shop.ui.store.newStoreInFoActivity">
+    tools:context="com.guohanhealth.shop.ui.store.newStoreInFoActivity">
 
     <item
         android:id="@+id/action_home"

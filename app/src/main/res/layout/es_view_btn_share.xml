@@ -5,7 +5,7 @@
 
     android:orientation="vertical">
 
-    <com.xinyuangongxiang.shop.custom.OverlayImageView
+    <com.guohanhealth.shop.custom.OverlayImageView
         android:id="@+id/view_btn_share_iv"
         android:layout_width="60.0dip"
         android:layout_height="60.0dip"

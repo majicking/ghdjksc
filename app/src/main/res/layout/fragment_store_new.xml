@@ -57,7 +57,7 @@
         android:layout_height="match_parent"
         android:background="#FAFAFA">
 
-        <com.xinyuangongxiang.shop.custom.MyGridView
+        <com.guohanhealth.shop.custom.MyGridView
             android:id="@+id/sotreGoodsGridViewID"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

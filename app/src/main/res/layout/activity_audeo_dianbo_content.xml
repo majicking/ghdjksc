@@ -39,7 +39,7 @@
     </LinearLayout>
 
 
-    <com.xinyuangongxiang.shop.custom.MyScrollView
+    <com.guohanhealth.shop.custom.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -86,12 +86,12 @@
 
             </LinearLayout>
 
-            <com.xinyuangongxiang.shop.custom.MyListView
+            <com.guohanhealth.shop.custom.MyListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="#eaeaea"
                 android:dividerHeight="1dp"
                 android:id="@+id/list" />
         </LinearLayout>
-    </com.xinyuangongxiang.shop.custom.MyScrollView>
+    </com.guohanhealth.shop.custom.MyScrollView>
 </LinearLayout>

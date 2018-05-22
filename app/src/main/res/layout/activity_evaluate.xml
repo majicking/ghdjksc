@@ -40,7 +40,7 @@
                 android:layout_below="@+id/lltvhint"
                 android:background="@color/nc_bg">
             <!--商品评价-->
-                <com.xinyuangongxiang.shop.custom.NoScrollListViewNormal
+                <com.guohanhealth.shop.custom.NoScrollListViewNormal
                     android:id="@+id/lvGoodEvaluate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

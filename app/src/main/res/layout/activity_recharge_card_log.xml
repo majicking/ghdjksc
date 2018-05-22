@@ -66,12 +66,12 @@
             android:textSize="16dp" />
     </RelativeLayout>
 
-    <com.xinyuangongxiang.shop.custom.MyListEmpty
+    <com.guohanhealth.shop.custom.MyListEmpty
         android:id="@+id/myListEmpty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.xinyuangongxiang.shop.custom.MyListEmpty>
+        android:layout_height="match_parent"></com.guohanhealth.shop.custom.MyListEmpty>
 
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/orderlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

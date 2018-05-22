@@ -1,17 +1,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg_color"
-    android:orientation="vertical"
-    tools:context=".CrashActivity" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/TextViewTitle"
@@ -25,12 +23,11 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:visibility="gone"
-            android:background="@drawable/cart_listview_gap" />
+            android:background="@drawable/cart_listview_gap"
+            android:visibility="gone" />
     </LinearLayout>
-    <!-- ====================== -->
 
-    <com.xinyuangongxiang.shop.custom.MyGridView
+    <com.guohanhealth.shop.custom.MyGridView
         android:id="@+id/gridview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -41,5 +38,6 @@
         android:listSelector="@null"
         android:numColumns="2"
         android:verticalSpacing="5dp" />
+
 
 </LinearLayout>

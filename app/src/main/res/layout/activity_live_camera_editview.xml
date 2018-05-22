@@ -5,7 +5,7 @@
     android:background="@color/nc_white"
     android:layout_height="65dp">
 
-        <com.xinyuangongxiang.shop.ui.fenxiao.MyEditText
+        <com.guohanhealth.shop.ui.fenxiao.MyEditText
             android:id="@+id/zhibo_my_et_talk"
             android:layout_width="match_parent"
             android:layout_height="50dp"

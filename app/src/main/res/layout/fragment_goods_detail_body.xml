@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/nc_bg"
     android:id="@+id/main_rl"
-    tools:context="com.xinyuangongxiang.shop.ui.type.GoodsDetailBodyFragment">
+    tools:context="com.guohanhealth.shop.ui.type.GoodsDetailBodyFragment">
 
-    <com.xinyuangongxiang.shop.custom.MyScrollView
+    <com.guohanhealth.shop.custom.MyScrollView
         android:id="@+id/sc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,14 +16,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <com.xinyuangongxiang.shop.custom.MyWebView
+            <com.guohanhealth.shop.custom.MyWebView
                 android:id="@+id/wvGoodsBody"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
-                </com.xinyuangongxiang.shop.custom.MyWebView>
+                </com.guohanhealth.shop.custom.MyWebView>
 
         </LinearLayout>
-    </com.xinyuangongxiang.shop.custom.MyScrollView>
+    </com.guohanhealth.shop.custom.MyScrollView>
 
     <Button
         android:id="@+id/top_btn"

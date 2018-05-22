@@ -23,9 +23,6 @@ import static com.guohanhealth.shop.common.Constants.ORDERTYPE;
 
 /**
  * 软件启动界面
- * @author KingKong-HE
- * @Time 2014-12-30
- * @Email KingKong@QQ.COM
  */
 public class WelcomeActivity extends Activity {
 

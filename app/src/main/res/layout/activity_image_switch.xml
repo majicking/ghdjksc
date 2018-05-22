@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/nc_background_transport"
     android:paddingBottom="10dp"
-    tools:context="com.xinyuangongxiang.shop.ui.type.ImageSwitchActivity">
+    tools:context="com.guohanhealth.shop.ui.type.ImageSwitchActivity">
 
     <ImageButton
         android:id="@+id/btnBack"

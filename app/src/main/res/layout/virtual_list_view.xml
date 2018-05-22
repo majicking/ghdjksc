@@ -125,7 +125,7 @@
     <!-- 列表空背景 -->
     <include layout="@layout/app_list_empty" />
 
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/listViewID"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

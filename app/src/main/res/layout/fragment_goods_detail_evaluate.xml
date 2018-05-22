@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/nc_bg"
     android:orientation="vertical"
-    tools:context="com.xinyuangongxiang.shop.ui.type.GoodsDetailEvaluateFragment">
+    tools:context="com.guohanhealth.shop.ui.type.GoodsDetailEvaluateFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

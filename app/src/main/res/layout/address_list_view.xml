@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.xinyuangongxiang.shop.custom.MyListView
+            <com.guohanhealth.shop.custom.MyListView
                 android:id="@+id/listViewID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -65,10 +65,10 @@
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
         android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        >
 
         <EditText
+            android:paddingLeft="15dp"
             android:id="@+id/editsearchorder"
             android:layout_width="0dp"
             android:layout_height="30dp"
@@ -77,7 +77,6 @@
             android:background="@color/nc_bg"
             android:hint="输入商品标题或订单号进行搜索"
             android:textColorHint="@color/nc_background_transport"
-            android:padding="3dp"
             android:textColor="@color/nc_text"
             android:textSize="14dp" />
 
@@ -85,6 +84,7 @@
             android:id="@+id/searchorder"
             style="@style/NCImageButton"
             android:layout_width="36dp"
+            android:background="@color/nc_bg"
             android:layout_height="36dp"
             android:src="@drawable/nc_icon_search" />
 

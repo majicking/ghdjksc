@@ -5,55 +5,57 @@
     android:background="@color/nc_bg"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvNoResult"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="没有找到符合条件的商品"
-        android:visibility="gone" />
+        android:layout_height="match_parent">
 
-    <ScrollView
-        android:id="@+id/svGoodsGrid"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:fadingEdge="none"
-        android:fillViewport="true"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:id="@+id/llGoodsGrid"
+        <ScrollView
+            android:id="@+id/svGoodsGrid"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|top"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:fillViewport="true"
+            android:scrollbars="none">
 
 
-            <com.xinyuangongxiang.shop.custom.MyGridView
-                android:id="@+id/gvGoodsGrid"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/nc_bg"
-                android:divider="@null"
-                android:fadingEdge="none"
-                android:horizontalSpacing="5dp"
-                android:listSelector="#00000000"
-                android:numColumns="2"
-                android:scrollbars="none"
-                android:verticalSpacing="5dp" />
+            <LinearLayout
+                android:id="@+id/llGoodsGrid"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|top"
+                android:orientation="vertical">
 
 
-            <TextView
-                android:id="@+id/tvLoadMore"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:gravity="center"
-                android:text="正在加载..."
-                android:textColor="@color/nc_text"
-                android:visibility="gone"
-                android:textSize="14dp" />
-        </LinearLayout>
-    </ScrollView>
+                <com.guohanhealth.shop.custom.MyGridView
+                    android:id="@+id/gvGoodsGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/nc_bg"
+                    android:divider="@null"
+                    android:fadingEdge="none"
+                    android:horizontalSpacing="5dp"
+                    android:listSelector="#00000000"
+                    android:numColumns="2"
+                    android:scrollbars="none"
+                    android:verticalSpacing="5dp" />
 
+
+                <TextView
+                    android:id="@+id/tvLoadMore"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:text="正在加载..."
+                    android:textColor="@color/nc_text"
+                    android:textSize="14dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </ScrollView>
+        <!-- 列表空背景 -->
+        <com.guohanhealth.shop.custom.MyListEmpty
+            android:id="@+id/myListEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.guohanhealth.shop.custom.MyListEmpty>
+
+    </RelativeLayout>
 </LinearLayout>

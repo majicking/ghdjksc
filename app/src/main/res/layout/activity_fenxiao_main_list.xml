@@ -7,7 +7,7 @@
 
     <!--<include layout="@layout/app_common_header"></include>-->
 
-    <com.xinyuangongxiang.shop.lib.tab.SlidingTabLayout
+    <com.guohanhealth.shop.lib.tab.SlidingTabLayout
         xmlns:tl="http://schemas.android.com/apk/res-auto"
         android:id="@+id/viewpagertab"
         android:layout_width="match_parent"

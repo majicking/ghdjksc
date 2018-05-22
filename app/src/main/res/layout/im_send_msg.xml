@@ -46,7 +46,7 @@
             android:textSize="15dp" />
     </RelativeLayout>
 
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/listViewID"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -92,7 +92,7 @@
             android:textSize="15sp" />
     </LinearLayout>
 
-    <com.xinyuangongxiang.shop.custom.MyGridView
+    <com.guohanhealth.shop.custom.MyGridView
         android:id="@+id/gridViewID"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

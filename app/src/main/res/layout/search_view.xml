@@ -89,7 +89,7 @@
                     android:textColor="@color/nc_text"
                     android:textSize="16dp" />
 
-                <com.xinyuangongxiang.shop.custom.MyGridView
+                <com.guohanhealth.shop.custom.MyGridView
                     android:id="@+id/gvSearchKeyList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                     android:numColumns="4"
                     android:scrollbars="none">
 
-                </com.xinyuangongxiang.shop.custom.MyGridView>
+                </com.guohanhealth.shop.custom.MyGridView>
             </LinearLayout>
 
             <LinearLayout
@@ -125,7 +125,7 @@
 
                 <TextView style="@style/NCLine" />
 
-                <com.xinyuangongxiang.shop.custom.MyListView
+                <com.guohanhealth.shop.custom.MyListView
                     android:id="@+id/searchListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -41,7 +41,7 @@
             android:paddingLeft="25dp"
             android:paddingRight="25dp">
 
-            <com.xinyuangongxiang.shop.custom.ShareButton
+            <com.guohanhealth.shop.custom.ShareButton
                 android:id="@+id/social_sb_wechat"
                 android:layout_width="0.0dip"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 app:description="微信"
                 app:icons="@mipmap/weixinlogo" />
 
-            <com.xinyuangongxiang.shop.custom.ShareButton
+            <com.guohanhealth.shop.custom.ShareButton
                 android:id="@+id/social_sb_zhifubao"
                 android:layout_width="0.0dip"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 app:description="支付宝"
                 app:icons="@mipmap/alipaylogo" />
 
-            <com.xinyuangongxiang.shop.custom.ShareButton
+            <com.guohanhealth.shop.custom.ShareButton
                 android:id="@+id/social_sb_wzhifubao"
                 android:layout_width="0.0dip"
                 android:layout_height="wrap_content"

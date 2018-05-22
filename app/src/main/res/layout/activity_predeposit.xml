@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/nc_bg"
     android:orientation="vertical"
-    tools:context="com.xinyuangongxiang.shop.ui.mine.PredepositActivity">
+    tools:context="com.guohanhealth.shop.ui.mine.PredepositActivity">
 
     <include layout="@layout/app_common_header" />
 

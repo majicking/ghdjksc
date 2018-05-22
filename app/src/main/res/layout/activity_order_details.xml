@@ -5,7 +5,7 @@
     android:layout_marginBottom="10dp"
     android:background="@color/nc_bg"
     android:orientation="vertical"
-    tools:context="com.xinyuangongxiang.shop.ui.mine.OrderDetailsActivity">
+    tools:context="com.guohanhealth.shop.ui.mine.OrderDetailsActivity">
 
     <include layout="@layout/app_common_header" />
 

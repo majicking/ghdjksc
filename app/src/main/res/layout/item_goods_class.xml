@@ -44,7 +44,7 @@
 
     </RelativeLayout>
 
-    <com.xinyuangongxiang.shop.custom.MyGridView
+    <com.guohanhealth.shop.custom.MyGridView
         android:id="@+id/gvGoodsClass"
         android:layout_width="match_parent"
         android:listSelector="#00000000"
@@ -52,6 +52,6 @@
         android:background="@color/nc_white"
         android:isScrollContainer="false"
         android:numColumns="3"
-        android:verticalSpacing="5dp"></com.xinyuangongxiang.shop.custom.MyGridView>
+        android:verticalSpacing="5dp"></com.guohanhealth.shop.custom.MyGridView>
 
 </LinearLayout>

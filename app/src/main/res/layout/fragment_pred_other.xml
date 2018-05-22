@@ -8,15 +8,15 @@
 
     <!-- 列表空背景 -->
 
-    <com.xinyuangongxiang.shop.custom.MyListEmpty
+    <com.guohanhealth.shop.custom.MyListEmpty
         android:id="@+id/myListEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        ></com.xinyuangongxiang.shop.custom.MyListEmpty>
+        ></com.guohanhealth.shop.custom.MyListEmpty>
 
     <!-- 订单列表 -->
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/xlistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -25,7 +25,7 @@
         android:textColor="#959595"
         android:textSize="16dp" />
 
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/listViewID"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

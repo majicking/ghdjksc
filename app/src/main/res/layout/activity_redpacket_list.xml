@@ -39,7 +39,7 @@
         </LinearLayout>
     </FrameLayout>
 
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/listViewID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -92,7 +92,7 @@
             </LinearLayout>
              <!--商品列表-->
 
-            <com.xinyuangongxiang.shop.custom.MyGridView
+            <com.guohanhealth.shop.custom.MyGridView
                 android:id="@+id/mygridview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -104,7 +104,7 @@
                 android:numColumns="2"
                 android:scrollbars="none"
                 android:verticalSpacing="5dp" >
-            </com.xinyuangongxiang.shop.custom.MyGridView>
+            </com.guohanhealth.shop.custom.MyGridView>
 
 
         </LinearLayout>

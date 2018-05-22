@@ -156,7 +156,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="15dp"
-                    android:text="收   款   人:"
+                    android:text="收  款   人:"
                     android:textColor="@color/black" />
 
                 <EditText

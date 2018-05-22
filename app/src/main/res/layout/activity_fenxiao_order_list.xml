@@ -39,7 +39,7 @@
             android:src="@drawable/nc_icon_search" />
 
     </LinearLayout>
-    <com.xinyuangongxiang.shop.lib.tab.SlidingTabLayout
+    <com.guohanhealth.shop.lib.tab.SlidingTabLayout
         xmlns:tl="http://schemas.android.com/apk/res-auto"
         android:id="@+id/viewpagertab"
         android:layout_width="match_parent"

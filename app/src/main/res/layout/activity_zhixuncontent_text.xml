@@ -4,7 +4,7 @@
     android:background="@color/nc_white"
     android:layout_height="match_parent">
 
-        <com.xinyuangongxiang.shop.custom.HtmlTextView
+        <com.guohanhealth.shop.custom.HtmlTextView
             android:id="@+id/new_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

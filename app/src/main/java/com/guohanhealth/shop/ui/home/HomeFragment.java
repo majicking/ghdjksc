@@ -429,9 +429,9 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     }
 
     private void doOnBorderListener() {
-        LogUtils.i(ScreenUtil.getScreenViewBottomHeight(scrollView) + "  "
-                + scrollView.getScrollY() + " " + ScreenUtil
-                .getScreenHeight(getActivity()));
+//        LogUtils.i(ScreenUtil.getScreenViewBottomHeight(scrollView) + "  "
+//                + scrollView.getScrollY() + " " + ScreenUtil
+//                .getScreenHeight(context));
 
         // 底部判断
         if (contentView != null

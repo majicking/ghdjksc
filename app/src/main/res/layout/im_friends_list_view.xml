@@ -7,7 +7,7 @@
 
     <include layout="@layout/app_common_header"/>
 
-    <com.xinyuangongxiang.shop.library.PullToRefreshScrollView
+    <com.guohanhealth.shop.library.PullToRefreshScrollView
         android:id="@+id/pull_refresh_scrollview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
@@ -17,7 +17,7 @@
             android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-      <com.xinyuangongxiang.shop.custom.MyExpandableListView
+      <com.guohanhealth.shop.custom.MyExpandableListView
             android:id="@+id/listViewID"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
@@ -31,6 +31,6 @@
       
       </LinearLayout>
       
-     </com.xinyuangongxiang.shop.library.PullToRefreshScrollView>
+     </com.guohanhealth.shop.library.PullToRefreshScrollView>
 
 </LinearLayout>

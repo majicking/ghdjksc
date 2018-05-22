@@ -40,7 +40,7 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        applicationId "com.xinyuangongxiang.shop"
+        applicationId "com.guohanhealth.shop"
         versionCode 1
         versionName "1.0.0"
         multiDexEnabled true

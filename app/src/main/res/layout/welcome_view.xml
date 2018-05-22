@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg_color"
-    tools:context="com.xinyuangongxiang.shop.WelcomeActivity">
-    <!--android:background="@drawable/welcome_bg"-->
+    tools:context="com.guohanhealth.shop.WelcomeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,13 +49,4 @@
         android:textColor="@color/black"
         android:textSize="16sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:text="B2B2C 2015 手机商城@网城商创"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
 </RelativeLayout>

@@ -43,8 +43,8 @@
             android:textColor="@color/app_white" />
     </RelativeLayout>
 
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/xlist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.xinyuangongxiang.shop.custom.XListView>
+        android:layout_height="match_parent"></com.guohanhealth.shop.custom.XListView>
 </LinearLayout>

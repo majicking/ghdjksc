@@ -4,7 +4,7 @@
     android:background="@color/nc_bg"
     android:layout_height="match_parent">
 
-    <com.xinyuangongxiang.shop.custom.XListView
+    <com.guohanhealth.shop.custom.XListView
         android:id="@+id/common_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

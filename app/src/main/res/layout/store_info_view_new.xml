@@ -81,7 +81,7 @@
 
 
     <!--主体-->
-    <com.xinyuangongxiang.shop.custom.CustomScrollView
+    <com.guohanhealth.shop.custom.CustomScrollView
         android:id="@+id/SView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
                 android:orientation="vertical">
             </LinearLayout>
         </LinearLayout>
-    </com.xinyuangongxiang.shop.custom.CustomScrollView>
+    </com.guohanhealth.shop.custom.CustomScrollView>
 
     <include
         android:id="@+id/storeInfo"

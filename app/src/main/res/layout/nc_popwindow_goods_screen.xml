@@ -60,6 +60,7 @@
                 android:gravity="center"
                 android:hint="最低价"
                 android:textColor="@color/nc_text"
+                android:textColorHint="@color/nc_text_hint"
                 android:textSize="14dp" />
 
             <ImageView
@@ -78,6 +79,7 @@
                 android:gravity="center"
                 android:hint="最高价"
                 android:textColor="@color/nc_text"
+                android:textColorHint="@color/nc_text_hint"
                 android:textSize="14dp" />
         </LinearLayout>
 
@@ -106,19 +108,19 @@
 
             <EditText
                 android:id="@+id/etAreaId"
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:visibility="invisible" />
 
             <Spinner
+                android:visibility="invisible"
                 android:id="@+id/spAreaList"
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:animationCache="true"
                 android:background="@color/nc_bg"
-                android:drawSelectorOnTop="true"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:spinnerMode="dialog" />
         </LinearLayout>
 
         <TextView
@@ -166,13 +168,13 @@
             android:layout_marginTop="10dp"
             android:text="店铺服务" />
 
-        <com.xinyuangongxiang.shop.custom.MyGridView
+        <com.guohanhealth.shop.custom.MyGridView
             android:id="@+id/gvContract"
-            android:numColumns="3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:numColumns="3">
 
-        </com.xinyuangongxiang.shop.custom.MyGridView>
+        </com.guohanhealth.shop.custom.MyGridView>
 
         <Button
             android:id="@+id/btnScreenSave"

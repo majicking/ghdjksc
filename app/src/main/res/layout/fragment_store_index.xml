@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <!--店铺图片轮播-->
-    <com.xinyuangongxiang.shop.custom.ViewFlipperScrollView
+    <com.guohanhealth.shop.custom.ViewFlipperScrollView
         android:id="@+id/viewFlipperScrollViewID"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:orientation="horizontal" />
         </LinearLayout>
-    </com.xinyuangongxiang.shop.custom.ViewFlipperScrollView>
+    </com.guohanhealth.shop.custom.ViewFlipperScrollView>
 
     <!--第一部分:店铺排行-->
     <LinearLayout
@@ -234,7 +234,7 @@
 
         <TextView style="@style/NCLine"/>
 
-        <com.xinyuangongxiang.shop.custom.MyGridView
+        <com.guohanhealth.shop.custom.MyGridView
             android:id="@+id/sotreGoodsGridViewID"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

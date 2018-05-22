@@ -69,7 +69,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 
-        <com.xinyuangongxiang.shop.custom.RoundProgressBar
+        <com.guohanhealth.shop.custom.RoundProgressBar
             android:id="@+id/roundProgressBarID"
             android:layout_width="80dip"
             android:layout_height="80dip"

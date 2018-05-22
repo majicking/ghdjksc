@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/app_bg_color"
-    tools:context="com.xinyuangongxiang.shop.ui.mine.OrderExchangeSendGoodsActivity">
+    tools:context="com.guohanhealth.shop.ui.mine.OrderExchangeSendGoodsActivity">
 
     <include layout="@layout/app_common_header" />
 

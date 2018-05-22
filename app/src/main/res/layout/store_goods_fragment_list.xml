@@ -14,7 +14,7 @@
         android:text="没有找到符合条件的商品"
         android:visibility="gone" />
 
-    <com.xinyuangongxiang.shop.custom.ListViewForScrollView
+    <com.guohanhealth.shop.custom.ListViewForScrollView
         android:id="@+id/listViewID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

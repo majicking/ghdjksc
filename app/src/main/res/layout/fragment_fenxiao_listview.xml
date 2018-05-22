@@ -7,7 +7,7 @@
     android:background="@color/nc_bg" >
 
     <!--<android.support.v4.widget.SwipeRefreshLayout-->
-    <com.xinyuangongxiang.shop.ui.fenxiao.RefreshLayout
+    <com.guohanhealth.shop.ui.fenxiao.RefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -45,6 +45,6 @@
 
         <!--</LinearLayout>-->
 
-    </com.xinyuangongxiang.shop.ui.fenxiao.RefreshLayout>
+    </com.guohanhealth.shop.ui.fenxiao.RefreshLayout>
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 </LinearLayout>

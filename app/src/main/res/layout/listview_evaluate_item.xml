@@ -182,7 +182,7 @@
             android:orientation="horizontal">
 
 
-            <com.xinyuangongxiang.shop.custom.NoScrollGridView
+            <com.guohanhealth.shop.custom.NoScrollGridView
                 android:id="@+id/gv_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

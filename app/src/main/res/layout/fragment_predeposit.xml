@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.xinyuangongxiang.shop.ui.mine.PredepositFragment">
+    tools:context="com.guohanhealth.shop.ui.mine.PredepositFragment">
 
-    <com.xinyuangongxiang.shop.custom.MyListEmpty
+    <com.guohanhealth.shop.custom.MyListEmpty
         android:id="@+id/myListEmpty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.xinyuangongxiang.shop.custom.MyListEmpty>
+        android:layout_height="match_parent"></com.guohanhealth.shop.custom.MyListEmpty>
 
     <ListView
         android:id="@+id/lvPredepositLog"

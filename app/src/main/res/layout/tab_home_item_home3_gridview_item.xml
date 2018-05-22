@@ -4,16 +4,16 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg_color"
     android:orientation="vertical"
-    tools:context=".CrashActivity" >
+>
 
 
     <ImageView
         android:id="@+id/ImageViewImagePic01"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/main_home2_height"
         android:adjustViewBounds="true"
-        android:padding="8dp"
+        android:padding="5dp"
         android:background="@drawable/dic_home3_item_pic_bg"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"/>
 
 </LinearLayout>
