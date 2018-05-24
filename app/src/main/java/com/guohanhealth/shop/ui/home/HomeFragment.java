@@ -59,6 +59,7 @@ import com.guohanhealth.shop.newpackage.OrderActivity;
 import com.guohanhealth.shop.newpackage.ViewHolder;
 import com.guohanhealth.shop.scannercode.android.CaptureActivity;
 import com.guohanhealth.shop.ui.fenxiao.FenXiaoAudeoListTabActivity;
+import com.guohanhealth.shop.ui.mine.FavStoreListActivity;
 import com.guohanhealth.shop.ui.mine.IMNewListActivity;
 import com.guohanhealth.shop.ui.mine.MyAssetActivity;
 import com.guohanhealth.shop.ui.mine.SigninActivity;
@@ -188,7 +189,9 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     }
                     break;
                 case 2:
-
+                    if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                        startActivity(new Intent(getActivity(), FavStoreListActivity.class));
+                    }
                     break;
                 case 3:
                     if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
