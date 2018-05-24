@@ -2,7 +2,6 @@ package com.guohanhealth.shop.ui.mine;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
+import com.guohanhealth.shop.WebViewActivity;
 import com.guohanhealth.shop.bean.Login;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
@@ -214,8 +214,10 @@ public class RegisteredActivity extends BaseActivity {
      */
     public void btnMemberDocumentClick(View v) {
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(Constants.WAP_MEMBER_DOCUMENT));
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(Constants.WAP_MEMBER_DOCUMENT));
+            Intent intent=new Intent(mActivity, WebViewActivity.class);
+            intent.putExtra("url",Constants.WAP_MEMBER_DOCUMENT);
             startActivity(intent);
         } catch (ActivityNotFoundException exception) {
             T.showShort(this, "链接失败");

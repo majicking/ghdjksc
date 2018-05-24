@@ -65,14 +65,20 @@ android {
         resValue "string", "app_name", "国翰大健康"
 
         manifestPlaceholders.put("UMENG_APPKEY", "566e3d5167e58e2442001aee")
-        manifestPlaceholders.put("QQ_APP_ID", "1106827816")
+        manifestPlaceholders.put("BAIDUPUSH_APPKEY", "DW13mjRd1khWrKZpZPP2iwara1xh8KDO")
+        manifestPlaceholders.put("QQ_APP_ID", "1106928692")
+
+        buildConfigField "String", "BAIDUPUSH_APPKEY", '"DW13mjRd1khWrKZpZPP2iwara1xh8KDO"'
 
         buildConfigField "String", "WX_APP_ID", '"wx5eb3be4a208fa171"'
         buildConfigField "String", "WX_APP_SECRET", '"0d73c4852ffd9745bd74e33bf725b0d2"'
+
         buildConfigField "String", "WEIBO_APP_KEY", '"3821500010"'
         buildConfigField "String", "WEIBO_APP_SECRET", '"1ed988c7770d20a09218584ca8a3ed3b"'
-        buildConfigField "String", "QQ_APP_ID", '"1106827816"'
-        buildConfigField "String", "QQ_APP_KEY", '"bqZ64PGbWvu3otQo"'
+//        buildConfigField "String", "QQ_APP_ID", '"1106827816"'
+//        buildConfigField "String", "QQ_APP_KEY", '"bqZ64PGbWvu3otQo"'
+        buildConfigField "String", "QQ_APP_ID", '"1106928692"'
+        buildConfigField "String", "QQ_APP_KEY", '"M02OJdXu3EUBLEVJ"'
 
         resValue "string", "more_aboutus_appname", "国翰大健康 Android客户端"
         resValue "string", "more_aboutus_version", "版本：${defaultConfig.versionName}"
@@ -165,10 +171,10 @@ dependencies {
     api files('libs/fastjson-1.2.7.jar')
     api files('libs/baidumapapi_v3_5_0.jar')
     api files('libs/locSDK_5.2.jar')
-    api files('libs/pushservice-5.0.0.66.jar')
     api files('libs/alivc-player-2.1.0.jar')
     api files('libs/httpclient-4.2.5.jar')
     api files('libs/httpcore-4.2.4.jar')
+    api files('libs/pushservice-5.6.0.30.jar')
     //    api files('libs/alipaySdk-20180403.jar')
     api 'org.apache.commons:commons-lang3:3.4'
     api 'com.squareup.okhttp:okhttp:2.4.0'

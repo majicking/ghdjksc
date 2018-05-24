@@ -214,11 +214,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         startActivityForResult(noAddressIntent, 5);
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
+                .setNegativeButton("取消", (dialogInterface, i) -> {
                 })
                 .create();
 
@@ -231,16 +227,13 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         pop = initPopupWindow(getApplicationContext(), mPopupWindowView);
 
 
-        flMain.post(new Runnable() {
-            @Override
-            public void run() {
-                if (null != pop) {
-                    fcode_ed_text.setFocusable(true);
-                    fcode_ed_text.setFocusableInTouchMode(true);
-                    fcode_ed_text.requestFocus();
-                    pop.showAtLocation(flMain, Gravity.CENTER, 0, 0);
-                    backgroundAlpha(0.5f);
-                }
+        flMain.post(() -> {
+            if (null != pop) {
+                fcode_ed_text.setFocusable(true);
+                fcode_ed_text.setFocusableInTouchMode(true);
+                fcode_ed_text.requestFocus();
+                pop.showAtLocation(flMain, Gravity.CENTER, 0, 0);
+                backgroundAlpha(0.5f);
             }
         });
 
@@ -329,52 +322,36 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         tvRpacket = (TextView) findViewById(R.id.tvRpacket);
         tvRpacketButton = (TextView) findViewById(R.id.tvRpacketButton);
         rpacketListUseable = new ArrayList<RpacketInfo>();
-        tvRpacketButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showRpacketWindow();
+        tvRpacketButton.setOnClickListener(view -> showRpacketWindow());
+        toggle_yck.setOnToggleChanged(on -> {
+            isyck = on;
+            if (on) {
+                if_pd_pay = "1";
+            } else {
+                if_pd_pay = "0";
             }
-        });
-        toggle_yck.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
-            @Override
-            public void onToggle(boolean on) {
-                isyck = on;
-                if (on) {
-                    if_pd_pay = "1";
-                } else {
-                    if_pd_pay = "0";
-                }
-                showEiditPassword();
+            showEiditPassword();
 
+        });
+        toggle_czk.setOnToggleChanged(on -> {
+            isczk = on;
+
+            if (on) {
+                if_rcb_pay = "1";
+            } else {
+                if_rcb_pay = "0";
             }
+            showEiditPassword();
         });
-        toggle_czk.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
-            @Override
-            public void onToggle(boolean on) {
-                isczk = on;
-
-                if (on) {
-                    if_rcb_pay = "1";
-                } else {
-                    if_rcb_pay = "0";
-                }
-                showEiditPassword();
+        toggle_jkd.setOnToggleChanged(on -> {
+            isjkd = on;
+            if (on) {
+                healthbean_pay = "1";
+            } else {
+                healthbean_pay = "0";
             }
-        });
-        toggle_jkd.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
-            @Override
-            public void onToggle(boolean on) {
-                isjkd = on;
-
-
-                if (on) {
-                    healthbean_pay = "1";
-                } else {
-                    healthbean_pay = "0";
-                }
 //                showToast(healthbean_pay);
-                showEiditPassword();
-            }
+            showEiditPassword();
         });
         num_yck = (TextView) findViewById(R.id.textview_yck);
         num_czk = (TextView) findViewById(R.id.textview_czk);

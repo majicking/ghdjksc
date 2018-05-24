@@ -12,7 +12,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -67,7 +66,6 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
     private Handler mXLHandler;
 
 
-
     public PredOtherFragment() {
     }
 
@@ -116,19 +114,21 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
         xlistview.setXListViewListener(this);
         switch (mParam1) {
             case "1":
+                if (myListEmpty!=null)
                 myListEmpty.setListEmpty(R.drawable.nc_icon_predeposit_white, "您尚无预存款收支信息", "使用商城预存款结算更方便");
                 predepositLogInfoArrayList = new ArrayList<>();
                 predepositLogListViewAdapter = new PredepositLogListViewAdapter(getActivity());
                 xlistview.setAdapter(predepositLogListViewAdapter);
                 break;
             case "2":
+                if (myListEmpty!=null)
                 myListEmpty.setListEmpty(R.drawable.nc_icon_predeposit_white, "您尚未充值过预存款", "使用商城预存款结算更方便");
                 pdrechargeInfoArrayList = new ArrayList<>();
                 pdrechargeListViewAdapter = new PdrechargeListViewAdapter(getActivity());
                 xlistview.setAdapter(pdrechargeListViewAdapter);
                 xlistview.setOnItemClickListener((parent, view, position, id) -> {
-                    if (pdrechargeInfoArrayList.get(position-1).getPaymentState().equals("0")){
-                        Dialog dialog=ProgressDialog.showLoadingProgress(context,"请稍后...");
+                    if (pdrechargeInfoArrayList.get(position - 1).getPaymentState().equals("0")) {
+                        Dialog dialog = ProgressDialog.showLoadingProgress(context, "请稍后...");
                         dialog.show();
                         Utils.loadingPaymentListData(o -> {
                                     ProgressDialog.dismissDialog(dialog);
@@ -146,7 +146,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
                                                 T.showShort(context, "没有支付方式，请后台配置");
                                                 return;
                                             }
-                                            OrderPay(size, arr, pdrechargeInfoArrayList.get(position-1).getSn());
+                                            OrderPay(size, arr, pdrechargeInfoArrayList.get(position - 1).getSn());
                                         } catch (JSONException e1) {
                                             e1.printStackTrace();
                                         }
@@ -161,6 +161,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
                 });
                 break;
             case "3":
+                if (myListEmpty!=null)
                 myListEmpty.setListEmpty(R.drawable.nc_icon_predeposit_white, "您尚未提现过预存款", "使用商城预存款结算更方便");
                 pdcashInfoArrayList = new ArrayList<>();
                 pdcashListViewAdapter = new PdcashListViewAdapter(getActivity());
@@ -169,6 +170,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
         }
 
     }
+
     private PopupWindow payPopupWindow;
     Handler handler = new Handler() {
         @Override
@@ -177,7 +179,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
             if (payPopupWindow != null && payPopupWindow.isShowing()) {
                 payPopupWindow.dismiss();
             }
-            ((PredepositActivity)context).loadPredeposit();
+            ((PredepositActivity) context).loadPredeposit();
             if (msg.what == 1) {
                 if (msg.obj != null) {
                     Toast.makeText(getActivity(), "支付成功", Toast.LENGTH_SHORT).show();
@@ -302,7 +304,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
      * 获取数据
      */
     private void loadingListData() {
-        ((PredepositActivity)context).loadPredeposit();
+        ((PredepositActivity) context).loadPredeposit();
         String url = mParam2 + "&curpage=" + currentPage + "&page=" + Constants.PAGESIZE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", MyShopApplication.getInstance().getLoginKey());
@@ -356,6 +358,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
                                 predepositLogListViewAdapter.notifyDataSetChanged();
                             } else {
                                 predepositLogInfoArrayList.clear();
+                                if (myListEmpty!=null)
                                 myListEmpty.setVisibility(View.VISIBLE);
                             }
                             predepositLogListViewAdapter.notifyDataSetChanged();
@@ -368,6 +371,7 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
                                 pdrechargeListViewAdapter.notifyDataSetChanged();
                             } else {
                                 pdrechargeInfoArrayList.clear();
+                                if (myListEmpty!=null)
                                 myListEmpty.setVisibility(View.VISIBLE);
                             }
                             pdrechargeListViewAdapter.notifyDataSetChanged();
@@ -380,12 +384,15 @@ public class PredOtherFragment extends Fragment implements XListView.IXListViewL
                                 pdcashListViewAdapter.notifyDataSetChanged();
                             } else {
                                 pdcashInfoArrayList.clear();
+                                if (myListEmpty!=null)
                                 myListEmpty.setVisibility(View.VISIBLE);
                             }
                             pdcashListViewAdapter.notifyDataSetChanged();
                             break;
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {

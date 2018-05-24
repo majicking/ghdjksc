@@ -1,8 +1,6 @@
 package com.guohanhealth.shop.ui.mine;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,12 +11,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
+import com.guohanhealth.shop.WebViewActivity;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
@@ -29,6 +24,9 @@ import com.guohanhealth.shop.custom.NCDialog;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ncinterface.INCOnDialogConfirm;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -187,10 +185,12 @@ public class RegisterMobileActivity extends BaseActivity {
      */
     public void btnMemberDocumentClick(View v) {
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(Constants.WAP_MEMBER_DOCUMENT));
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(Constants.WAP_MEMBER_DOCUMENT));
+            Intent intent=new Intent(mActivity, WebViewActivity.class);
+            intent.putExtra("url",Constants.WAP_MEMBER_DOCUMENT);
             startActivity(intent);
-        }catch (ActivityNotFoundException exception){
+        }catch (Exception exception){
             T.showShort(this,"链接失败");
         }
     }

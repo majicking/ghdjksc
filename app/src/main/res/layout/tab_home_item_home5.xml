@@ -11,27 +11,36 @@
         android:background="#FFFFFF"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/title1"
+        <LinearLayout
+            android:id="@+id/titlelayout"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dip"
-            android:gravity="center"
-            android:visibility="gone"
-            android:text="@string/app_name"
-            android:textColor="#6D6D6D"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/title2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dip"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textColor="#6D6D6D"
-            android:textSize="16sp" />
+            <TextView
+
+                android:id="@+id/title1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:textColor="#6D6D6D"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/title2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="15dp"
+                android:textColor="#6D6D6D"
+                android:textSize="16sp" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,9 +50,9 @@
             <ImageView
                 android:id="@+id/img1"
                 android:layout_width="0dp"
-                android:scaleType="centerCrop"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -55,8 +64,8 @@
                     android:id="@+id/img2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -67,16 +76,16 @@
                     <ImageView
                         android:id="@+id/img3"
                         android:layout_width="0dp"
-                        android:scaleType="centerCrop"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/img4"
                         android:layout_width="0dp"
-                        android:scaleType="centerCrop"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

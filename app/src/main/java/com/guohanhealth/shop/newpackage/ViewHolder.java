@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -12,10 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.guohanhealth.shop.common.LoadImage;
-
-
 /**
  * 每一行里面的所有控件      父类View
  *
@@ -26,7 +22,6 @@ public class ViewHolder {
     private int mPosition;  //行号
     private View mConvertView;//每一行对应的布局
     private Context context;
-
     private ViewHolder(Context context, ViewGroup parent, int layoutId, int postion) {
         this.context = context;
         this.mPosition = postion;
@@ -34,18 +29,15 @@ public class ViewHolder {
         mConvertView = LayoutInflater.from(context).inflate(layoutId, parent, false);
         mConvertView.setTag(this);
     }
-
     /**
      * 获取一个Viewholder对象
      */
-
     public static ViewHolder getInstance(Context context, View convertView, ViewGroup parent, int layoutId, int postion) {
         if (convertView == null) {
             return new ViewHolder(context, parent, layoutId, postion);
         }
         return (ViewHolder) convertView.getTag();
     }
-
     /**
      * 通过控件的id拿到相应的控件（注意：因为我不知道控件的类型，要用到泛型）
      *
@@ -62,17 +54,14 @@ public class ViewHolder {
         }
         return (T) view;
     }
-
     /**
      * 为TextView设置文字
      */
-
     public ViewHolder setText(int viewId, String text) {
         TextView view = getView(viewId);
         view.setText(text);
         return this;
     }
-
     /**
      * 为ImageView设置图片
      */
@@ -93,11 +82,9 @@ public class ViewHolder {
         }
         return this;
     }
-
     public int getPosition() {
         return mPosition;
     }
-
     public View getConvertView() {
         return mConvertView;
     }

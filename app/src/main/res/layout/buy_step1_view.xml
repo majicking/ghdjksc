@@ -425,6 +425,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
@@ -582,7 +583,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/predepositLayoutID"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -591,40 +592,6 @@
                     android:orientation="vertical"
                     android:padding="5dip"
                     >
-
-                  <!--  <LinearLayout
-                        android:visibility="gone"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dip"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/availablePredepositID"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@null"
-                            android:button="@null"
-                            android:drawableLeft="@drawable/buy_step1_check_bg"
-                            android:drawablePadding="5dip"
-                            android:text="预存款支付"
-                            android:textColor="#000000"
-                            android:textSize="15dp" />
-
-                        <CheckBox
-                            android:id="@+id/availableRCBalanceID"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@null"
-                            android:button="@null"
-                            android:drawableLeft="@drawable/buy_step1_check_bg"
-                            android:drawablePadding="5dip"
-                            android:text="充值卡支付"
-                            android:textColor="#000000"
-                            android:textSize="15dp" />
-                    </LinearLayout>-->
 
                     <EditText
                         android:enabled="false"
@@ -638,7 +605,14 @@
                         android:password="true"
                         android:singleLine="true"
                         android:textSize="15dp" />
-                </LinearLayout>
+
+                    <ImageView
+                        android:layout_margin="7dip"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/noeditextpwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp" />
+                </RelativeLayout>
 
                 <Button
                     android:id="@+id/commitID"

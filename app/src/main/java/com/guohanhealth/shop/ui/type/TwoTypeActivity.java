@@ -1,6 +1,16 @@
 package com.guohanhealth.shop.ui.type;
 
-import java.util.ArrayList;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.TwoTypeExpandableListViewAdapter;
@@ -15,17 +25,7 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.ArrayList;
 
 /**
  * 二级分类界面
@@ -147,27 +147,24 @@ public class TwoTypeActivity extends Activity implements OnClickListener{
 		
 		String url = Constants.URL_GOODSCLASS+"&gc_id="+gc_id;
 		
-		RemoteDataHandler.asyncDataStringGet(url, new Callback() {
-			@Override
-			public void dataLoaded(ResponseData data) {
-				if(data.getCode() == HttpStatus.SC_OK){
-					String json = data.getJson();
-					try {
-						JSONObject obj = new JSONObject(json);
-						String array = obj.getString("class_list");
-						ArrayList<TwoType> typeNextList = new ArrayList<TwoType>();
-						typeNextList.add(new TwoType(gc_id,"全部商品"));
-						typeNextList.addAll(TwoType.newInstanceList(array));
-						adapter.setTypeNextCList(typeNextList);
-						adapter.notifyDataSetChanged();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}else{
-					Toast.makeText(TwoTypeActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
+		RemoteDataHandler.asyncDataStringGet(url, data -> {
+            if(data.getCode() == HttpStatus.SC_OK){
+                String json = data.getJson();
+                try {
+                    JSONObject obj = new JSONObject(json);
+                    String array = obj.getString("class_list");
+                    ArrayList<TwoType> typeNextList = new ArrayList<TwoType>();
+                    typeNextList.add(new TwoType(gc_id,"全部商品"));
+                    typeNextList.addAll(TwoType.newInstanceList(array));
+                    adapter.setTypeNextCList(typeNextList);
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Toast.makeText(TwoTypeActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+            }
+        });
 	}
 
 	@Override

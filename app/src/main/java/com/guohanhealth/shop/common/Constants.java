@@ -62,6 +62,8 @@ public final class Constants {
     public static final String QQ_APP_ID = BuildConfig.QQ_APP_ID;
     public static final String QQ_APP_KEY = BuildConfig.QQ_APP_KEY;
 
+    public static final String BAIDUPUSH_APPKEY = BuildConfig.BAIDUPUSH_APPKEY;
+
     /**
      * 登录成功广播返回标识
      */
@@ -618,11 +620,11 @@ public final class Constants {
     //手机注册
     public static final String URL_CONNECT_SMS_REGISTER = URL_CONTEXTPATH + "act=connect&op=sms_register";
     //WAP用户注册协议
-    public static final String WAP_MEMBER_DOCUMENT = WAP_URL + "tmpl/member/document.html";
+    public static final String WAP_MEMBER_DOCUMENT = WAP_URL_ALL + "tmpl/member/document.html";
     //WAP找回密码
-    public static final String WAP_FIND_PASSWORD = WAP_URL + "tmpl/member/find_password.html";
+    public static final String WAP_FIND_PASSWORD = WAP_URL_ALL + "tmpl/member/find_password.html";
     //WAP品牌图标
-    public static final String WAP_BRAND_ICON = WAP_URL + "images/degault.png";
+    public static final String WAP_BRAND_ICON = WAP_URL_ALL + "images/degault.png";
     //商品分类全部子集
     public static final String URL_GOODS_CLASS_CHILD_ALL = URL_CONTEXTPATH + "act=goods_class&op=get_child_all";
     //搜索关键词列表

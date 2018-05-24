@@ -10,20 +10,19 @@ import java.util.List;
 
 public abstract class CommonAdapter<T> extends BaseAdapter {
     private Context mContext;
-    private List<T> mData;// 数据源（因为我不知道每一行里面具体放的是什么，所以用泛型）
-
+    private List<T> mData;// 数据源（不知道每一行里面具体放的是什么，所以用泛型）
     private int mItemLayoutId;
 
     public CommonAdapter(Context context, List<T> mData2, int itemLayoutId) {
-        mData=new ArrayList<>();
+        mData = new ArrayList<>();
         this.mContext = context;
         this.mData = mData2;
         this.mItemLayoutId = itemLayoutId;
     }
 
     public void updataAdapter(List<T> mData2) {
-        if (mData2!=null&&mData2.size()>0)
-        this.mData=mData2;
+        if (mData2 != null && mData2.size() > 0)
+            this.mData = mData2;
         else
             mData.clear();
         notifyDataSetChanged();
@@ -49,12 +48,12 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     }
 
     // 填充数据
-    public abstract void convert(ViewHolder viewHolder, T item, int position, View convertView, ViewGroup parentViewGroup);
+    public abstract void convert(ViewHolder viewHolder, T item,
+                                 int position, View convertView, ViewGroup parentViewGroup);
 
     private ViewHolder getViewHolder(int position, View convertView, ViewGroup parent) {
         return ViewHolder.getInstance(mContext, convertView, parent, mItemLayoutId, position);
     }
-
 }
 
 

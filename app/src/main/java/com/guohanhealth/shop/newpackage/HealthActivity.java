@@ -29,8 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HealthActivity extends Activity implements XListView.IXListViewListener {
-
-
     @BindView(R.id.btnBack)
     ImageButton btnBack;
     @BindView(R.id.tvCommonTitle)
@@ -60,7 +58,8 @@ public class HealthActivity extends Activity implements XListView.IXListViewList
         datalist = new ArrayList<>();
         adapter = new CommonAdapter<HealthBean>(this, datalist, R.layout.item_health_layout) {
             @Override
-            public void convert(ViewHolder viewHolder, HealthBean item, int position, View convertView, ViewGroup parentViewGroup) {
+            public void convert(ViewHolder viewHolder, HealthBean item,
+                                int position, View convertView, ViewGroup parentViewGroup) {
                 TextView tvDesc = viewHolder.getView(R.id.tvDesc);
                 TextView tvSn = viewHolder.getView(R.id.tvSn);
                 TextView tvAvAmount = viewHolder.getView(R.id.tvAvAmount);
@@ -116,14 +115,7 @@ public class HealthActivity extends Activity implements XListView.IXListViewList
                         datalist.clear();
                     }
                     if (data.getCode() == HttpStatus.SC_OK) {
-
                         if (!json.equals("false")) {
-//
-//                            if (JSONParser.getStringFromJsonString("pages", json).equals("0")) {
-//
-//                            } else {
-//                                xlist.setPullLoadEnable(true);
-//                            }
                             List<HealthBean> list = JSONParser.JSON2Array(JSONParser.getStringFromJsonString("data", json), HealthBean.class);
                             if (list != null && list.size() > 0) {
                                 datalist.addAll(list);
@@ -137,15 +129,12 @@ public class HealthActivity extends Activity implements XListView.IXListViewList
                     } else {
                         ShopHelper.showApiError(HealthActivity.this, json);
                     }
-
-
                 }
         );
     }
 
     @Override
     public void onRefresh() {
-
         handler.postDelayed(() -> {
                     pagenum = 0;
                     try {
@@ -161,10 +150,8 @@ public class HealthActivity extends Activity implements XListView.IXListViewList
     @Override
     public void onLoadMore() {
         pagenum += 1;
-        handler.postDelayed(() ->
-                {
+        handler.postDelayed(() -> {
                     try {
-
                         pagenum = pagenum + 1;
                         getData();
                     } catch (Exception e) {

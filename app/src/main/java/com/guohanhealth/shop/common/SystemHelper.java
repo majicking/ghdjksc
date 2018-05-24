@@ -254,7 +254,6 @@ public class SystemHelper {
                 .considerExifParams(true)
                 .displayer(new FadeInBitmapDisplayer(000))//图片显示时间
                 .build();
-        ;
 
         return options;
     }

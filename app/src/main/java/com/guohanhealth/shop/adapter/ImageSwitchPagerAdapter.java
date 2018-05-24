@@ -33,6 +33,7 @@ public class ImageSwitchPagerAdapter extends PagerAdapter {
         mImageViews = new ImageView[imageList.size()];
         for (int i = 0; i < mImageViews.length; i++) {
             ImageView imageView = new ImageView(context);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageLoader.displayImage(imageList.get(i), imageView, options, animateFirstListener);
             mImageViews[i] = imageView;
         }

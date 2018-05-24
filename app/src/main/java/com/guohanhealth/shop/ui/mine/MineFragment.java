@@ -24,15 +24,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.wang.avi.AVLoadingIndicatorView;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.Mine;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
@@ -57,6 +48,15 @@ import com.guohanhealth.shop.ui.fenxiao.FenxiaoSettlementActivity;
 import com.guohanhealth.shop.ui.fenxiao.FenxiaoTixianActivity;
 import com.guohanhealth.shop.ui.type.AddressListActivity;
 import com.guohanhealth.shop.ui.type.GoodsBrowseActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -75,9 +75,7 @@ import static com.guohanhealth.shop.common.Constants.ORDERTYPE;
  * @Time 2015-7-6
  */
 public class MineFragment extends Fragment {
-
     private MyShopApplication myApplication;
-
     private LinearLayout llLogin;
     private LinearLayout llMemberInfo;
     private ImageView ivMemberAvatar;
@@ -91,11 +89,9 @@ public class MineFragment extends Fragment {
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options = SystemHelper.getRoundedBitmapDisplayImageOptions(100);
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
-
     /*分销*/
     private LinearLayout fenxiao_llOrderNoeval, fenxiao_llOrderNotakes, fenxiao_llOrderSend, fenxiao_llOrderNew, ll_fenxiao;
     private Button fenxiao_btnOrderAll;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,13 +99,11 @@ public class MineFragment extends Fragment {
         View viewLayout = inflater.inflate(R.layout.main_mine_view, container, false);
         MyExceptionHandler.getInstance().setContext(getActivity());
         myApplication = (MyShopApplication) getActivity().getApplicationContext();
-
         initSettingButton(viewLayout);
         initMemberButton(viewLayout);
         initOrderButton(viewLayout);
         initAssetButton(viewLayout);
         initFenxiaoLinearlayout(viewLayout);
-
         return viewLayout;
     }
 
@@ -131,49 +125,24 @@ public class MineFragment extends Fragment {
                 } else {
                     T.showShort(getActivity(), movie_msg);
                 }
-
-
-//                   startActivity(new Intent(getActivity(), ApplyLiveActivity.class));
-//                   startActivity(new Intent(getActivity(), PushActivity.class));
             }
         });
         /*全部*/
-        fenxiao_btnOrderAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                startActivity(new Intent(getActivity(), ZhiBoActivity.class));
-                startActivity(new Intent(getActivity(), FenxiaoAllActivity.class));
-
-            }
+        fenxiao_btnOrderAll.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), FenxiaoAllActivity.class));
         });
         /*分销结算*/
-        fenxiao_llOrderNotakes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), FenxiaoSettlementActivity.class));
-            }
-        });
+        fenxiao_llOrderNotakes.setOnClickListener(v ->
+                startActivity(new Intent(getActivity(), FenxiaoSettlementActivity.class)));
         /*分销订单*/
-        fenxiao_llOrderSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), FenxiaoOrderActivity.class));
-            }
-        });
+        fenxiao_llOrderSend.setOnClickListener(v ->
+                startActivity(new Intent(getActivity(), FenxiaoOrderActivity.class)));
         /*分销商品 */
-        fenxiao_llOrderNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), FenxiaoGoodsActivity.class));
-            }
-        });
+        fenxiao_llOrderNew.setOnClickListener(v ->
+                startActivity(new Intent(getActivity(), FenxiaoGoodsActivity.class)));
         /*分销提现列表*/
-        fenxiao_llOrdertixian.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), FenxiaoTixianActivity.class));
-            }
-        });
+        fenxiao_llOrdertixian.setOnClickListener(v ->
+                startActivity(new Intent(getActivity(), FenxiaoTixianActivity.class)));
     }
 
     /**
@@ -205,15 +174,6 @@ public class MineFragment extends Fragment {
                     //通过imageview，设置图片
                     imageView.setImageBitmap(bitmap);
                     loadingIndicatorView.setVisibility(View.GONE);
-//                    Glide.with(getActivity()).load(msg.obj).placeholder(R.drawable.rjc_error_pressed).into(imageView);
-
-//                    Glide.with(getActivity())
-//                            .load(msg.obj)
-//                            .crossFade()
-//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                            .placeholder(R.mipmap.logo)  //设置占位图
-//                            .error(R.drawable.rjc_error_pressed)      //加载错误图
-//                            .into(imageView);
                 }
             };
             RemoteDataHandler.asyncDataStringGet(url, data -> {
@@ -231,9 +191,7 @@ public class MineFragment extends Fragment {
                         call.enqueue(new Callback() {
                             @Override
                             public void onFailure(Request request, IOException e) {
-
                             }
-
                             //得到从网上获取资源，转换成我们想要的类型
                             @Override
                             public void onResponse(Response response) throws IOException {
@@ -254,16 +212,9 @@ public class MineFragment extends Fragment {
                     popupWindow.dismiss();
                 }
             });
-
-
             Button btnConfirm = (Button) viewPopScreen.findViewById(R.id.btnConfirm);
             FrameLayout flBack = (FrameLayout) viewPopScreen.findViewById(R.id.flBack);
-            btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    popupWindow.dismiss();
-                }
-            });
+            btnConfirm.setOnClickListener(view -> popupWindow.dismiss());
             popupWindow.setOnDismissListener(() -> {
                 popupWindow = null;
             });
@@ -280,51 +231,32 @@ public class MineFragment extends Fragment {
     private void initSettingButton(View viewLayout) {
         //设置
         Button btnSetting = (Button) viewLayout.findViewById(R.id.btnSetting);
-        btnSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), SettingActivity.class));
-                }
+        btnSetting.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
-
         //设置2
         RelativeLayout rlSetting = (RelativeLayout) viewLayout.findViewById(R.id.rlSetting);
-        rlSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), SettingActivity.class));
-                }
+        rlSetting.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
-
         //IM
         Button btnIm = (Button) viewLayout.findViewById(R.id.btnIm);
-        btnIm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-//                    startActivity(new Intent(getActivity(), IMFriendsListActivity.class));
-                    startActivity(new Intent(getActivity(), IMNewListActivity.class));
-                }
+        btnIm.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), IMNewListActivity.class));
             }
         });
-
         //登录
         llLogin = (LinearLayout) viewLayout.findViewById(R.id.llLogin);
-        llLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
-        });
+        llLogin.setOnClickListener(view ->
+                startActivity(new Intent(getActivity(), LoginActivity.class)));
         llMemberInfo = (LinearLayout) viewLayout.findViewById(R.id.llMemberInfo);
         ivMemberAvatar = (ImageView) viewLayout.findViewById(R.id.ivMemberAvatar);
         tvMemberName = (TextView) viewLayout.findViewById(R.id.tvMemberName);
-
-
         daifukuan = (TextView) viewLayout.findViewById(R.id.daifukuang_num);
         daishouhuo = (TextView) viewLayout.findViewById(R.id.daishouhuo_num);
         daiziti = (TextView) viewLayout.findViewById(R.id.daiziti_num);
@@ -336,7 +268,6 @@ public class MineFragment extends Fragment {
             }
         });
     }
-
     /**
      * 初始化用户信息相关按钮
      *
@@ -345,25 +276,18 @@ public class MineFragment extends Fragment {
     private void initMemberButton(View viewLayout) {
         //商品收藏
         LinearLayout llFavGoods = (LinearLayout) viewLayout.findViewById(R.id.llFavGoods);
-        llFavGoods.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), FavGoodsListActivity.class));
-                }
+        llFavGoods.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), FavGoodsListActivity.class));
             }
         });
         ivFavGoods = (ImageView) viewLayout.findViewById(R.id.ivFavGoods);
         tvFavGoodsCount = (TextView) viewLayout.findViewById(R.id.tvFavGoodsCount);
-
         //收藏店铺
         LinearLayout llFavStore = (LinearLayout) viewLayout.findViewById(R.id.llFavStore);
-        llFavStore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), FavStoreListActivity.class));
-                }
+        llFavStore.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), FavStoreListActivity.class));
             }
         });
         ivFavStore = (ImageView) viewLayout.findViewById(R.id.ivFavStore);
@@ -371,29 +295,21 @@ public class MineFragment extends Fragment {
         tv_Member_v = (TextView) viewLayout.findViewById(R.id.tv_Member_v);
         //我的足迹
         LinearLayout llZuji = (LinearLayout) viewLayout.findViewById(R.id.llZuji);
-        llZuji.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), GoodsBrowseActivity.class));
-                }
+        llZuji.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), GoodsBrowseActivity.class));
             }
         });
-
         //收货地址
         RelativeLayout rlAddress = (RelativeLayout) viewLayout.findViewById(R.id.rlAddress);
-        rlAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    Intent intent = new Intent(getActivity(), AddressListActivity.class);
-                    intent.putExtra("addressFlag", "0");
-                    startActivity(intent);
-                }
+        rlAddress.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                Intent intent = new Intent(getActivity(), AddressListActivity.class);
+                intent.putExtra("addressFlag", "0");
+                startActivity(intent);
             }
         });
     }
-
     /**
      * 初始化订单相关按钮
      *
@@ -402,12 +318,7 @@ public class MineFragment extends Fragment {
     private void initOrderButton(View viewLayout) {
         //全部订单
         Button btnOrderAll = (Button) viewLayout.findViewById(R.id.btnOrderAll);
-        btnOrderAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showOrderList("");
-            }
-        });
+        btnOrderAll.setOnClickListener(view -> showOrderList(""));
         //待付款订单
         LinearLayout llOrderNew = (LinearLayout) viewLayout.findViewById(R.id.llOrderNew);
         setOrderButtonEvent(llOrderNew, "state_new");
@@ -422,12 +333,8 @@ public class MineFragment extends Fragment {
         setOrderButtonEvent(llOrderNoeval, "state_noeval");
         //退款退货
         LinearLayout llRefund = (LinearLayout) viewLayout.findViewById(R.id.llRefund);
-        llRefund.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), OrderExchangeListActivity.class));
-            }
-        });
+        llRefund.setOnClickListener(view ->
+                startActivity(new Intent(getActivity(), OrderExchangeListActivity.class)));
     }
 
     /**
@@ -438,69 +345,51 @@ public class MineFragment extends Fragment {
     private void initAssetButton(View viewLayout) {
         //全部财产
         Button btnMyAsset = (Button) viewLayout.findViewById(R.id.btnMyAsset);
-        btnMyAsset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+        btnMyAsset.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
 
-                    startActivity(new Intent(getActivity(), MyAssetActivity.class));
-                }
+                startActivity(new Intent(getActivity(), MyAssetActivity.class));
             }
         });
 
         //预存款
         LinearLayout llPredeposit = (LinearLayout) viewLayout.findViewById(R.id.llPredeposit);
-        llPredeposit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+        llPredeposit.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
 
-                    startActivity(new Intent(getActivity(), PredepositActivity.class));
-                }
+                startActivity(new Intent(getActivity(), PredepositActivity.class));
             }
         });
 
         //充值卡
         LinearLayout llRechargeCard = (LinearLayout) viewLayout.findViewById(R.id.llRechargeCard);
-        llRechargeCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), RechargeCardLogActivity.class));
-                }
+        llRechargeCard.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), RechargeCardLogActivity.class));
             }
         });
 
         //代金券
         LinearLayout llVoucherList = (LinearLayout) viewLayout.findViewById(R.id.llVoucherList);
-        llVoucherList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), VoucherListActivity.class));
-                }
+        llVoucherList.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), VoucherListActivity.class));
             }
         });
 
         //红包
         LinearLayout llRedpacket = (LinearLayout) viewLayout.findViewById(R.id.llRedpacketList);
-        llRedpacket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), RedpacketListActivity.class));
-                }
+        llRedpacket.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), RedpacketListActivity.class));
             }
         });
 
         //积分
         LinearLayout llPointLog = (LinearLayout) viewLayout.findViewById(R.id.llPointLog);
-        llPointLog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                    startActivity(new Intent(getActivity(), PointLogActivity.class));
-                }
+        llPointLog.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), PointLogActivity.class));
             }
         });
     }
@@ -509,19 +398,13 @@ public class MineFragment extends Fragment {
      * 设置订单按钮事件
      */
     private void setOrderButtonEvent(LinearLayout btn, final String stateType) {
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showOrderList(stateType);
-            }
-        });
+        btn.setOnClickListener(view -> showOrderList(stateType));
     }
-
     /**
      * 显示订单列表
      */
     private void showOrderList(String stateType) {
-        int type = 0;
+        int type;
         switch (stateType) {
             case "state_new":
                 type = 1;
@@ -538,7 +421,6 @@ public class MineFragment extends Fragment {
             default:
                 type = 0;
                 break;
-
         }
         if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
             Intent it = new Intent();
@@ -546,10 +428,6 @@ public class MineFragment extends Fragment {
             it.putExtra(ORDERTYPE, false);
             it.setClass(getActivity(), OrderActivity.class);
             startActivity(it);
-
-//            Intent intent = new Intent(getActivity(), OrderListActivity.class);
-//            intent.putExtra("state_type", stateType);
-//            startActivity(intent);
         }
     }
 
@@ -580,7 +458,6 @@ public class MineFragment extends Fragment {
             }
         }
     };
-
     public void registerBoradcastReceiver() {
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(Constants.LOGIN_SUCCESS_URL);
@@ -623,15 +500,12 @@ public class MineFragment extends Fragment {
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new RemoteDataHandler.Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
-
                 String json = data.getJson();
-//                Logger.d(json);
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
                         JSONObject obj = new JSONObject(json);
                         String objJson = obj.getString("member_info");
                         Mine bean = Mine.newInstanceList(objJson);
-
                         if (bean != null) {
                             tvMemberName.setText(bean.getMemberName() == null ? "" : bean.getMemberName());
                             imageLoader.displayImage(bean.getMemberAvatar(), ivMemberAvatar, options, animateFirstListener);
@@ -668,14 +542,12 @@ public class MineFragment extends Fragment {
                                 daifukuan.setText(bean.getOrderNopay());
                                 daifukuan.setVisibility(View.VISIBLE);
                             }
-                            //d/d
                             if (bean.getIs_distr() != null) {
                                 if ("1".equals(bean.getIs_distr())) {
                                     ll_fenxiao.setVisibility(View.VISIBLE);
                                 } else {
                                     ll_fenxiao.setVisibility(View.GONE);
                                 }
-
                             } else {
                                 ll_fenxiao.setVisibility(View.GONE);
                             }
@@ -685,11 +557,9 @@ public class MineFragment extends Fragment {
                                 } else {
                                     fenxiao_llOrderNoeval.setVisibility(View.GONE);
                                 }
-
                             }
                             movie_msg = bean.getIs_movie_msg();
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -704,86 +574,53 @@ public class MineFragment extends Fragment {
         String url = Constants.URL_VERIFY_MOVIE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
-
-//        OkHttpUtil.postAsyn(getActivity(),url,new OkHttpUtil.ResultCallback<String>() {
-//            @Override
-//            public void onError(Request request, Exception e) {
-//                Logger.d(e.toString());
-//                T.showShort(getActivity(),e.getMessage());
-//            }
-//
-//            @Override
-//            public void onResponse(String response) {
-//                Logger.d(response);
-//                try {
-//                    JSONObject objError = new JSONObject(response);
-//                    String error = objError.getString("error");
-//                    if (error != null) {
-//                        T.showShort(getActivity(),error);
-//                        return;
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        },params);
-
-        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-
-                String json = data.getJson();
-//                Logger.d(data.toString());
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    /*审核通过了*/
-                    if ("1".equals(json)) {
-                        /*从没有申请过*/
-                        T.showShort(getActivity(), "请申请直播");
-                        startActivity(new Intent(getActivity(), ApplyLiveActivity.class));
-                    } else {
-//                        T.showShort(getActivity(),json);
-//                        LiveCameraActivity.startActivity(getActivity(),"rtmp://video-center.alivecdn.com/shopnc/test1?vhost=live.shopnctest.com", AlivcMediaFormat.OUTPUT_RESOLUTION_360P,false,AlivcMediaFormat.CAMERA_FACING_FRONT);
-                        startActivity(new Intent(getActivity(), BeginLiveActivity.class));
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                /*审核通过了*/
+                if ("1".equals(json)) {
+                    /*从没有申请过*/
+                    T.showShort(getActivity(), "请申请直播");
+                    startActivity(new Intent(getActivity(), ApplyLiveActivity.class));
+                } else {
+//  LiveCameraActivity.startActivity(getActivity(),"rtmp://video-center.alivecdn.com/shopnc/test1?vhost=live.shopnctest.com", AlivcMediaFormat.OUTPUT_RESOLUTION_360P,false,AlivcMediaFormat.CAMERA_FACING_FRONT);
+                    startActivity(new Intent(getActivity(), BeginLiveActivity.class));
+                }
+            } else {
+                /*失败有两种 正在进行中，没有通过*/
+                if (data.getCode() == 400) {
+                    try {
+                        JSONObject objError = new JSONObject(json);
+                        String error = objError.getString("error");
+                        if (!objError.isNull("true_name")) {
+                            String true_name = objError.getString("true_name");
+                            String card_number = objError.getString("card_number");
+                            String card_before_image = objError.getString("card_before_image");
+                            String card_behind_image = objError.getString("card_behind_image");
+                            String card_before_image_url = objError.getString("card_before_image_url");
+                            String card_behind_image_url = objError.getString("card_behind_image_url");
+                            String is_agree = objError.getString("is_agree");
+                            String member_id = objError.getString("member_id");
+                            String movie_id = objError.getString("movie_id");
+                            Intent intent = new Intent(getActivity(), ApplyLiveActivity.class);
+                            intent.putExtra("true_name", true_name);
+                            intent.putExtra("card_number", card_number);
+                            intent.putExtra("card_before_image", card_before_image);
+                            intent.putExtra("card_behind_image", card_behind_image);
+                            intent.putExtra("card_before_image_url", card_before_image_url);
+                            intent.putExtra("card_behind_image_url", card_behind_image_url);
+                            intent.putExtra("is_agree", is_agree);
+                            intent.putExtra("member_id", member_id);
+                            intent.putExtra("movie_id", movie_id);
+                            startActivity(intent);
+                        } else {
+                            T.showShort(getActivity(), error);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
-                    /*失败有两种 正在进行中，没有通过*/
-                    if (data.getCode() == 400) {
-                        try {
-                            JSONObject objError = new JSONObject(json);
-                            String error = objError.getString("error");
-
-                            if (!objError.isNull("true_name")) {
-                                String true_name = objError.getString("true_name");
-                                String card_number = objError.getString("card_number");
-                                String card_before_image = objError.getString("card_before_image");
-                                String card_behind_image = objError.getString("card_behind_image");
-                                String card_before_image_url = objError.getString("card_before_image_url");
-                                String card_behind_image_url = objError.getString("card_behind_image_url");
-                                String is_agree = objError.getString("is_agree");
-                                String member_id = objError.getString("member_id");
-                                String movie_id = objError.getString("movie_id");
-
-                                Intent intent = new Intent(getActivity(), ApplyLiveActivity.class);
-                                intent.putExtra("true_name", true_name);
-                                intent.putExtra("card_number", card_number);
-                                intent.putExtra("card_before_image", card_before_image);
-                                intent.putExtra("card_behind_image", card_behind_image);
-                                intent.putExtra("card_before_image_url", card_before_image_url);
-                                intent.putExtra("card_behind_image_url", card_behind_image_url);
-                                intent.putExtra("is_agree", is_agree);
-                                intent.putExtra("member_id", member_id);
-                                intent.putExtra("movie_id", movie_id);
-
-                                startActivity(intent);
-                            } else {
-                                T.showShort(getActivity(), error);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        ShopHelper.showApiError(getActivity(), json);
-                    }
+                    ShopHelper.showApiError(getActivity(), json);
                 }
             }
         });

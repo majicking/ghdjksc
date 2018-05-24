@@ -783,7 +783,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    AudioSwitchPagerAdapter audioSwitchPagerAdapter;
+
 
 
     /**
@@ -810,8 +810,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         }
         vpImage.setAdapter(new ImageSwitchPagerAdapter(getActivity(), imageList));
 
-//        audioSwitchPagerAdapter = new AudioSwitchPagerAdapter(getActivity(), imageList,isAudio);
-//
+//        AudioSwitchPagerAdapter audioSwitchPagerAdapter; = new AudioSwitchPagerAdapter(getActivity(), imageList,isAudio);
 //        vpImage.setAdapter(audioSwitchPagerAdapter);
         vpImage.setOnPageChangeListener(this);
     }

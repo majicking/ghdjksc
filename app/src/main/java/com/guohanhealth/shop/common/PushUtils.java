@@ -37,7 +37,7 @@ public class PushUtils {
         PushManager.startWork(context,
                 PushConstants.LOGIN_TYPE_API_KEY,
 //                Utils.getMetaValue(context, "P1vKEMreHXWtuazwHDHgGgVY"));
-                Utils.getMetaValue(context, "DW13mjRd1khWrKZpZPP2iwara1xh8KDO"));
+                Utils.getMetaValue(context, Constants.BAIDUPUSH_APPKEY));
         // Push: 无账号初始化，用api key绑定
         // checkApikey();
         PushManager.startWork(context,

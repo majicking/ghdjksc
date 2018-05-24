@@ -74,15 +74,12 @@ public class BrandGridViewAdapter extends BaseAdapter{
 		}
 		
 		final BrandInfo brandInfo = brandInfoArrayList.get(position);
-		holder.llBrandItem.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Intent intent = new Intent(context, GoodsListFragmentManager.class);
-				intent.putExtra("b_id", brandInfo.getBrandId());
-				intent.putExtra("gc_name", brandInfo.getBrandName());
-				context.startActivity(intent);
-			}
-		});
+		holder.llBrandItem.setOnClickListener(view -> {
+            Intent intent = new Intent(context, GoodsListFragmentManager.class);
+            intent.putExtra("b_id", brandInfo.getBrandId());
+            intent.putExtra("gc_name", brandInfo.getBrandName());
+            context.startActivity(intent);
+        });
 		imageLoader.displayImage(brandInfo.getBrandPic(), holder.ivBrandPic, options, animateFirstListener);
 		holder.tvBrandName.setText(brandInfo.getBrandName());
 		return convertView;

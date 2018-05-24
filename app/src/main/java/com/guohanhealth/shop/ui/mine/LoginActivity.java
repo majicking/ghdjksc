@@ -1,9 +1,7 @@
 package com.guohanhealth.shop.ui.mine;
 
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +15,7 @@ import android.widget.Toast;
 
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
+import com.guohanhealth.shop.WebViewActivity;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
@@ -37,7 +36,6 @@ import java.util.Map;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 
 
 /**
@@ -199,10 +197,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      */
     public void btnFindPasswordClick(View v) {
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(Constants.WAP_FIND_PASSWORD));
+            Intent intent=new Intent(mActivity, WebViewActivity.class);
+            intent.putExtra("url",Constants.WAP_FIND_PASSWORD);
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(Constants.WAP_FIND_PASSWORD));
             startActivity(intent);
-        } catch (ActivityNotFoundException exception) {
+        } catch (Exception exception) {
             T.showShort(this, "链接失败");
         }
     }
@@ -375,7 +375,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     //授权
     private void authorization(SHARE_MEDIA share_media) {
-        if (!UMShareAPI.get(LoginActivity.this).isInstall(this, share_media)) {
+        if (share_media!=SHARE_MEDIA.SINA&&!UMShareAPI.get(LoginActivity.this).isInstall(this, share_media)) {
             Toast.makeText(LoginActivity.this, "未安装客户端", Toast.LENGTH_SHORT).show();
             return;
         }

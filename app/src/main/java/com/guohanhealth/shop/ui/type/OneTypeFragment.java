@@ -204,23 +204,20 @@ public class OneTypeFragment extends Fragment {
             }
 
             //点击
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    resetCurrentGoodsClass(currentGoodsClassView);
-                    setCurrentGoodsClass(view);
+            v.setOnClickListener(view -> {
+                resetCurrentGoodsClass(currentGoodsClassView);
+                setCurrentGoodsClass(view);
 
-                    currentGoodsClassView = view;
-                    svGoodsClassRoot.smoothScrollTo(0, view.getTop());
+                currentGoodsClassView = view;
+                svGoodsClassRoot.smoothScrollTo(0, view.getTop());
 
-                    TextView tvGoodsClassId = (TextView) view.findViewById(R.id.tvGoodsClassId);
-                    String goodsClassId = tvGoodsClassId.getText().toString();
-                    if (goodsClassId.equals("0")) {
-                        gvBrand.setVisibility(View.VISIBLE);
-                        svGoodsClass.setVisibility(View.GONE);
-                    } else {
-                        showGoodsClass(goodsClassId);
-                    }
+                TextView tvGoodsClassId1 = (TextView) view.findViewById(R.id.tvGoodsClassId);
+                String goodsClassId = tvGoodsClassId1.getText().toString();
+                if (goodsClassId.equals("0")) {
+                    gvBrand.setVisibility(View.VISIBLE);
+                    svGoodsClass.setVisibility(View.GONE);
+                } else {
+                    showGoodsClass(goodsClassId);
                 }
             });
             llGoodsClassRoot.addView(v);

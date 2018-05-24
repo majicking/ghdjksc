@@ -14,7 +14,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.alivc.player.AccessKey;
-import com.alivc.player.AccessKeyCallback;
 import com.alivc.player.AliVcMediaPlayer;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -22,33 +21,27 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.duanqu.qupai.jni.ApplicationGlue;
-import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.emitter.Emitter.Listener;
 import com.github.nkzawa.engineio.client.Transport;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Manager;
 import com.github.nkzawa.socketio.client.Socket;
+import com.guohanhealth.shop.R;
+import com.guohanhealth.shop.bean.IMMemberInFo;
+import com.guohanhealth.shop.http.RemoteDataHandler;
+import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
+import com.guohanhealth.shop.http.ResponseData;
+import com.guohanhealth.shop.ui.mine.IMFriendsListActivity;
+import com.guohanhealth.shop.ui.mine.IMNewListActivity;
+import com.guohanhealth.shop.xrefresh.utils.LogUtils;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.umeng.commonsdk.BuildConfig;
 import com.umeng.commonsdk.UMConfigure;
-import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
-
-import com.umeng.socialize.UMShareAPI;
-import com.guohanhealth.shop.R;
-import com.guohanhealth.shop.bean.IMMemberInFo;
-import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
-import com.guohanhealth.shop.http.ResponseData;
-
-import com.guohanhealth.shop.ui.mine.IMFriendsListActivity;
-import com.guohanhealth.shop.ui.mine.IMNewListActivity;
-import com.guohanhealth.shop.xrefresh.utils.LogUtils;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -57,9 +50,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,47 +61,38 @@ import java.util.Map;
  * @Email KingKong@QQ.COM
  */
 public class MyShopApplication extends Application {
-
     /**
      * 系统初始化配置文件操作器
      */
     private SharedPreferences sysInitSharedPreferences;
-
     /**
      * 记录用户登录后的密钥KEY
      */
     private String loginKey;
-
     /**
      * 记录用户登录后的MemberID
      */
     private String memberID;
-
     /**
      * 记录用户登录后的UserName
      */
     private String userName;
-
     /**
      * 记录用户登录后的memberAvatar
      */
     private String memberAvatar;
-
     /**
      * 记录是否自动登录
      */
     private boolean IsCheckLogin;
-
     /**
      * 记录IM是否在线
      */
     private boolean IMConnect = false;
-
     /**
      * 记录IM是否提示Notification
      */
     private boolean IMNotification = true;
-
     /**
      * 记录是否显示未读消息
      */
@@ -119,32 +101,25 @@ public class MyShopApplication extends Application {
      * 记录支付回掉地址url
      */
     private String notify_ur;
-
     /**
      * 消息通知
      */
     private Notification mNotification;
     private NotificationManager mNotificationManager;
-
     /**
      * Socket即时通讯实例
      */
     private Socket mSocket;
-
     //热门搜索
     private String searchHotName;
     private String searchHotValue;
-
     //搜索关键词列表
     private ArrayList<String> searchKeyList;
-
     //配送区域地区
     private String areaId;
     private String areaName;
-
     //记录拍照地址
     private String imgPath;
-
     //百度地图
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
@@ -187,17 +162,14 @@ public class MyShopApplication extends Application {
 
     private static MyShopApplication instance;
 
-
     @Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(context);
         MultiDex.install(this);
     }
 
-
     //各个平台的配置
     {
-        //微信
         PlatformConfig.setWeixin(Constants.APP_ID, Constants.APP_SECRET);
         //新浪微博(第三个参数为回调地址)
         PlatformConfig.setSinaWeibo(Constants.WEIBO_APP_KEY, Constants.WEIBO_APP_SECRET, Constants.WEIBO_REDIRECT_URL);
@@ -211,51 +183,31 @@ public class MyShopApplication extends Application {
         instance = this;
         //百度地图
         initBaiduMap();
-
         sysInitSharedPreferences = getSharedPreferences(Constants.SYSTEM_INIT_FILE_NAME, MODE_PRIVATE);
-
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         mNotification = new Notification(R.drawable.ic_launcher, getString(R.string.more_aboutus_appname), System.currentTimeMillis());
-
         loginKey = sysInitSharedPreferences.getString("loginKey", "");
-
         memberID = sysInitSharedPreferences.getString("memberID", "");
-
         userName = sysInitSharedPreferences.getString("userName", "");
-
         memberAvatar = sysInitSharedPreferences.getString("memberAvatar", "");
-
         IsCheckLogin = sysInitSharedPreferences.getBoolean("IsCheckLogin", false);
-
         loadingUserInfo(loginKey, memberID);
-
         createCacheDir();
-
         initImageLoader(this);
-
-//        MyExceptionHandler mUncaughtException = MyExceptionHandler.getInstance();
-//        mUncaughtException.init();
-
         try {
-
             IO.Options options = new IO.Options();
-            options.host =  Constants.IM_HOST;
-
+            options.host = Constants.IM_HOST;
             //连接Socket
             LogUtils.i(options.host);
             mSocket = IO.socket(Constants.IM_HOST, options);
-
             mSocket.io().reconnectionDelay(2000);
             mSocket.connect();
-
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.i(e.toString());
         }
-
         mSocket.io().on(Manager.EVENT_TRANSPORT, args -> {
             Transport transport = (Transport) args[0];
             transport.on(Transport.EVENT_REQUEST_HEADERS, args1 -> {
@@ -265,7 +217,6 @@ public class MyShopApplication extends Application {
                 headers.put("Origin", Constants.IM_HOST);
 
             });
-
             transport.on(Transport.EVENT_RESPONSE_HEADERS, new Listener() {
                 @Override
                 public void call(Object... args) {
@@ -276,53 +227,35 @@ public class MyShopApplication extends Application {
                 }
             });
         });
-
-
         //通知已连接
-        mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+        mSocket.on(Socket.EVENT_CONNECT, args -> {
+            LogUtils.i("---------------->已连接");
+            UpDateUser();
 
-            public void call(Object... args) {
-                LogUtils.i("---------------->已连接");
-                UpDateUser();
-
-            }
         });
-
         mSocket.on(Socket.EVENT_ERROR, v -> {
             LogUtils.i("---------------->错误");
         });
         //通知已断开
-        mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-            public void call(Object... args) {
-                LogUtils.i("---------------->已断开");
-
-                IMConnect = false;////设置链接失败
-                mNotification.tickerText = "您的IM帐号已离线";
-                ;
-                Intent intent = new Intent(getApplicationContext(), IMFriendsListActivity.class);
-                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+        mSocket.on(Socket.EVENT_DISCONNECT, args -> {
+            LogUtils.i("---------------->已断开");
+            IMConnect = false;////设置链接失败
+            mNotification.tickerText = "您的IM帐号已离线";
+            Intent intent = new Intent(getApplicationContext(), IMFriendsListActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
 //              mNotification.setLatestEventInfo(getApplicationContext(), "", "",contentIntent);//ShopNC商城客户端
-                mNotificationManager.notify(-1, mNotification);// 通知一下才会生效哦
-                mNotificationManager.cancel(-1);
-
-            }
+//            mNotificationManager.notify(-1, mNotification);// 通知一下才会生效哦
+//            mNotificationManager.cancel(-1);
         });
         //获取node消息
         mSocket.on("get_msg", new Listener() {
-
             public void call(Object... get_msg) {
                 String message = get_msg[0].toString();
-
                 IMConnect = true;//设置链接成功
-
                 if (!message.equals("{}")) {
                     if (isIMNotification()) {
                         mNotification.tickerText = "新消息注意查收";
-
-//                        Intent intent = new Intent(getApplicationContext(), IMFriendsListActivity.class);
                         Intent intent = new Intent(getApplicationContext(), IMNewListActivity.class);
-
                         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
 //                        mNotification.setLatestEventInfo(getApplicationContext(), "消息提示", "有新消息注意查收", contentIntent);//ShopNC商城客户端
 //                        mNotificationManager.notify(13, mNotification);// 通知一下才会生效哦
@@ -332,28 +265,18 @@ public class MyShopApplication extends Application {
                         sendBroadcast(intent);
                     }
                 }
-
             }
         });
-
-        mSocket.on("get_state", new Listener() {
-
-            public void call(Object... obj) {
-                String get_state = obj[0].toString();
-
-                Intent intent = new Intent(Constants.IM_FRIENDS_LIST_UPDATA_UI);
-                intent.putExtra("get_state", get_state);
-                sendBroadcast(intent);
-            }
+        mSocket.on("get_state", obj -> {
+            String get_state = obj[0].toString();
+            Intent intent = new Intent(Constants.IM_FRIENDS_LIST_UPDATA_UI);
+            intent.putExtra("get_state", get_state);
+            sendBroadcast(intent);
         });
-
         /*百度推送*/
-
         PushUtils.BinForApp(this);
         /*阿里云播放器*/
         String businessId = "video_live";
-//        final String accessKeyId = "7dy4fM0WxuUKicK4";
-//        final String accessKeySecret = "ACzQ3TGUuN01cLbubqKSEDZ2CnOPdv";
         final String accessKeyId = "LTAIVmBfKoKUaofj";
         final String accessKeySecret = "jPOxIVy4wjxAGs9AWmXt3ahpiLOX3q";
         AliVcMediaPlayer.init(getApplicationContext(), businessId, () -> new AccessKey(accessKeyId, accessKeySecret));
@@ -366,9 +289,7 @@ public class MyShopApplication extends Application {
         } catch (UnsatisfiedLinkError e) {
             Log.i("msg", "so库文件加载失败" + e.toString());
         }
-
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "1fe6a20054bcef865eeb0991ee84525b");
-
     }
 
     public static MyShopApplication getInstance() {
@@ -379,7 +300,6 @@ public class MyShopApplication extends Application {
      * node 更新会员状态
      */
     public void UpDateUser() {
-
         if (!TextUtils.isEmpty(memberID)) {
             try {
                 String update_user = "{\"u_id\":\"" + memberID + "\",\"u_name\":\"" + userName + "\",\"avatar\":\"" + memberAvatar + "\"}";
@@ -403,7 +323,6 @@ public class MyShopApplication extends Application {
         params.put("key", key);
         params.put("u_id", u_id);
         params.put("t", "member_id");
-
         RemoteDataHandler.asyncPostDataString(url, params, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
@@ -416,17 +335,15 @@ public class MyShopApplication extends Application {
                         setMemberID(memberINFO.getMember_id() == null ? "" : memberINFO.getMember_id());
                         setMemberAvatar(memberINFO.getMember_avatar() == null ? "" : memberINFO.getMember_avatar());
                         setUserName(memberINFO.getMember_name() == null ? "" : memberINFO.getMember_name());
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else {
-//					Toast.makeText(MyShopApplication.this, R.string.load_error, Toast.LENGTH_SHORT).show();
+//					Toast.makeText(MyShopApplication.this, "数据加载失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
 
     /**
      * 百度地图的初始化
@@ -437,7 +354,6 @@ public class MyShopApplication extends Application {
         // 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
         SDKInitializer.initialize(this);
         mLocationClient = new LocationClient(getApplicationContext()); // 声明LocationClient类
-
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);// 可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("gcj02");// 可选，默认gcj02，设置返回的定位结果坐标系
@@ -464,11 +380,9 @@ public class MyShopApplication extends Application {
             sb.append("\nlatitude : ");
             sb.append(location.getLatitude());
             lat = location.getLatitude();
-
             sb.append("\nlontitude : ");
             sb.append(location.getLongitude());
             lon = location.getLongitude();
-
             sb.append("\nradius : ");
             sb.append(location.getRadius());
             if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
@@ -484,7 +398,6 @@ public class MyShopApplication extends Application {
                 sb.append(location.getAddrStr());
                 sb.append("\ndescribe : ");
                 sb.append("gps定位成功");
-
             } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
                 sb.append("\naddr : ");
                 sb.append(location.getAddrStr());
@@ -506,44 +419,35 @@ public class MyShopApplication extends Application {
                 sb.append("\ndescribe : ");
                 sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
             }
-
             if (mLocationResult != null) {
                 mLocationResult.setText(sb.toString());
             }
-            LogHelper.i("huting---BaiduLocationApiDem", sb.toString());
+            LogUtils.i(sb.toString());
         }
     }
-
     public String getNotify_ur() {
         return notify_ur;
     }
-
     public void setNotify_ur(String notify_ur) {
         this.notify_ur = notify_ur;
     }
-
     public boolean isShowNum() {
         return showNum;
     }
-
     public void setShowNum(boolean showNum) {
         this.showNum = showNum;
     }
-
     public SharedPreferences getSysInitSharedPreferences() {
         return sysInitSharedPreferences;
     }
-
     public void setSysInitSharedPreferences(
             SharedPreferences sysInitSharedPreferences) {
         this.sysInitSharedPreferences = sysInitSharedPreferences;
     }
-
     public void setLoginKey(String loginKey) {
         this.loginKey = loginKey;
         sysInitSharedPreferences.edit().putString("loginKey", this.loginKey).commit();
     }
-
     public String getLoginKey() {
         String loginKey = sysInitSharedPreferences.getString("loginKey", "");
         return loginKey;
@@ -553,7 +457,6 @@ public class MyShopApplication extends Application {
         String memberAvatar = sysInitSharedPreferences.getString("memberAvatar", "");
         return memberAvatar;
     }
-
     public void setMemberAvatar(String memberAvatar) {
         this.memberAvatar = memberAvatar;
         sysInitSharedPreferences.edit().putString("memberAvatar", this.memberAvatar).commit();
@@ -563,104 +466,78 @@ public class MyShopApplication extends Application {
         boolean IsCheckLogin = sysInitSharedPreferences.getBoolean("IsCheckLogin", false);
         return IsCheckLogin;
     }
-
     public void setIsCheckLogin(boolean isCheckLogin) {
         IsCheckLogin = isCheckLogin;
         sysInitSharedPreferences.edit().putBoolean("IsCheckLogin", this.IsCheckLogin).commit();
     }
-
     public String getSearchHotValue() {
         return searchHotValue;
     }
-
     public void setSearchHotValue(String searchHotValue) {
         this.searchHotValue = searchHotValue;
     }
-
     public String getSearchHotName() {
         return searchHotName;
     }
-
     public void setSearchHotName(String searchHotName) {
         this.searchHotName = searchHotName;
     }
-
     public ArrayList<String> getSearchKeyList() {
         return searchKeyList;
     }
-
     public void setSearchKeyList(ArrayList<String> searchKeyList) {
         this.searchKeyList = searchKeyList;
     }
-
     public boolean isIMConnect() {
         return IMConnect;
     }
-
     public void setIMConnect(boolean iMConnect) {
         IMConnect = iMConnect;
     }
-
     public String getMemberID() {
         String memberID = sysInitSharedPreferences.getString("memberID", "");
         return memberID;
     }
-
     public String getUserName() {
         String userName = sysInitSharedPreferences.getString("userName", "");
         return userName;
     }
-
     public void setUserName(String userName) {
         this.userName = userName;
         sysInitSharedPreferences.edit().putString("userName", this.userName).commit();
     }
-
     public void setMemberID(String memberID) {
         this.memberID = memberID;
         sysInitSharedPreferences.edit().putString("memberID", this.memberID).commit();
     }
-
     public boolean isIMNotification() {
         return IMNotification;
     }
-
     public Socket getmSocket() {
         return mSocket;
     }
-
     public void setmSocket(Socket mSocket) {
         this.mSocket = mSocket;
     }
-
     public void setIMNotification(boolean iMNotification) {
         IMNotification = iMNotification;
     }
-
     public NotificationManager getmNotificationManager() {
         return mNotificationManager;
     }
-
     public void setmNotificationManager(NotificationManager mNotificationManager) {
         this.mNotificationManager = mNotificationManager;
     }
-
     public Notification getmNotification() {
         return mNotification;
     }
-
     public void setmNotification(Notification mNotification) {
         this.mNotification = mNotification;
     }
-
     /**
      * 设置ImageLoader初始化参数
      */
     public static void initImageLoader(Context context) {
-        // This configuration tuning is custom. You can tune every option, you may tune some of them,
-        // or you can create default configuration by
-        //  ImageLoaderConfiguration.createDefault(this);
-        // method.
         File cacheDir = new File(Constants.CACHE_DIR_IMAGE);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
                 .threadPriority(Thread.NORM_PRIORITY - 2)
@@ -675,7 +552,6 @@ public class MyShopApplication extends Application {
                 .diskCache(new UnlimitedDiscCache(cacheDir))
                 .writeDebugLogs() // Remove for release app
                 .build();
-        // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config);
     }
 
@@ -708,7 +584,6 @@ public class MyShopApplication extends Application {
                     System.out.println("SD卡照片缓存目录:创建失败!");
                 }
             }
-
             File fff = new File(Constants.CACHE_DIR_UPLOADING_IMG);
             if (fff.exists()) {
                 System.out.println("SD卡照片缓存目录:已存在!");
@@ -722,6 +597,4 @@ public class MyShopApplication extends Application {
             }
         }
     }
-
-
 }

@@ -1,12 +1,31 @@
 package com.guohanhealth.shop.ui.mine;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ImageSpan;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.SendMsgListViewAdapter;
@@ -29,36 +48,13 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
-import android.os.Bundle;
-import android.os.Vibrator;
-import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.ImageSpan;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * 发送消息界面
@@ -86,6 +82,8 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
     private SendMsgListViewAdapter adapter;
 
     private XListView listViewID;
+    private Button chatSend;
+    private Button buttonSimilies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +106,8 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
     public void initViewUIID() {
         gridViewID = (MyGridView) findViewById(R.id.gridViewID);
         ImageView imageBack = (ImageView) findViewById(R.id.imageBack);
-        Button buttonSimilies = (Button) findViewById(R.id.buttonSimilies);
-        Button chatSend = (Button) findViewById(R.id.chat_send);
+        buttonSimilies = (Button) findViewById(R.id.buttonSimilies);
+        chatSend = (Button) findViewById(R.id.chat_send);
         TextView historyButtonID = (TextView) findViewById(R.id.historyButtonID);
         TextView textUserName = (TextView) findViewById(R.id.textUserName);
         listViewID = (XListView) findViewById(R.id.listViewID);
@@ -117,7 +115,6 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
 
 
         mediaPlayer = MediaPlayer.create(IMSendMsgActivity.this, R.raw.new_msg001);
-        ;
 
         adapter = new SendMsgListViewAdapter(IMSendMsgActivity.this);
 
@@ -147,50 +144,40 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
 
         GetUserInFo(myApplication.getLoginKey(), t_id, "member_id");
 
-        gridViewID.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3) {
-                SmiliesList bean = (SmiliesList) gridViewID.getItemAtPosition(arg2);
-                if (bean != null) {
-                    Bitmap bitmap = null;
-                    bitmap = BitmapFactory.decodeResource(IMSendMsgActivity.this.getResources(), bean.getPath());
-                    ImageSpan imageSpan = new ImageSpan(IMSendMsgActivity.this, bitmap);
-                    SpannableString spannableString = new SpannableString(bean.getTitle());
-                    spannableString.setSpan(imageSpan, 0, bean.getTitle().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        gridViewID.setOnItemClickListener((arg0, arg1, arg2, arg3) -> {
+            SmiliesList bean = (SmiliesList) gridViewID.getItemAtPosition(arg2);
+            if (bean != null) {
+                Bitmap bitmap = null;
+                bitmap = BitmapFactory.decodeResource(IMSendMsgActivity.this.getResources(), bean.getPath());
+                ImageSpan imageSpan = new ImageSpan(IMSendMsgActivity.this, bitmap);
+                SpannableString spannableString = new SpannableString(bean.getTitle());
+                spannableString.setSpan(imageSpan, 0, bean.getTitle().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //					chat_editmessage.append(spannableString);
-                    int index = chatEditmessage.getSelectionStart();
-                    Editable editable = chatEditmessage.getText();
-                    editable.insert(index, spannableString);
-                }
+                int index = chatEditmessage.getSelectionStart();
+                Editable editable = chatEditmessage.getText();
+                editable.insert(index, spannableString);
             }
         });
 
-        listViewID.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+        listViewID.setOnTouchListener((v, event) -> {
 
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-
-                simFlag = false;
-                gridViewID.setVisibility(View.GONE);
-
-                return false;
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
+
+            simFlag = false;
+            gridViewID.setVisibility(View.GONE);
+
+            return false;
         });
 
-        chatEditmessage.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+        chatEditmessage.setOnTouchListener((v, event) -> {
 
-                simFlag = false;
-                gridViewID.setVisibility(View.GONE);
+            simFlag = false;
+            gridViewID.setVisibility(View.GONE);
 
-                return false;
-            }
+            return false;
         });
 
     }
@@ -212,42 +199,36 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
         params.put("t_name", t_name);
         params.put("t_msg", t_msg);
 
-        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-                    String scanningTime = formatter.format(curDate);
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String msg = obj2.getString("msg");
-
-                        myApplication.getmSocket().emit("send_msg", new JSONObject(msg));
-                        String ures = "{\"disconnect_time\":\"\",\"s_name\":\"\",\"update_time\":\"\",\"connected\":\"\",\"s_id\":\"\",\"avatar\":\"" + myApplication.getMemberAvatar() + "\",\"u_id\":\"\",\"u_name\":\"\",\"online\":\"\"}";
-                        IMMsgList l = new IMMsgList("0", "", "", "", myApplication.getUserName(), chatEditmessage.getText().toString(), scanningTime, ures);
-                        l.setViewFlag(false);
-                        imMsgLists.add(l);
-                        adapter.setIMMsgList(imMsgLists);
-                        adapter.notifyDataSetChanged();
-                        listViewID.setSelection(imMsgLists.size());
-                        chatEditmessage.setText("");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                String scanningTime = formatter.format(curDate);
+                try {
+                    JSONObject obj2 = new JSONObject(json);
+                    String msg = obj2.getString("msg");
+                    myApplication.getmSocket().emit("send_msg", new JSONObject(msg));
+                    String ures = "{\"disconnect_time\":\"\",\"s_name\":\"\",\"update_time\":\"\",\"connected\":\"\",\"s_id\":\"\",\"avatar\":\"" + myApplication.getMemberAvatar() + "\",\"u_id\":\"\",\"u_name\":\"\",\"online\":\"\"}";
+                    IMMsgList l = new IMMsgList("0", "", "", "", myApplication.getUserName(), chatEditmessage.getText().toString(), scanningTime, ures);
+                    l.setViewFlag(false);
+                    imMsgLists.add(l);
+                    adapter.setIMMsgList(imMsgLists);
+                    adapter.notifyDataSetChanged();
+                    listViewID.setSelection(imMsgLists.size());
+                    chatEditmessage.setText("");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    JSONObject obj2 = new JSONObject(json);
+                    String error = obj2.getString("error");
+                    if (error != null) {
+                        Toast.makeText(IMSendMsgActivity.this, error, Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(IMSendMsgActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });

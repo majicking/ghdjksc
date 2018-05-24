@@ -2,7 +2,6 @@ package com.guohanhealth.shop.ui.mine;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.NCDialog;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
-import com.guohanhealth.shop.ncinterface.INCOnDialogConfirm;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -41,12 +39,9 @@ public class SettingActivity extends BaseActivity {
     private Button btnLogout;
     private TextView tvMobile, tvPaypwd;
     private RelativeLayout rlModifyPassword, rlBindMobile, rlModifyPayPassword, rlFeed;
-
     private Boolean isBindMobile = false;
     private String mobile = "";
-
     private NCDialog ncDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,18 +49,14 @@ public class SettingActivity extends BaseActivity {
         MyExceptionHandler.getInstance().setContext(this);
         setCommonHeader("设置");
         myApplication = (MyShopApplication) getApplicationContext();
-
         tvMobile = (TextView) findViewById(R.id.tvMobile);
         tvPaypwd = (TextView) findViewById(R.id.tvPaypwd);
-
         initModifyPassword();
         initBindMobile();
         initModifyPayPassword();
         initFeed();
         initLogout();
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -103,10 +94,6 @@ public class SettingActivity extends BaseActivity {
             }
         });
     }
-
-
-
-
     /**
      * 获得是否设置支付密码信息
      */
@@ -117,7 +104,6 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
-//                Log.d("dqw", json);
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
                         JSONObject object = new JSONObject(json);
@@ -135,7 +121,6 @@ public class SettingActivity extends BaseActivity {
             }
         });
     }
-
     /**
      * 初始化修改密码
      */
@@ -160,36 +145,28 @@ public class SettingActivity extends BaseActivity {
      */
     private void initBindMobile() {
         rlBindMobile = (RelativeLayout) findViewById(R.id.rlBindMobile);
-        rlBindMobile.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isBindMobile) {
-                    Intent intent = new Intent(SettingActivity.this, UnbindMobileActivity.class);
-                    intent.putExtra("mobile", mobile);
-                    startActivityForResult(intent, Constants.RESULT_FLAG_BIND_MOBILE);
-                } else {
-                    startActivityForResult(new Intent(SettingActivity.this, BindMobileActivity.class), Constants.RESULT_FLAG_BIND_MOBILE);
-                }
+        rlBindMobile.setOnClickListener(view -> {
+            if (isBindMobile) {
+                Intent intent = new Intent(SettingActivity.this, UnbindMobileActivity.class);
+                intent.putExtra("mobile", mobile);
+                startActivityForResult(intent, Constants.RESULT_FLAG_BIND_MOBILE);
+            } else {
+                startActivityForResult(new Intent(SettingActivity.this, BindMobileActivity.class), Constants.RESULT_FLAG_BIND_MOBILE);
             }
         });
     }
-
-
     /**
      * 初始化修改支付密码
      */
     private void initModifyPayPassword() {
         rlModifyPayPassword = (RelativeLayout) findViewById(R.id.rlModifyPayPassword);
-        rlModifyPayPassword.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isBindMobile) {
-                    Intent intent = new Intent(SettingActivity.this, ModifyPaypwdStep1Activity.class);
-                    intent.putExtra("mobile", mobile);
-                    startActivityForResult(intent, Constants.RESULT_FLAG_SET_PAYPWD);
-                } else {
-                    startActivityForResult(new Intent(SettingActivity.this, BindMobileActivity.class), Constants.RESULT_FLAG_BIND_MOBILE);
-                }
+        rlModifyPayPassword.setOnClickListener(view -> {
+            if (isBindMobile) {
+                Intent intent = new Intent(SettingActivity.this, ModifyPaypwdStep1Activity.class);
+                intent.putExtra("mobile", mobile);
+                startActivityForResult(intent, Constants.RESULT_FLAG_SET_PAYPWD);
+            } else {
+                startActivityForResult(new Intent(SettingActivity.this, BindMobileActivity.class), Constants.RESULT_FLAG_BIND_MOBILE);
             }
         });
     }
@@ -199,13 +176,7 @@ public class SettingActivity extends BaseActivity {
      */
     private void initFeed() {
         rlFeed = (RelativeLayout) findViewById(R.id.rlFeed);
-        rlFeed.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                startActivity(new Intent(SettingActivity.this, FeekBaskActivity.class));
-            }
-        });
+        rlFeed.setOnClickListener(view -> startActivity(new Intent(SettingActivity.this, FeekBaskActivity.class)));
     }
 
     /**
@@ -213,58 +184,40 @@ public class SettingActivity extends BaseActivity {
      */
     private void initLogout() {
         btnLogout = (Button) findViewById(R.id.btnLogout);
-
         String loginKey = myApplication.getLoginKey();
         if (loginKey != null && !loginKey.equals("")) {
             btnLogout.setVisibility(View.VISIBLE);
         } else {
             btnLogout.setVisibility(View.GONE);
         }
-
-        btnLogout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
-                builder.setTitle("功能选择")
-                        .setMessage("您确定注销当前帐号吗？");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        myApplication.setLoginKey("");
-                        myApplication.setMemberID("");
-                        myApplication.setMemberAvatar("");
-                        myApplication.setUserName("");
-                        myApplication.getmSocket().disconnect();
-                        myApplication.getmSocket().io().reconnection(false);
-                        btnLogout.setVisibility(View.GONE);
-                        Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        SettingActivity.this.finish();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).create().show();
-            }
+        btnLogout.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+            builder.setTitle("功能选择")
+                    .setMessage("您确定注销当前帐号吗？");
+            builder.setPositiveButton("确定", (dialog, whichButton) -> {
+                myApplication.setLoginKey("");
+                myApplication.setMemberID("");
+                myApplication.setMemberAvatar("");
+                myApplication.setUserName("");
+                myApplication.getmSocket().disconnect();
+                myApplication.getmSocket().io().reconnection(false);
+                btnLogout.setVisibility(View.GONE);
+                Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                startActivity(intent);
+                SettingActivity.this.finish();
+            }).setNegativeButton("取消", (dialog, which) -> {
+            }).create().show();
         });
     }
-
-
     /**
      * 清除缓存
      */
     public void btnCleanClick(View view) {
-
         ncDialog = new NCDialog(SettingActivity.this);
         ncDialog.setText1("确认清除缓存?");
-        ncDialog.setOnDialogConfirm(new INCOnDialogConfirm() {
-            @Override
-            public void onDialogConfirm() {
-                MyFileAsyncTask fileAsyncTask = new MyFileAsyncTask();
-                fileAsyncTask.execute();
-            }
+        ncDialog.setOnDialogConfirm(() -> {
+            MyFileAsyncTask fileAsyncTask = new MyFileAsyncTask();
+            fileAsyncTask.execute();
         });
         ncDialog.showPopupWindow();
     }
@@ -288,7 +241,6 @@ public class SettingActivity extends BaseActivity {
      */
     private class MyFileAsyncTask extends AsyncTask<String, Void, String> {
         ProgressDialog dialog = new ProgressDialog(SettingActivity.this);
-
         @Override
         protected String doInBackground(String... params) {
             delAllFile(Constants.CACHE_DIR_IMAGE);
@@ -299,13 +251,11 @@ public class SettingActivity extends BaseActivity {
             }
             return "1";
         }
-
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             dialog.dismiss();
         }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -318,7 +268,6 @@ public class SettingActivity extends BaseActivity {
             dialog.show();
         }
     }
-
     /**
      * 删除文件夹里面的所有文件
      *
