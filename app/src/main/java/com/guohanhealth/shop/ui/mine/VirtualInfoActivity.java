@@ -129,6 +129,8 @@ public class VirtualInfoActivity extends BaseActivity {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
                         } else {
                             ShopHelper.showApiError(VirtualInfoActivity.this, json);

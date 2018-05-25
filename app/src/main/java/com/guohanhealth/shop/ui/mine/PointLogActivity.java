@@ -95,7 +95,11 @@ public class PointLogActivity extends BaseActivity {
                         tvPoint.setText(obj.optString("point"));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(PointLogActivity.this, json);
                 }
             }
         });
@@ -134,6 +138,8 @@ public class PointLogActivity extends BaseActivity {
                         } else {
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {

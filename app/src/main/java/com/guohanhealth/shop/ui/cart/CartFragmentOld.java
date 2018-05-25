@@ -1,30 +1,5 @@
 package com.guohanhealth.shop.ui.cart;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import com.guohanhealth.shop.R;
-import com.guohanhealth.shop.adapter.CartListViewAdapter;
-import com.guohanhealth.shop.bean.CartGood;
-import com.guohanhealth.shop.bean.CartList;
-import com.guohanhealth.shop.common.Constants;
-import com.guohanhealth.shop.common.MyExceptionHandler;
-import com.guohanhealth.shop.common.MyShopApplication;
-import com.guohanhealth.shop.custom.XListView;
-import com.guohanhealth.shop.custom.XListView.IXListViewListener;
-import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
-import com.guohanhealth.shop.http.ResponseData;
-import com.guohanhealth.shop.ui.mine.LoginActivity;
-import com.guohanhealth.shop.ui.type.BuyStep1Activity;
-
-import org.apache.http.HttpStatus;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +15,32 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.guohanhealth.shop.R;
+import com.guohanhealth.shop.adapter.CartListViewAdapter;
+import com.guohanhealth.shop.bean.CartGood;
+import com.guohanhealth.shop.bean.CartList;
+import com.guohanhealth.shop.common.Constants;
+import com.guohanhealth.shop.common.MyExceptionHandler;
+import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
+import com.guohanhealth.shop.custom.XListView;
+import com.guohanhealth.shop.custom.XListView.IXListViewListener;
+import com.guohanhealth.shop.http.RemoteDataHandler;
+import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
+import com.guohanhealth.shop.http.ResponseData;
+import com.guohanhealth.shop.ui.mine.LoginActivity;
+import com.guohanhealth.shop.ui.type.BuyStep1Activity;
+
+import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * 购物车界面
@@ -235,18 +236,11 @@ public class CartFragmentOld extends Fragment implements IXListViewListener, OnC
                         cartListViewAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
-
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(getActivity(), json);
                     cartYesDataID.setVisibility(View.GONE);
                     cartNoDataID.setVisibility(View.VISIBLE);
 //					Toast.makeText(CartActivity.this, getString(R.string.datas_loading_fail_prompt), Toast.LENGTH_SHORT).show();;
@@ -258,7 +252,7 @@ public class CartFragmentOld extends Fragment implements IXListViewListener, OnC
     /**
      * 编辑购物车数量
      *
-     * @param //key      用户标识
+     * @param //key    用户标识
      * @param cart_id  购物车ID
      * @param quantity 商品数量
      */
@@ -290,20 +284,11 @@ public class CartFragmentOld extends Fragment implements IXListViewListener, OnC
 
                     } catch (JSONException e1) {
                         e1.printStackTrace();
-                    }
-
-
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(getActivity(), json);
                 }
             }
         });
@@ -347,17 +332,8 @@ public class CartFragmentOld extends Fragment implements IXListViewListener, OnC
 
                         loadingCartListData();
                     }
-
                 } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(getActivity(), json);
                 }
             }
         });

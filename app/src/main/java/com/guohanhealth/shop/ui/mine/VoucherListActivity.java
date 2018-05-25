@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
@@ -14,6 +13,7 @@ import com.guohanhealth.shop.bean.VoucherList;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.MyListEmpty;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.custom.XListView.IXListViewListener;
@@ -113,8 +113,8 @@ public class VoucherListActivity extends BaseActivity implements IXListViewListe
 
                 listViewID.stopRefresh();
 
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
                         JSONObject obj = new JSONObject(json);
                         String objJson = obj.getString("voucher_list");
@@ -130,10 +130,12 @@ public class VoucherListActivity extends BaseActivity implements IXListViewListe
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
+                    ShopHelper.showApiError(VoucherListActivity.this, json);
                     myListEmpty.setVisibility(View.VISIBLE);
-                    Toast.makeText(VoucherListActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -23,6 +23,7 @@
                 android:text="收  货  人：" />
 
             <EditText
+                android:maxLines="1"
                 android:id="@+id/editAddressName"
                 style="@style/NCFormEdit"
                 android:maxLength="10"
@@ -75,6 +76,7 @@
                 android:text="详细地址：" />
 
             <EditText
+                android:maxLines="1"
                 android:id="@+id/editJieDaoAddress"
                 style="@style/NCFormEdit"
                 android:maxLength="38"

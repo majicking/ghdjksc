@@ -122,6 +122,8 @@ public class RechargeCardAddActivity extends BaseActivity{
                         ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(RechargeCardAddActivity.this, json);

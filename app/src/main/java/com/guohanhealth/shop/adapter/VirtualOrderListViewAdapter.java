@@ -21,9 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.pay.PayResult;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.VirtualList;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
@@ -35,12 +32,14 @@ import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.common.Utils;
 import com.guohanhealth.shop.http.HttpHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
 import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ncinterface.DataCallback;
 import com.guohanhealth.shop.newpackage.ProgressDialog;
 import com.guohanhealth.shop.ui.mine.VirtualInfoActivity;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -212,23 +211,15 @@ public class VirtualOrderListViewAdapter extends BaseAdapter {
                                             T.showShort(context, "没有支付方式，请后台配置");
                                             return;
                                         }
-                                        LogUtils.i("订单号--->" + Qbean.getOrder_sn());
                                         OrderPay(size, arr, Qbean.getOrder_sn());
 
                                     } catch (JSONException e1) {
                                         e1.printStackTrace();
-                                    }
-
-                                } else {
-                                    try {
-                                        JSONObject obj2 = new JSONObject(json);
-                                        String error = obj2.getString("error");
-                                        if (error != null) {
-                                            T.showShort(context, error);
-                                        }
-                                    } catch (JSONException e) {
+                                    }catch (Exception e){
                                         e.printStackTrace();
                                     }
+                                } else {
+                                    ShopHelper.showApiError(context, json);
                                 }
                             }
                         });

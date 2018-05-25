@@ -101,6 +101,8 @@ public class RegisterMobileActivity extends BaseActivity {
                         imageLoader.displayImage(Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey, ivCode, options, animateFirstListener);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(RegisterMobileActivity.this, json);
@@ -153,6 +155,8 @@ public class RegisterMobileActivity extends BaseActivity {
                                     startActivity(intent);
                                     finish();
                                 } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }catch (Exception e){
                                     e.printStackTrace();
                                 }
                             } else {

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
@@ -14,6 +13,7 @@ import com.guohanhealth.shop.bean.RedpacketInfo;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
@@ -108,12 +108,11 @@ public class RedpacketListActivity extends BaseActivity implements XListView.IXL
 
                 listViewID.stopRefresh();
 
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
                         JSONObject obj = new JSONObject(json);
                         String objJson = obj.getString("redpacket_list");
-
                         ArrayList<RedpacketInfo> redpacketInfoArrayList= RedpacketInfo.newInstanceList(objJson);
                         int d = redpacketInfoArrayList == null ? 0 : redpacketInfoArrayList.size();
                         if(d > 0){
@@ -122,9 +121,11 @@ public class RedpacketListActivity extends BaseActivity implements XListView.IXL
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(RedpacketListActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(RedpacketListActivity.this, json);
                 }
             }
         });

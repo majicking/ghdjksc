@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.guohanhealth.shop.common.ShopHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -308,20 +309,10 @@ public class StoreInFoActivity extends Activity implements OnGestureListener, On
                 if (data.getCode() == HttpStatus.SC_OK) {
                     if (json.equals("1")) {
                         Toast.makeText(StoreInFoActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
-                        ;
                         loadingData(store_id);
                     }
                 } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(StoreInFoActivity.this, error, Toast.LENGTH_SHORT).show();
-                            ;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(StoreInFoActivity.this,json);
                 }
             }
         });

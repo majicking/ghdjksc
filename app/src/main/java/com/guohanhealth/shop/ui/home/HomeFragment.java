@@ -363,6 +363,8 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else {
                 ShopHelper.showApiError(context, json);
@@ -893,30 +895,31 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
      * 获取搜索热词
      */
     private void getSearchHot() {
-        RemoteDataHandler.asyncDataStringGet(Constants.URL_SEARCH_HOT, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String hotInfoString = obj.getString("hot_info");
-                        String searchHotName = "";
-                        if (!hotInfoString.equals("[]")) {
-                            JSONObject hotInfoObj = new JSONObject(hotInfoString);
-                            searchHotName = hotInfoObj.getString("name");
-                            myApplication.setSearchHotName(searchHotName);
-                            myApplication.setSearchHotValue(hotInfoObj.getString("value"));
-                        }
-                        if (searchHotName != null && !searchHotName.equals("")) {
-                            tvSearch.setHint(searchHotName);
-                        } else {
-                            tvSearch.setHint(context.getResources().getString(R.string.default_search_text));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        RemoteDataHandler.asyncDataStringGet(Constants.URL_SEARCH_HOT, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject obj = new JSONObject(json);
+                    String hotInfoString = obj.getString("hot_info");
+                    String searchHotName = "";
+                    if (!hotInfoString.equals("[]")) {
+                        JSONObject hotInfoObj = new JSONObject(hotInfoString);
+                        searchHotName = hotInfoObj.getString("name");
+                        myApplication.setSearchHotName(searchHotName);
+                        myApplication.setSearchHotValue(hotInfoObj.getString("value"));
                     }
+                    if (searchHotName != null && !searchHotName.equals("")) {
+                        tvSearch.setHint(searchHotName);
+                    } else {
+                        tvSearch.setHint(context.getResources().getString(R.string.default_search_text));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+            } else {
+//                ShopHelper.showApiError(getActivity(), json);
             }
         });
     }
@@ -928,8 +931,8 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
         RemoteDataHandler.asyncDataStringGet(Constants.URL_SEARCH_KEY_LIST, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
                         ArrayList<String> searchKeyList = new ArrayList<String>();
                         JSONObject obj = new JSONObject(json);
@@ -945,11 +948,15 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                         myApplication.setSearchKeyList(searchKeyList);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(getActivity(), json);
                 }
-            }
-        });
-    }
+        }
+    });
+}
 
     @Override
     public boolean onDown(MotionEvent arg0) {
@@ -1074,20 +1081,21 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     }
 
 
-    public class FenXiaoAudeoListTabOnclienr implements View.OnClickListener {
-        private String mCate_id;
+public class FenXiaoAudeoListTabOnclienr implements View.OnClickListener {
+    private String mCate_id;
 
-        public FenXiaoAudeoListTabOnclienr(String cate_id) {
-            this.mCate_id = cate_id;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), FenXiaoAudeoListTabActivity.class);
-            intent.putExtra("cate_id", mCate_id);
-            startActivity(intent);
-        }
+    public FenXiaoAudeoListTabOnclienr(String cate_id) {
+        this.mCate_id = cate_id;
     }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getActivity(), FenXiaoAudeoListTabActivity.class);
+        intent.putExtra("cate_id", mCate_id);
+        startActivity(intent);
+    }
+
+}
 
     private Context context;
 

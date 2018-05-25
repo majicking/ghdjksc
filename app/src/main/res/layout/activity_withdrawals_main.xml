@@ -28,6 +28,8 @@
             android:textColor="@color/nc_black"/>
 
         <EditText
+            android:maxLines="1"
+            android:inputType="number|numberDecimal"
             android:id="@+id/etjiner"
             style="@style/NCFormEditNoBorder"
             android:textColorHint="#bfbfbf"
@@ -47,6 +49,8 @@
 
         <EditText
             android:id="@+id/etpass"
+            android:maxLines="1"
+            android:maxLength="20"
             style="@style/NCFormEditNoBorder"
             android:textColorHint="#bfbfbf"
             android:password="true"

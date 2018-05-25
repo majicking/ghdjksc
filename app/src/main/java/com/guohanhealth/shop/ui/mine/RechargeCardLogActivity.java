@@ -7,11 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
@@ -166,7 +163,11 @@ public class RechargeCardLogActivity extends BaseActivity {
                         tvRechargeCard.setText("¥" + obj.optString("available_rc_balance"));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(RechargeCardLogActivity.this, json);
                 }
             }
         });
@@ -185,7 +186,6 @@ public class RechargeCardLogActivity extends BaseActivity {
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     if (!data.isHasMore()) {
                         isHasMore = false;
                     } else {
@@ -218,6 +218,8 @@ public class RechargeCardLogActivity extends BaseActivity {
                             myListEmpty.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {

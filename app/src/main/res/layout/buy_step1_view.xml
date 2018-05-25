@@ -40,6 +40,9 @@
                         android:background="@drawable/edit_bg"
                         android:hint="请输入手机号"
                         android:padding="10dip"
+                        android:maxLines="1"
+                        android:maxLength="11"
+                        android:inputType="number"
                         android:singleLine="true"
                         android:textSize="15dp"
                         android:visibility="gone" />
@@ -425,13 +428,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
                     android:background="@drawable/list_item_w_bg"
                     android:orientation="horizontal"
-                    android:padding="5dip">
+                    android:padding="5dip"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -583,36 +586,36 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/predepositLayoutID"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
                     android:background="@drawable/list_item_w_bg"
                     android:orientation="vertical"
-                    android:padding="5dip"
-                    >
+                    android:padding="5dip">
 
-                    <EditText
-                        android:enabled="false"
-                        android:id="@+id/editPasswordID"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dip"
-                        android:background="@drawable/edit_bg"
-                        android:hint="请输入支付密码"
-                        android:padding="10dip"
-                        android:password="true"
-                        android:singleLine="true"
-                        android:textSize="15dp" />
-
-                    <ImageView
-                        android:layout_margin="7dip"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/noeditextpwd"
+                    <RelativeLayout
+                        android:id="@+id/textstatu"
+                        android:background="@drawable/nc_select_btn_bg_line"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp" />
-                </RelativeLayout>
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/editPasswordID"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dip"
+                            android:background="@drawable/edit_bg"
+                            android:enabled="false"
+                            android:hint="请输入支付密码"
+                            android:padding="10dip"
+                            android:inputType="textPassword"
+                            android:singleLine="true"
+                            android:textSize="15dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/commitID"

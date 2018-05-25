@@ -154,6 +154,8 @@ public class PredAddFragment extends Fragment {
                                             OrderPay(size, arr, pay_sn);
                                         } catch (JSONException e1) {
                                             e1.printStackTrace();
+                                        }catch (Exception e){
+                                            e.printStackTrace();
                                         }
 
                                     } else {

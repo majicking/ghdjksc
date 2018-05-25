@@ -1,7 +1,6 @@
 package com.guohanhealth.shop.ui.mine;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.ReturnBean;
@@ -18,7 +16,6 @@ import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
-import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
 
@@ -86,8 +83,9 @@ public class OrderExchangeControlDetailsActivity extends BaseActivity {
 
                     }catch (JSONException e){
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 }else{
                     ShopHelper.showApiError(OrderExchangeControlDetailsActivity.this, json);
                 }
@@ -99,7 +97,6 @@ public class OrderExchangeControlDetailsActivity extends BaseActivity {
             @Override
             public void dataLoaded(ResponseData data) {
                 String json=data.getJson();
-                Log.i("QINGoods",json);
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try{
                         org.json.JSONObject obj=new org.json.JSONObject(json);
@@ -110,9 +107,11 @@ public class OrderExchangeControlDetailsActivity extends BaseActivity {
 
                     }catch (JSONException e){
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                }else{
-                    T.showShort(OrderExchangeControlDetailsActivity.this, json);
+                } else {
+                    ShopHelper.showApiError(OrderExchangeControlDetailsActivity.this, json);
                 }
             }
         });

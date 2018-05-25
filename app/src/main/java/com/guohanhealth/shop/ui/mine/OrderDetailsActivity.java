@@ -434,6 +434,8 @@ public class OrderDetailsActivity extends BaseActivity {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(OrderDetailsActivity.this, json);
@@ -515,10 +517,11 @@ public class OrderDetailsActivity extends BaseActivity {
                         textWuLiu.setText(o.getString("time") + o.getString("context"));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
-//                    ShopHelper.showApiError(OrderDetailsActivity.this, json);
+                    ShopHelper.showApiError(OrderDetailsActivity.this, json);
                 }
             }
         });
@@ -537,30 +540,16 @@ public class OrderDetailsActivity extends BaseActivity {
         params.put("order_id", order_id);
 
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication,
-                new RemoteDataHandler.Callback() {
-                    @Override
-                    public void dataLoaded(ResponseData data) {
-                        String json = data.getJson();
-                        if (data.getCode() == HttpStatus.SC_OK) {
-                            if (json.equals("1")) {
-                                loadOrderDetails();
-                                Toast.makeText(OrderDetailsActivity.this, "订单操作成功",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        } else {
-                            try {
-                                JSONObject obj2 = new JSONObject(json);
-                                String error = obj2.getString("error");
-                                if (error != null) {
-                                    Toast.makeText(OrderDetailsActivity.this, error,
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                data -> {
+                    String json = data.getJson();
+                    if (data.getCode() == HttpStatus.SC_OK) {
+                        if (json.equals("1")) {
+                            loadOrderDetails();
+                            Toast.makeText(OrderDetailsActivity.this, "订单操作成功",
+                                    Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        ShopHelper.showApiError(OrderDetailsActivity.this,json);
                     }
                 });
     }

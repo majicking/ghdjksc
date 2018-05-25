@@ -17,6 +17,7 @@
 
 
         <EditText
+            android:maxLines="1"
             android:inputType="number|numberDecimal"
             android:textSize="18sp"
             android:gravity="center"

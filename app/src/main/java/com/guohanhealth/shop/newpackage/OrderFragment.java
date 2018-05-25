@@ -39,9 +39,11 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
 public class OrderFragment extends Fragment implements XListView.IXListViewListener {
     public OrderFragment() {
     }
+
     public static Fragment newInstance(String param1, String param2, String param3, String param4, boolean flag) {
         OrderFragment fragment = new OrderFragment();
         Bundle args = new Bundle();
@@ -53,6 +55,7 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,7 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
             flag = getArguments().getBoolean(ARG_PARAM5, false);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
         initData();
         return view;
     }
+
     Unbinder unbinder;
     @BindView(R.id.xlistview)
     XListView xlistview;
@@ -99,6 +104,7 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
     private VirtualOrderListViewAdapter virtualadapter;
     int pageno = 1;//当前页码
     private Handler mXLHandler;
+
     private void initView() {
         orderLists = new ArrayList<>();
         lists = new ArrayList<>();
@@ -113,6 +119,7 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
             xlistview.setAdapter(adapter);
         }
     }
+
     /**
      * 空列表背景
      */
@@ -125,13 +132,17 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
         tvListEmptyTitle.setText(title);
         tvListEmptySubTitle.setText(subTitle);
     }
-    private void initData() {}
+
+    private void initData() {
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String title, String flag) {
         if (mListener != null) {
             mListener.onFragmentInteraction(title, flag);
         }
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -143,17 +154,20 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
         registerBoradcastReceiver();
         loadingListData();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         context.unregisterReceiver(mBroadcastReceiver);
     }
+
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -166,11 +180,13 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
             }
         }
     };
+
     public void registerBoradcastReceiver() {
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(Constants.REFRESHLAYOUT);
         context.registerReceiver(mBroadcastReceiver, myIntentFilter);  //注册广播
     }
+
     @Override
     public void onRefresh() {
         //下拉刷新
@@ -184,6 +200,7 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
             }
         }, 1000);
     }
+
     @Override
     public void onLoadMore() {
         //上拉加载
@@ -196,6 +213,7 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
             }
         }, 1000);
     }
+
     /**
      * 初始化加载数据
      */
@@ -268,6 +286,8 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(context, json);
@@ -275,15 +295,18 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
             }
         });
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String title, String flag);

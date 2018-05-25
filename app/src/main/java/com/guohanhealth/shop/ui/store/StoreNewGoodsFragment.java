@@ -13,7 +13,6 @@ import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.StoreGoodsMyGridViewListAdapter;
 import com.guohanhealth.shop.bean.GoodsList;
 import com.guohanhealth.shop.common.Constants;
-import com.guohanhealth.shop.common.LogHelper;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
@@ -102,8 +101,6 @@ public class StoreNewGoodsFragment extends Fragment {
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
-                    LogHelper.d("huting---storeNew:", json.toString());
                     try {
                         JSONObject obj = new JSONObject(json);
                         String array = obj.getString("goods_list");
@@ -111,15 +108,15 @@ public class StoreNewGoodsFragment extends Fragment {
                             ArrayList<GoodsList> list = GoodsList.newInstanceList(array);
                             goodsListViewAdapter.setGoodsList(list);
                             goodsListViewAdapter.notifyDataSetChanged();
-
                             llNoData.setVisibility(View.GONE);
                         } else {
                             llNoData.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(getActivity(), json);
                 }

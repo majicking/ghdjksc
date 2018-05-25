@@ -19,12 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.StoreGoodsMyGridViewListAdapter;
@@ -44,6 +39,9 @@ import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ui.home.SubjectWebActivity;
 import com.guohanhealth.shop.ui.type.GoodsDetailsActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -233,7 +231,6 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
                     try {
                         JSONObject obj = new JSONObject(json);
                         String goods_list = obj.getString("goods_list");
-
                         if (goods_list.equals("") || goods_list == null || goods_list.equals(null)) {
                             llRank.setVisibility(View.GONE);
                         } else {
@@ -244,7 +241,9 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
                             }
                         }
 
-                    } catch (Exception e) {
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {
@@ -284,17 +283,11 @@ public class StoreIndexFragment extends Fragment implements GestureDetector.OnGe
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });

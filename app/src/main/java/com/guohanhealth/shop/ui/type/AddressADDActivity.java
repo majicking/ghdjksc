@@ -220,7 +220,6 @@ public class AddressADDActivity extends BaseActivity {
                 if (data.getCode() == HttpStatus.SC_OK) {
                     if (json.contains("address_id")) {
                         Toast.makeText(AddressADDActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-
                         Intent mIntent = getIntent();
                         setResult(Constants.ADD_ADDRESS_SUCC, mIntent);
                         AddressADDActivity.this.finish();
@@ -296,8 +295,9 @@ public class AddressADDActivity extends BaseActivity {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(AddressADDActivity.this, json);
                 }

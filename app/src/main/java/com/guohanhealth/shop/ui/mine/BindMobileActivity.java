@@ -106,6 +106,8 @@ public class BindMobileActivity extends BaseActivity {
                         ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(BindMobileActivity.this, json);
@@ -151,6 +153,8 @@ public class BindMobileActivity extends BaseActivity {
                         ShopHelper.btnSmsCaptchaCountDown(BindMobileActivity.this, btnGetSmsCaptcha, smsTime);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(BindMobileActivity.this, json);
@@ -177,7 +181,7 @@ public class BindMobileActivity extends BaseActivity {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
                     ShopHelper.showMessage(BindMobileActivity.this, "手机验证成功");
-                    if (getIntent().getStringExtra("type").equals(Constants.SETTINGPWD)){
+                    if (getIntent().getStringExtra("type").equals(Constants.SETTINGPWD)) {
                         Intent intent = new Intent(mActivity, ModifyPaypwdStep1Activity.class);
                         intent.putExtra("mobile", etMobile.getText().toString());
                         intent.putExtra("type", Constants.SETTINGPWD);

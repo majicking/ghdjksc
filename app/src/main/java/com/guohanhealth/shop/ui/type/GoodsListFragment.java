@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.GoodsListViewAdapter;
@@ -24,8 +22,6 @@ import com.guohanhealth.shop.custom.MyListEmpty;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.custom.XListView.IXListViewListener;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
-import com.guohanhealth.shop.http.ResponseData;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -142,48 +138,46 @@ public class GoodsListFragment extends Fragment implements IXListViewListener {
 
         url = url + "&curpage=" + pageno + "&page=" + Constants.PAGESIZE;
 
-        RemoteDataHandler.asyncDataStringGet(url, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-
-                listViewID.stopLoadMore();
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    if (!TextUtils.isEmpty(json)) {
-                        if (!data.isHasMore()) {
-                            listViewID.setPullLoadEnable(false);
-                        } else {
-                            listViewID.setPullLoadEnable(true);
-                        }
-                        if (pageno == 1) {
-                            goodsLists.clear();
-                        }
-
-                        if (myListEmpty != null)
-                            myListEmpty.setVisibility(View.GONE);
-                        try {
-
-                            JSONObject obj = new JSONObject(json);
-                            String array = obj.getString("goods_list");
-                            if (array != "" && !array.equals("array") && array != null && !array.equals("[]")) {
-                                ArrayList<GoodsList> list = GoodsList.newInstanceList(array);
-                                goodsLists.addAll(list);
-                                goodsListViewAdapter.setGoodsLists(goodsLists);
-                                goodsListViewAdapter.notifyDataSetChanged();
-                            } else {
-                                if (pageno == 1)
-                                    myListEmpty.setVisibility(View.VISIBLE);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+        RemoteDataHandler.asyncDataStringGet(url, data -> {
+            listViewID.stopLoadMore();
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                if (!TextUtils.isEmpty(json)) {
+                    if (!data.isHasMore()) {
+                        listViewID.setPullLoadEnable(false);
                     } else {
-                        myListEmpty.setVisibility(View.VISIBLE);
-                        ShopHelper.showApiError(context, json);
+                        listViewID.setPullLoadEnable(true);
+                    }
+                    if (pageno == 1) {
+                        goodsLists.clear();
+                    }
+
+                    if (myListEmpty != null)
+                        myListEmpty.setVisibility(View.GONE);
+                    try {
+
+                        JSONObject obj = new JSONObject(json);
+                        String array = obj.getString("goods_list");
+                        if (array != "" && !array.equals("array") && array != null && !array.equals("[]")) {
+                            ArrayList<GoodsList> list = GoodsList.newInstanceList(array);
+                            goodsLists.addAll(list);
+                            goodsListViewAdapter.setGoodsLists(goodsLists);
+                            goodsListViewAdapter.notifyDataSetChanged();
+                        } else {
+                            if (pageno == 1)
+                                myListEmpty.setVisibility(View.VISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
+                    myListEmpty.setVisibility(View.VISIBLE);
                     ShopHelper.showApiError(context, json);
                 }
+            } else {
+                ShopHelper.showApiError(context, json);
             }
         });
     }

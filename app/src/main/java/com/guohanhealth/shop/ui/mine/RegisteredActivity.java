@@ -68,21 +68,17 @@ public class RegisteredActivity extends BaseActivity {
 
         //检查是否开启手机注册
         String url = Constants.URL_CONNECT_STATE + "&t=connect_sms_reg";
-        RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    LinearLayout llRegTab = (LinearLayout) findViewById(R.id.llRegTab);
-
-                    String result = data.getJson();
-                    if (result.equals("1")) {
-                        llRegTab.setVisibility(View.VISIBLE);
-                    } else {
-                        llRegTab.setVisibility(View.GONE);
-                    }
+        RemoteDataHandler.asyncDataStringGet(url, data -> {
+            if (data.getCode() == HttpStatus.SC_OK) {
+                LinearLayout llRegTab = (LinearLayout) findViewById(R.id.llRegTab);
+                String result = data.getJson();
+                if (result.equals("1")) {
+                    llRegTab.setVisibility(View.VISIBLE);
                 } else {
-                    Toast.makeText(RegisteredActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    llRegTab.setVisibility(View.GONE);
                 }
+            } else {
+                ShopHelper.showApiError(RegisteredActivity.this, data.getJson());
             }
         });
 
@@ -188,7 +184,6 @@ public class RegisteredActivity extends BaseActivity {
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     Login login = Login.newInstanceList(json);
                     myApplication.setUserName(login.getUsername());
                     myApplication.setLoginKey(login.getKey());
@@ -216,8 +211,8 @@ public class RegisteredActivity extends BaseActivity {
         try {
 //            Intent intent = new Intent(Intent.ACTION_VIEW);
 //            intent.setData(Uri.parse(Constants.WAP_MEMBER_DOCUMENT));
-            Intent intent=new Intent(mActivity, WebViewActivity.class);
-            intent.putExtra("url",Constants.WAP_MEMBER_DOCUMENT);
+            Intent intent = new Intent(mActivity, WebViewActivity.class);
+            intent.putExtra("url", Constants.WAP_MEMBER_DOCUMENT);
             startActivity(intent);
         } catch (ActivityNotFoundException exception) {
             T.showShort(this, "链接失败");

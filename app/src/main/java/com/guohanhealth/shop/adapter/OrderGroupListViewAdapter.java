@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.pay.PayResult;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.OrderGoodsList;
 import com.guohanhealth.shop.bean.OrderGroupList;
@@ -33,6 +29,7 @@ import com.guohanhealth.shop.bean.OrderList;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.common.Utils;
@@ -47,6 +44,9 @@ import com.guohanhealth.shop.ui.mine.OrderExchangeActivity;
 import com.guohanhealth.shop.ui.type.EvaluateActivity;
 import com.guohanhealth.shop.ui.type.EvaluateAddActivity;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -174,7 +174,6 @@ public class OrderGroupListViewAdapter extends BaseAdapter {
                                         String JosnObj = jsonObject
                                                 .getString("payment_list");
                                         JSONArray arr = new JSONArray(JosnObj);
-                                        Log.d("huting====pay", arr.toString());
 
                                         int size = null == arr ? 0 : arr.length();
                                         if (size < 1) {
@@ -186,18 +185,11 @@ public class OrderGroupListViewAdapter extends BaseAdapter {
 
                                     } catch (JSONException e1) {
                                         e1.printStackTrace();
-                                    }
-
-                                } else {
-                                    try {
-                                        JSONObject obj2 = new JSONObject(json);
-                                        String error = obj2.getString("error");
-                                        if (error != null) {
-                                            T.showShort(context, error);
-                                        }
-                                    } catch (JSONException e) {
+                                    }catch (Exception e){
                                         e.printStackTrace();
                                     }
+                                } else {
+                                    ShopHelper.showApiError(context, json);
                                 }
                             }
                         });
@@ -836,18 +828,8 @@ public class OrderGroupListViewAdapter extends BaseAdapter {
                                     Constants.REFRESHLAYOUT);
                             context.sendBroadcast(mIntent);
                         }
-
                     } else {
-                        try {
-                            JSONObject obj2 = new JSONObject(json);
-                            String error = obj2.getString("error");
-                            if (error != null) {
-                                Toast.makeText(context, error,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        ShopHelper.showApiError(context, json);
                     }
                 });
     }

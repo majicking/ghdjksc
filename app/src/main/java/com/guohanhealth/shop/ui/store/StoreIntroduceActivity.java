@@ -296,15 +296,7 @@ public class StoreIntroduceActivity extends BaseActivity implements View.OnClick
                         initData();
                     }
                 } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(StoreIntroduceActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                  ShopHelper.showApiError(StoreIntroduceActivity.this,json);
                 }
             }
         });

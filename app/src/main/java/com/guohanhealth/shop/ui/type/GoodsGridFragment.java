@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.GoodsListViewAdapter;
@@ -128,6 +127,8 @@ public class GoodsGridFragment extends Fragment {
                                 myListEmpty.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        }catch (Exception e){
                             e.printStackTrace();
                         }
                     } else {

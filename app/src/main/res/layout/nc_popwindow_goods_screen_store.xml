@@ -53,6 +53,8 @@
             android:orientation="horizontal">
 
             <EditText
+                android:maxLines="1"
+                android:inputType="number|numberDecimal"
                 android:id="@+id/etPriceFrom"
                 android:layout_width="100dp"
                 android:layout_height="30dp"

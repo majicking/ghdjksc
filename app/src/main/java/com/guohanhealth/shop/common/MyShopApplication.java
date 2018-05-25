@@ -29,8 +29,6 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.IMMemberInFo;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
-import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ui.mine.IMFriendsListActivity;
 import com.guohanhealth.shop.ui.mine.IMNewListActivity;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
@@ -323,24 +321,23 @@ public class MyShopApplication extends Application {
         params.put("key", key);
         params.put("u_id", u_id);
         params.put("t", "member_id");
-        RemoteDataHandler.asyncPostDataString(url, params, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String member_info = obj2.getString("member_info");
-                        IMMemberInFo memberINFO = IMMemberInFo.newInstanceList(member_info);
-                        setMemberID(memberINFO.getMember_id() == null ? "" : memberINFO.getMember_id());
-                        setMemberAvatar(memberINFO.getMember_avatar() == null ? "" : memberINFO.getMember_avatar());
-                        setUserName(memberINFO.getMember_name() == null ? "" : memberINFO.getMember_name());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-//					Toast.makeText(MyShopApplication.this, "数据加载失败", Toast.LENGTH_SHORT).show();
+        RemoteDataHandler.asyncPostDataString(url, params, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject obj2 = new JSONObject(json);
+                    String member_info = obj2.getString("member_info");
+                    IMMemberInFo memberINFO = IMMemberInFo.newInstanceList(member_info);
+                    setMemberID(memberINFO.getMember_id() == null ? "" : memberINFO.getMember_id());
+                    setMemberAvatar(memberINFO.getMember_avatar() == null ? "" : memberINFO.getMember_avatar());
+                    setUserName(memberINFO.getMember_name() == null ? "" : memberINFO.getMember_name());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+            } else {
+//                ShopHelper.showApiError(getApplicationContext(), json);
             }
         });
     }

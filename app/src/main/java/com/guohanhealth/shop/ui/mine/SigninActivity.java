@@ -85,11 +85,11 @@ public class SigninActivity extends BaseActivity {
         btnLookMyPoints.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SigninActivity.this,PointLogActivity.class));
+                startActivity(new Intent(SigninActivity.this, PointLogActivity.class));
             }
         });
 
-        llAvtivity = (LinearLayout)findViewById(R.id.llAvtivity);
+        llAvtivity = (LinearLayout) findViewById(R.id.llAvtivity);
         llAvtivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,8 +120,8 @@ public class SigninActivity extends BaseActivity {
      * 活动说明
      */
 
-    private void showPopWindow(){
-        if(popupWindow == null){
+    private void showPopWindow() {
+        if (popupWindow == null) {
             viewPopScreen = LayoutInflater.from(SigninActivity.this).inflate(R.layout.nc_activity_popwindow, null);
             popupWindow = new PopupWindow(viewPopScreen, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
             popupWindow.setTouchable(true);
@@ -169,8 +169,11 @@ public class SigninActivity extends BaseActivity {
                         enableSignin(obj.optString("points_signin"));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
+                    ShopHelper.showApiError(SigninActivity.this, json);
                     disableSignin();
                 }
             }
@@ -211,7 +214,11 @@ public class SigninActivity extends BaseActivity {
                         tvPoint.setText(obj.optString("point"));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(SigninActivity.this, json);
                 }
             }
         });
@@ -263,6 +270,8 @@ public class SigninActivity extends BaseActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(SigninActivity.this, json);
@@ -292,7 +301,6 @@ public class SigninActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }

@@ -15,6 +15,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,13 +30,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
-import com.readystatesoftware.viewbadger.BadgeView;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.shareboard.SnsPlatform;
-import com.umeng.socialize.utils.ShareBoardlistener;
 import com.guohanhealth.shop.MainFragmentManager;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.AudioSwitchPagerAdapter;
@@ -74,6 +68,13 @@ import com.guohanhealth.shop.ncinterface.INCOnStringModify;
 import com.guohanhealth.shop.newpackage.ProgressDialog;
 import com.guohanhealth.shop.newpackage.ShareUtils;
 import com.guohanhealth.shop.ui.store.newStoreInFoActivity;
+import com.orhanobut.logger.Logger;
+import com.readystatesoftware.viewbadger.BadgeView;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.shareboard.SnsPlatform;
+import com.umeng.socialize.utils.ShareBoardlistener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -257,22 +258,14 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         svMain = (MyScrollView) layout.findViewById(R.id.svMain);
         //滑动到底部加载商品描述，体验不好暂时停用，后期进行优化
 
-        svMain.setOnScrollToBottomLintener(new MyScrollView.OnScrollToBottomListener() {
-            @Override
-            public void onScrollBottomListener(boolean isBottom) {
-                isBootom = isBottom;
-            }
-        });
-        svMain.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (isBootom) {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        ((GoodsDetailsActivity) getActivity()).changeFreagemt(1);
-                    }
+        svMain.setOnScrollToBottomLintener(isBottom -> isBootom = isBottom);
+        svMain.setOnTouchListener((view, motionEvent) -> {
+            if (isBootom) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    ((GoodsDetailsActivity) getActivity()).changeFreagemt(1);
                 }
-                return false;
             }
+            return false;
         });
         ll_btnHairAreaName = (RelativeLayout) layout.findViewById(R.id.ll_btnHairAreaName);
         ll_btnHairAreaName.setOnClickListener(this);
@@ -300,6 +293,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
             btnGoodsShare.setVisibility(View.GONE);
         }
         btnGoodsShare.setOnClickListener(view -> {
+
             /**开启默认分享面板，分享列表**/
             new ShareAction(GoodsDetailFragment.this.getActivity()).setDisplayList(
                     SHARE_MEDIA.SINA,
@@ -313,12 +307,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         });
         //收藏按钮
         btnGoodsFav = (ImageButton) layout.findViewById(R.id.btnGoodsFav);
-        btnGoodsFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnGoodsFavClick(view);
-            }
-        });
+        btnGoodsFav.setOnClickListener(view -> btnGoodsFavClick(view));
         //促销
         llPromotion = (LinearLayout) layout.findViewById(R.id.llPromotion);
         llManSong = (LinearLayout) layout.findViewById(R.id.llManSong);
@@ -474,8 +463,13 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                     handler.sendMessage(msg);
                 } catch (JSONException e) {
                     Toast.makeText(getActivity(), "获取购物车数量失败", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
                 }
-
+            } else {
+                ShopHelper.showApiError(context, json);
             }
         });
 
@@ -493,19 +487,24 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
     private ShareBoardlistener shareBoardlistener = new ShareBoardlistener() {
         @Override
         public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
+            if (!UMShareAPI.get(GoodsDetailFragment.this.getActivity()).isInstall(GoodsDetailFragment.this.getActivity(), share_media) &&
+                    share_media != SHARE_MEDIA.SINA && share_media != SHARE_MEDIA.QZONE) {
+                Toast.makeText(context, "未安装客户端", Toast.LENGTH_SHORT).show();
+                return;
+            }
             switch (share_media) {
                 case QQ:
-                    new ShareUtils(context).shareWeb((Activity) context, Constants.WAP_GOODS_URL + goodsId, goodsName, goodsName + "     " + Constants.WAP_GOODS_URL + goodsId + "        (" + getString(R.string.app_name) + ")", "", R.mipmap.logo,
+                    new ShareUtils(context).shareWeb((Activity) context, Constants.WAP_GOODS_URL + goodsId, goodsName, goodsName + "     " + Constants.WAP_GOODS_URL + goodsId + "        (" + getString(R.string.app_name) + ")", TextUtils.isEmpty(goodsWapUrl) ? "" : goodsWapUrl, R.mipmap.logo,
                             SHARE_MEDIA.QQ
                     );
                     break;
                 case QZONE:
-                    new ShareUtils(context).shareWeb((Activity) context, Constants.WAP_GOODS_URL + goodsId, goodsName, goodsName + "     " + Constants.WAP_GOODS_URL + goodsId + "        (" + getString(R.string.app_name) + ")", "", R.mipmap.logo,
+                    new ShareUtils(context).shareWeb((Activity) context, Constants.WAP_GOODS_URL + goodsId, goodsName, goodsName + "     " + Constants.WAP_GOODS_URL + goodsId + "        (" + getString(R.string.app_name) + ")", TextUtils.isEmpty(goodsWapUrl) ? "" : goodsWapUrl, R.mipmap.logo,
                             SHARE_MEDIA.QZONE
                     );
                     break;
                 case WEIXIN:
-                    new ShareUtils(context).shareWeb((Activity) context, Constants.WAP_GOODS_URL + goodsId, goodsName, goodsName + "     " + Constants.WAP_GOODS_URL + goodsId + "        (" + getString(R.string.app_name) + ")", "", R.mipmap.logo,
+                    new ShareUtils(context).shareWeb((Activity) context, Constants.WAP_GOODS_URL + goodsId, goodsName, goodsName + "     " + Constants.WAP_GOODS_URL + goodsId + "        (" + getString(R.string.app_name) + ")", TextUtils.isEmpty(goodsWapUrl) ? "" : goodsWapUrl, R.mipmap.logo,
                             SHARE_MEDIA.WEIXIN
                     );
                     break;
@@ -547,7 +546,6 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         progressDialog = ProgressDialog.showLoadingProgress(getActivity(), "正在加载中...");
         progressDialog.show();
         RemoteDataHandler.asyncDataStringGet(url, data -> {
-
 //                viewList.clear();
             String json = data.getJson();
             if (data.getCode() == HttpStatus.SC_OK) {
@@ -568,7 +566,6 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                         //未收藏
                         btnGoodsFav.setSelected(false);
                     }
-
                     //显示商品图片
                     String goods_image = obj.getString("goods_image"); //商品图片
                     String video_path = obj.optString("video_path", ""); //视频资源
@@ -673,24 +670,22 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                     } else {
                         llStoreO2o.setVisibility(View.GONE);
                     }
-
-
                     if (!is_virtual.equals("1")) {
                         ifCanBuyS();
                     } else {
                         ifCanBuyV();
                     }
-
                     //初始化规格弹出窗口
                     initSpec(goodsBean, obj.getString("spec_list"));
                     goodsDetails = goodsBean;
                     specList = obj.getString("spec_list");
-
-
                     svMain.smoothScrollTo(0, 0);
-                } catch (Exception e) {
-                    ProgressDialog.dismissDialog(progressDialog);
+                } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    ProgressDialog.dismissDialog(progressDialog);
                 }
             } else {
                 ProgressDialog.dismissDialog(progressDialog);
@@ -708,24 +703,18 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         if (goodsBean == null) {
             return;
         }
-        incOnNumModify = new INCOnNumModify() {
-            @Override
-            public void onModify(int num) {
-                goodsNum = num;
-                setSpecStirng();
-            }
+        incOnNumModify = num -> {
+            goodsNum = num;
+            setSpecStirng();
         };
 
-        incOnStringModify = new INCOnStringModify() {
-            @Override
-            public void onModify(String str) {
-                goodsId = str;
-                loadingGoodsDetailsData();
-                ((GoodsDetailsActivity) getActivity()).changeGoods(goodsId);
-                if (AudioSwitchPagerAdapter.player != null) {
-                    AudioSwitchPagerAdapter.player.onDestroy();
-                    AudioSwitchPagerAdapter.player = null;
-                }
+        incOnStringModify = str -> {
+            goodsId = str;
+            loadingGoodsDetailsData();
+            ((GoodsDetailsActivity) getActivity()).changeGoods(goodsId);
+            if (AudioSwitchPagerAdapter.player != null) {
+                AudioSwitchPagerAdapter.player.onDestroy();
+                AudioSwitchPagerAdapter.player = null;
             }
         };
 
@@ -782,8 +771,6 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
             llStoreVoucher.setVisibility(View.GONE);
         }
     }
-
-
 
 
     /**
@@ -1009,7 +996,12 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(context, json);
+
                 }
             }
         });
@@ -1108,15 +1100,12 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         }
         params.put("key", myApplication.getLoginKey());
 
-        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    btnGoodsFav.setSelected(btnState);
-                } else {
-                    ShopHelper.showApiError(getActivity(), json);
-                }
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                btnGoodsFav.setSelected(btnState);
+            } else {
+                ShopHelper.showApiError(getActivity(), json);
             }
         });
     }
@@ -1150,9 +1139,10 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.imID:
-                ShopHelper.showIm(getActivity(), myApplication, t_id, t_name);
+                if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                    ShopHelper.showIm(getActivity(), myApplication, t_id, t_name);
+                }
                 break;
-
             case R.id.showCartLayoutID:
                 //跳转购物车
                 intent = new Intent(getActivity(), MainFragmentManager.class);
@@ -1185,17 +1175,14 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         params.put("ifcart", "0");
         Dialog dialog = ProgressDialog.showLoadingProgress(context, "数据加载...");
         dialog.show();
-        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    flag = true;
-                } else {
-                    errorMsg = json;
-                }
-                ProgressDialog.dismissDialog(dialog);
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                flag = true;
+            } else {
+                errorMsg = json;
             }
+            ProgressDialog.dismissDialog(dialog);
         });
     }
 
@@ -1210,17 +1197,14 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         params.put("quantity", String.valueOf(goodsNum));
         Dialog dialog = ProgressDialog.showLoadingProgress(context, "数据加载...");
         dialog.show();
-        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    flag = true;
-                } else {
-                    errorMsg = json;
-                }
-                ProgressDialog.dismissDialog(dialog);
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                flag = true;
+            } else {
+                errorMsg = json;
             }
+            ProgressDialog.dismissDialog(dialog);
         });
     }
 

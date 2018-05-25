@@ -74,6 +74,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:maxLines="1"
             android:background="@color/nc_bg"
             android:hint="输入商品标题或订单号进行搜索"
             android:textColorHint="@color/nc_background_transport"

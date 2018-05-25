@@ -174,7 +174,7 @@ dependencies {
     api files('libs/alivc-player-2.1.0.jar')
     api files('libs/httpclient-4.2.5.jar')
     api files('libs/httpcore-4.2.4.jar')
-    api files('libs/pushservice-5.6.0.30.jar')
+    api files('libs/pushservice-5.0.0.66.jar')
     //    api files('libs/alipaySdk-20180403.jar')
     api 'org.apache.commons:commons-lang3:3.4'
     api 'com.squareup.okhttp:okhttp:2.4.0'

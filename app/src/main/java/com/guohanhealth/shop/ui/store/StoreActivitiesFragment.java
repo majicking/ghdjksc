@@ -11,11 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.StoreMSActivities;
 import com.guohanhealth.shop.bean.StoreMSRules;
@@ -26,8 +24,8 @@ import com.guohanhealth.shop.common.LoadImage;
 import com.guohanhealth.shop.common.LogHelper;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.ResponseData;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -108,67 +106,62 @@ public class StoreActivitiesFragment extends Fragment {
         final ArrayList<StoreMSRules> arrayList = new ArrayList<StoreMSRules>();
         String url = Constants.URL_STORE_ACTIVITIES +"&store_id=" +store_id;
 
-        RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
+        RemoteDataHandler.asyncDataStringGet(url, data -> {
+            String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
+                    try {
+                        JSONObject obj = new JSONObject(json);
+                        String promotion = obj.getString("promotion");
+                        if (promotion != null && !promotion.equals("") && !promotion.equals("{}")) {
+                            JSONObject object = new JSONObject(promotion);
+                            String xianshi = object.getString("xianshi");
+                            String mansong = object.getString("mansong");
 
-                    if (data.getCode() == HttpStatus.SC_OK) {
-                        try {
-                            JSONObject obj = new JSONObject(json);
-                            String promotion = obj.getString("promotion");
+                            //满即送
+                            if (!mansong.equals("") && !mansong.equals("{}") && mansong != null) {
+                                StoreMSActivities storeMSActivities = StoreMSActivities.newInstanceList(mansong);
+                                JSONArray jsonArray = new JSONArray(storeMSActivities.getRules());
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    StoreMSRules storeMSRules = gson.fromJson(jsonArray.get(i).toString(), StoreMSRules.class);
+                                    arrayList.add(storeMSRules);
 
-                            if (promotion != null && !promotion.equals("") && !promotion.equals("{}")) {
-                                JSONObject object = new JSONObject(promotion);
-                                String xianshi = object.getString("xianshi");
-                                String mansong = object.getString("mansong");
+                                    LogHelper.d("huting--rules:", storeMSRules.toString());
+                                }
+                                LogHelper.d("huting--mansong:", storeMSActivities.toString());
 
                                 //满即送
-                                if (!mansong.equals("") && !mansong.equals("{}") && mansong != null) {
-                                    StoreMSActivities storeMSActivities = StoreMSActivities.newInstanceList(mansong);
-                                    JSONArray jsonArray = new JSONArray(storeMSActivities.getRules());
-                                    for (int i = 0; i < jsonArray.length(); i++){
-                                        StoreMSRules storeMSRules = gson.fromJson(jsonArray.get(i).toString(),StoreMSRules.class);
-                                        arrayList.add(storeMSRules);
-
-                                        LogHelper.d("huting--rules:", storeMSRules.toString());
-                                    }
-                                    LogHelper.d("huting--mansong:", storeMSActivities.toString());
-
-                                    //满即送
-                                    View storeMsListView = getStoreMSListItemView(storeMSActivities,arrayList);
-                                    llStoreActivityList.addView(storeMsListView);
-                                }else{
-
-                                }
-
-                               //限时折扣
-                                if (!xianshi.equals("") && !xianshi.equals("{}") && xianshi != null) {
-                                   StoreXSActivities storeXSActivities = gson.fromJson(xianshi, StoreXSActivities.class);
-                                   LogHelper.d("huting--xianshi:", storeXSActivities.toString());
-
-                                    //限时折扣
-                                    View storeXsListItemView = getStoreXSListItemView(storeXSActivities);
-                                    llStoreActivityList.addView(storeXsListItemView);
-                                }else{
-
-                                }
-
-                                llNoData.setVisibility(View.GONE);
-
+                                View storeMsListView = getStoreMSListItemView(storeMSActivities, arrayList);
+                                llStoreActivityList.addView(storeMsListView);
                             } else {
-                                llNoData.setVisibility(View.VISIBLE);
+
                             }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            //限时折扣
+                            if (!xianshi.equals("") && !xianshi.equals("{}") && xianshi != null) {
+                                StoreXSActivities storeXSActivities = gson.fromJson(xianshi, StoreXSActivities.class);
+                                LogHelper.d("huting--xianshi:", storeXSActivities.toString());
+
+                                //限时折扣
+                                View storeXsListItemView = getStoreXSListItemView(storeXSActivities);
+                                llStoreActivityList.addView(storeXsListItemView);
+                            } else {
+
+                            }
+
+                            llNoData.setVisibility(View.GONE);
+
+                        } else {
+                            llNoData.setVisibility(View.VISIBLE);
                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(getActivity(), json);
                 }
-            }
         });
     }
 

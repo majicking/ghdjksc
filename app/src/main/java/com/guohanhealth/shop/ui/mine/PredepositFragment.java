@@ -126,6 +126,8 @@ public class PredepositFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(getActivity(), json);

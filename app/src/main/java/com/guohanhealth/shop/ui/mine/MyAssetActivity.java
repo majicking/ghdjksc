@@ -122,7 +122,6 @@ public class MyAssetActivity extends BaseActivity {
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     try {
                         JSONObject obj = new JSONObject(json);
                         tvPredepoit.setText(obj.optString("predepoit") + "元");
@@ -132,6 +131,8 @@ public class MyAssetActivity extends BaseActivity {
                         tvPoint.setText(obj.optString("point") + "分");
                         healthnumber.setText(obj.optString("healthbean_value") + "个");
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {

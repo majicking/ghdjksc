@@ -36,10 +36,7 @@ public class DialogHelper {
         popupWindow.update();
         popupWindow.setAnimationStyle(R.anim.popup_window_enter);
         popupWindow.setAnimationStyle(R.anim.popup_window_exit);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-            }
+        popupWindow.setOnDismissListener(() -> {
         });
         return popupWindow;
     }

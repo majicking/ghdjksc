@@ -253,8 +253,11 @@ public class NCGoodsSpecPopupWindow {
                         handler.sendMessage(msg);
                     } catch (JSONException e) {
                         Toast.makeText(context, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
+                } else {
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });

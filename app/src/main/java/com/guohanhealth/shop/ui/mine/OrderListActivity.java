@@ -225,8 +225,9 @@ public class OrderListActivity extends BaseActivity implements IXListViewListene
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(OrderListActivity.this, json);
                 }

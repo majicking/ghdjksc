@@ -1,11 +1,9 @@
 package com.guohanhealth.shop.ui.mine;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -37,7 +35,9 @@ import com.guohanhealth.shop.common.ComparatorMsg;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.SmiliesData;
+import com.guohanhealth.shop.custom.CustomDialog;
 import com.guohanhealth.shop.custom.MyGridView;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
@@ -198,8 +198,9 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
         params.put("t_id", t_id);
         params.put("t_name", t_name);
         params.put("t_msg", t_msg);
-
+        chatSend.setEnabled(false);
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            chatSend.setEnabled(true);
             String json = data.getJson();
             if (data.getCode() == HttpStatus.SC_OK) {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -219,17 +220,11 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
                     chatEditmessage.setText("");
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-            } else {
-                try {
-                    JSONObject obj2 = new JSONObject(json);
-                    String error = obj2.getString("error");
-                    if (error != null) {
-                        Toast.makeText(IMSendMsgActivity.this, error, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
+                }catch (Exception e){
                     e.printStackTrace();
                 }
+            } else {
+                ShopHelper.showApiError(IMSendMsgActivity.this, json);
             }
         });
     }
@@ -253,21 +248,14 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
                         String msg = obj2.getString("member_info");
                         IMMemberInFo imMemberInFo = IMMemberInFo.newInstanceList(msg);
                         adapter.setImMemberInFo(imMemberInFo);
-                        ;
                         adapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(IMSendMsgActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(IMSendMsgActivity.this, json);
                 }
             }
         });
@@ -392,13 +380,16 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
                     }
                     loadSendMsg(myApplication.getLoginKey(), t_id, t_name, t_msg);
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(IMSendMsgActivity.this);
-                    builder.setTitle("IM离线通知").setMessage("您的IM账号已经离线，点击确定重新登录");
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            myApplication.getmSocket().connect();
-                        }
-                    }).create().show();
+
+                    CustomDialog.Builder builder = new CustomDialog.Builder(this);
+                    builder.setTitle("提示")
+                            .setMessage("您的IM账号已经离线，点击确定重新登录")
+                            .setOnlyOneButton(true)
+                            .setPositiveButton("确定", (dialog, which) -> {
+                                dialog.dismiss();
+                                myApplication.getmSocket().connect();
+                            })
+                            .create().show();
                 }
 
                 break;

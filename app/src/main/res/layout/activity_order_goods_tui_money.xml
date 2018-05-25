@@ -134,6 +134,7 @@
                     />
 
                 <EditText
+                    android:inputType="numberDecimal|number"
                     android:id="@+id/textNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

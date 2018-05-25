@@ -52,6 +52,8 @@
                 android:text="手  机  号：" />
 
             <EditText
+                android:maxLines="1"
+                android:maxLength="11"
                 android:id="@+id/etPhone"
                 style="@style/NCFormEdit"
                 android:hint="请输入手机号"

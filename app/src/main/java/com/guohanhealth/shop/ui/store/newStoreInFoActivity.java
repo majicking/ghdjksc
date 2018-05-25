@@ -372,8 +372,12 @@ public class newStoreInFoActivity extends FragmentActivity implements OnClickLis
                             ShopHelper.showIm(newStoreInFoActivity.this, myApplication, storeIntroduce.getMember_id(), storeIntroduce.getMember_name());
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
+                }else {
+                    ShopHelper.showApiError(newStoreInFoActivity.this,data.getJson());
                 }
             }
         }, new OkHttpUtil.Param[]{
@@ -396,7 +400,6 @@ public class newStoreInFoActivity extends FragmentActivity implements OnClickLis
                         JSONObject obj = new JSONObject(json);
                         String store_info = obj.getString("store_info");
                         StoreIndex storeInFo = StoreIndex.newInstanceList(store_info);
-
                         if (storeInFo != null) {
                             //设置店铺名
                             store_name = storeInFo.getStore_name() == null ? "" : storeInFo.getStore_name();
@@ -421,17 +424,11 @@ public class newStoreInFoActivity extends FragmentActivity implements OnClickLis
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(newStoreInFoActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(newStoreInFoActivity.this, json);
                 }
             }
         });
@@ -466,7 +463,11 @@ public class newStoreInFoActivity extends FragmentActivity implements OnClickLis
                         initStoreVoucher(storeVouchers);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(newStoreInFoActivity.this, data.getJson());
                 }
             }
         }, new OkHttpUtil.Param[]{
@@ -497,26 +498,15 @@ public class newStoreInFoActivity extends FragmentActivity implements OnClickLis
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
         params.put("store_id", store_id);
-        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    if (json.equals("1")) {
-                        Toast.makeText(newStoreInFoActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
-                        initData(store_id);
-                    }
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(newStoreInFoActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                if (json.equals("1")) {
+                    Toast.makeText(newStoreInFoActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+                    initData(store_id);
                 }
+            } else {
+                ShopHelper.showApiError(newStoreInFoActivity.this,json);
             }
         });
     }
@@ -530,26 +520,15 @@ public class newStoreInFoActivity extends FragmentActivity implements OnClickLis
         params.put("key", myApplication.getLoginKey());
         params.put("store_id", store_id);
 
-        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    if (json.equals("1")) {
-                        Toast.makeText(newStoreInFoActivity.this, "取消成功", Toast.LENGTH_SHORT).show();
-                        initData(store_id);
-                    }
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(newStoreInFoActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                if (json.equals("1")) {
+                    Toast.makeText(newStoreInFoActivity.this, "取消成功", Toast.LENGTH_SHORT).show();
+                    initData(store_id);
                 }
+            } else {
+                ShopHelper.showApiError(newStoreInFoActivity.this, json);
             }
         });
     }

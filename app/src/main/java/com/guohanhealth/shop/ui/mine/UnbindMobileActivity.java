@@ -117,6 +117,8 @@ public class UnbindMobileActivity extends BaseActivity {
                         ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(UnbindMobileActivity.this, json);
@@ -155,6 +157,8 @@ public class UnbindMobileActivity extends BaseActivity {
                         ShopHelper.showMessage(UnbindMobileActivity.this, "验证码发送成功");
                         ShopHelper.btnSmsCaptchaCountDown(UnbindMobileActivity.this, btnGetSmsCaptcha, smsTime);
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {

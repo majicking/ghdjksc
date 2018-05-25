@@ -27,6 +27,8 @@
                 style="@style/NCFormEditNoBorder"
                 android:layout_alignParentLeft="true"
                 android:hint="请输入手机号"
+                android:maxLength="11"
+                android:maxLines="1"
                 android:inputType="number" />
 
             <Button

@@ -37,6 +37,8 @@
                 android:text="设置密码：" />
 
             <EditText
+                android:maxLines="1"
+                android:maxLength="20"
                 android:id="@+id/etPassword"
                 style="@style/NCFormEditNoBorder"
                 android:layout_alignParentLeft="true"

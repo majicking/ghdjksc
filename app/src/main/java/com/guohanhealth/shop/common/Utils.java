@@ -1,10 +1,5 @@
 package com.guohanhealth.shop.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -17,35 +12,35 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alipay.sdk.pay.PayDemoActivity;
-import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.guohanhealth.shop.R;
-import com.guohanhealth.shop.bean.OrderGroupList;
 import com.guohanhealth.shop.custom.ShareButton;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ncinterface.DataCallback;
 import com.guohanhealth.shop.ui.mine.PayMentWebActivity;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.tencent.mm.sdk.modelpay.PayReq;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class Utils {
     public static final String TAG = "PushDemoActivity";
@@ -211,8 +206,9 @@ public class Utils {
                         LogUtils.i("唤起微信结果=" + result);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(context,json);
                 }
@@ -265,8 +261,9 @@ public class Utils {
                             LogUtils.i("唤起微信结果=" + result);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-
                     } else {
                         ShopHelper.showApiError(context,json);
                     }

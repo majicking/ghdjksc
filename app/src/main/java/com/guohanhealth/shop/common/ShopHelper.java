@@ -1,8 +1,6 @@
 package com.guohanhealth.shop.common;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,18 +13,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.GpsInfo;
 import com.guohanhealth.shop.bean.Login;
+import com.guohanhealth.shop.custom.CustomDialog;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ui.mine.IMSendMsgActivity;
 import com.guohanhealth.shop.ui.mine.LoginActivity;
 import com.guohanhealth.shop.ui.type.GoodsDetailsActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -67,7 +65,7 @@ public class ShopHelper {
         Intent mIntent = new Intent(Constants.LOGIN_SUCCESS_URL);
         context.sendBroadcast(mIntent);
 
-        Intent intent=new Intent(Constants.SHOW_CART_NUM);
+        Intent intent = new Intent(Constants.SHOW_CART_NUM);
         context.sendBroadcast(intent);
     }
 
@@ -95,20 +93,20 @@ public class ShopHelper {
      * 处理并显示接口错误信息
      */
     public static void showApiError(Context context, String json) {
-        if(json != null){
+        if (json != null) {
             try {
                 JSONObject objError = new JSONObject(json);
                 String error = objError.getString("error");
                 if (error != null) {
-                    T.showShort(context,error);
+                    T.showShort(context, error);
                     return;
                 }
             } catch (Exception e) {
-                T.showShort(context,context.getResources().getString(R.string.load_error));
+                T.showShort(context, context.getResources().getString(R.string.load_error));
                 e.printStackTrace();
             }
-        }else{
-            T.showShort(context,"网络异常");
+        } else {
+            T.showShort(context, "网络异常");
         }
     }
 
@@ -143,6 +141,7 @@ public class ShopHelper {
      * 显示IM窗口
      */
     public static void showIm(Context context, final MyShopApplication myApplication, String memberId, String memberName) {
+
         if (myApplication.getMemberID().equals(memberId)) {
             Toast.makeText(context, "对不起，您不可以和自己聊天", Toast.LENGTH_SHORT).show();
             return;
@@ -153,20 +152,24 @@ public class ShopHelper {
             intent.putExtra("t_name", memberName);
             context.startActivity(intent);
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("IM离线通知").setMessage("您的IM账号已经离线，点击确定重新登录");
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    myApplication.getmSocket().connect();
-                }
-            }).create().show();
+
+            CustomDialog.Builder builder = new CustomDialog.Builder(context);
+            builder.setTitle("提示")
+                    .setMessage("您的IM账号已经离线，点击确定重新登录")
+                    .setOnlyOneButton(true)
+                    .setPositiveButton("确定", (dialog, which) -> {
+                        dialog.dismiss();
+                        myApplication.getmSocket().connect();
+                    })
+                    .create().show();
+
         }
     }
 
     /**
      * 添加购物车
      */
-    public static void addCart(final Context context,final MyShopApplication myApplication, String goodsId, int goodsNum) {
+    public static void addCart(final Context context, final MyShopApplication myApplication, String goodsId, int goodsNum) {
         String url = Constants.URL_ADD_CART;
 
         HashMap<String, String> params = new HashMap<String, String>();
@@ -180,7 +183,7 @@ public class ShopHelper {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
                     Toast.makeText(context, "添加购物车成功", Toast.LENGTH_SHORT).show();
-                    getNum(context,myApplication);
+                    getNum(context, myApplication);
                 } else {
                     ShopHelper.showApiError(context, json);
                 }
@@ -190,24 +193,27 @@ public class ShopHelper {
 
     }
 
-    public static void  getNum(final Context context,MyShopApplication myApplication){
-        String url=Constants.URL_GET_CART_NUM;
+    public static void getNum(final Context context, MyShopApplication myApplication) {
+        String url = Constants.URL_GET_CART_NUM;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
-        RemoteDataHandler.asyncPostDataString(url,params,new RemoteDataHandler.Callback() {
+        RemoteDataHandler.asyncPostDataString(url, params, new RemoteDataHandler.Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
-                String json=data.getJson();
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    try{
-                        JSONObject obj=new JSONObject(json);
-                        String num=obj.getString("cart_count");
-                        Intent intent=new Intent(Constants.SHOW_CART_NUM);
+                    try {
+                        JSONObject obj = new JSONObject(json);
+                        String num = obj.getString("cart_count");
+                        Intent intent = new Intent(Constants.SHOW_CART_NUM);
                         context.sendBroadcast(intent);
-                    }catch (JSONException e){
-                        Toast.makeText(context,"获取购物车数量失败",Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        Toast.makeText(context, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
+                } else {
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });

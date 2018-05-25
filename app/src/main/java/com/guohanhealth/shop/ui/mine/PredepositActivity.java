@@ -15,6 +15,7 @@ import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
 
@@ -150,7 +151,11 @@ public class PredepositActivity extends BaseActivity {
                         tvPredeposit.setText("¥" + obj.optString("predepoit"));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(PredepositActivity.this, json);
                 }
             }
         });

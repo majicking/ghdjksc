@@ -24,6 +24,7 @@ import com.guohanhealth.shop.bean.InvoiceList;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.MyAddInvoice;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
@@ -45,7 +46,7 @@ import java.util.HashMap;
  * @Time 2015-1-20
  * @Email KingKong@QQ.COM
  */
-public class InvoiceListActivity extends BaseActivity  {
+public class InvoiceListActivity extends BaseActivity {
 
     private MyShopApplication myApplication;
 
@@ -174,8 +175,8 @@ public class InvoiceListActivity extends BaseActivity  {
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
                         JSONObject obj = new JSONObject(json);
                         String invoice_list = obj.getString("invoice_list");
@@ -184,9 +185,11 @@ public class InvoiceListActivity extends BaseActivity  {
                         aListViewAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(InvoiceListActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(InvoiceListActivity.this, json);
                 }
             }
         });
@@ -203,8 +206,8 @@ public class InvoiceListActivity extends BaseActivity  {
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
                         JSONObject objJSON = new JSONObject(json);
                         String invoice_list = objJSON.getString("invoice_content_list");
@@ -220,10 +223,11 @@ public class InvoiceListActivity extends BaseActivity  {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(InvoiceListActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
-                    ;
+                    ShopHelper.showApiError(InvoiceListActivity.this, json);
                 }
             }
         });
@@ -246,21 +250,12 @@ public class InvoiceListActivity extends BaseActivity  {
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     if (json.equals("1")) {
                         Toast.makeText(InvoiceListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                         loadingInvoiceListData();//刷新列表
                     }
                 } else {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(InvoiceListActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(InvoiceListActivity.this, json);
                 }
             }
         });
@@ -283,7 +278,7 @@ public class InvoiceListActivity extends BaseActivity  {
             params.put("inv_title", inv_title);
         }
         params.put("inv_content", inv_content);
-        Dialog dialog= ProgressDialog.showLoadingProgress(InvoiceListActivity.this,"加载中...");
+        Dialog dialog = ProgressDialog.showLoadingProgress(InvoiceListActivity.this, "加载中...");
         dialog.show();
         RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, new Callback() {
             @Override
@@ -292,20 +287,11 @@ public class InvoiceListActivity extends BaseActivity  {
                 addInvoiceDialog.dismiss();
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     loadingInvoiceListData();//刷新列表
-
                     loadingInvoiceListData();
                 } else {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(InvoiceListActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(InvoiceListActivity.this, json);
+
                 }
             }
         });

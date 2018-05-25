@@ -1,6 +1,7 @@
 package com.guohanhealth.shop.ui.mine;
 
-import java.util.HashMap;
+import android.os.Bundle;
+import android.widget.TextView;
 
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
@@ -8,6 +9,7 @@ import com.guohanhealth.shop.adapter.OrderDeliverListViewAdapter;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
@@ -18,9 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.HashMap;
 
 /**
  * 查看物流界面
@@ -99,18 +99,11 @@ public class OrderDeliverDetailsActivity extends BaseActivity  {
                         adapter.notifyDataSetChanged();
                     } catch (JSONException e1) {
                         e1.printStackTrace();
-                    }
-
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(OrderDeliverDetailsActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(OrderDeliverDetailsActivity.this, json);
                 }
             }
         });

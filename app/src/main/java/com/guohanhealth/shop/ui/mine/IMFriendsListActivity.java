@@ -24,6 +24,7 @@ import com.guohanhealth.shop.bean.IMMsgList;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.MyExpandableListView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
@@ -218,24 +219,16 @@ public class IMFriendsListActivity extends BaseActivity {
 
                 mPullRefreshScrollView.onRefreshComplete();//加载完成下拉控件取消显示
 
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
-                    String json = data.getJson();
-
                     message_num.clear();
-
                     mapList.clear();
-
                     ArrayList<IMFriendsG> friendsGList = new ArrayList<IMFriendsG>();
-
                     friendsGList.add(new IMFriendsG("好友列表", 0)); //name列表名称 id列表id 0是好友列表 1 是最近联系人
                     friendsGList.add(new IMFriendsG("最近联系人", 1)); //name列表名称 id列表id 0是好友列表 1 是最近联系人
-
                     ArrayList<IMFriendsList> friendsC0List = new ArrayList<IMFriendsList>();
                     ArrayList<IMFriendsList> friendsC1List = new ArrayList<IMFriendsList>();
-
                     JSONObject object = new JSONObject();//记录UID
-
                     try {
                         JSONObject obj = new JSONObject(json);
                         String uList = obj.getString("list");
@@ -248,14 +241,11 @@ public class IMFriendsListActivity extends BaseActivity {
                             if (bean.getFriend() != null && bean.getFriend().equals("1")) {
                                 friendsC0List.add(bean);
                             }
-
                             if (bean.getRecent() != null && bean.getRecent().equals("1")) {
                                 friendsC1List.add(bean);
                             }
-
                             object.put(bean.getU_id(), "0");
                         }
-
                         mapList.put(0, friendsC0List);
                         mapList.put(1, friendsC1List);
 
@@ -263,12 +253,14 @@ public class IMFriendsListActivity extends BaseActivity {
                         adapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                     myApplication.UpDateUser();
 
                     myApplication.getmSocket().emit("get_state", object);
                 } else {
-                    Toast.makeText(IMFriendsListActivity.this,R.string.load_error,Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(IMFriendsListActivity.this,json);
                 }
             }
         });
@@ -293,20 +285,10 @@ public class IMFriendsListActivity extends BaseActivity {
                 if (data.getCode() == HttpStatus.SC_OK) {
                     if (json.equals("1")) {
                         Toast.makeText(IMFriendsListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-                        ;
                         loadingFriendsListData();//初始化加载数据
                     }
                 } else {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(IMFriendsListActivity.this, error, Toast.LENGTH_SHORT).show();
-                            ;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(IMFriendsListActivity.this,json);
                 }
             }
         });

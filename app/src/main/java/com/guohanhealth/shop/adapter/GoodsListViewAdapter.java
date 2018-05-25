@@ -11,22 +11,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.GoodsList;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.LoadImage;
 import com.guohanhealth.shop.common.LogHelper;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.StringUtils;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ui.store.newStoreInFoActivity;
 import com.guohanhealth.shop.ui.type.GoodsDetailsActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -195,11 +195,9 @@ public class GoodsListViewAdapter extends BaseAdapter {
                         @Override
                         public void dataLoaded(ResponseData data) {
 //                                    LogHelper.e("wj","点击了" + position);
+                            String json = data.getJson();
 
                             if (data.getCode() == HttpStatus.SC_OK) {
-
-                                String json = data.getJson();
-
                                 try {
                                     JSONObject jsonObj = new JSONObject(json);
                                     String objString = jsonObj.getString("store_credit");
@@ -216,8 +214,11 @@ public class GoodsListViewAdapter extends BaseAdapter {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                     holder.llStoreInfo.setVisibility(View.GONE);
+                                }catch (Exception e){
+                                    e.printStackTrace();
                                 }
                             } else {
+                                ShopHelper.showApiError(context, json);
                                 holder.llStoreInfo.setVisibility(View.GONE);
                             }
                         }

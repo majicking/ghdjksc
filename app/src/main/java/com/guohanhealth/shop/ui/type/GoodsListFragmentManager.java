@@ -467,7 +467,6 @@ public class GoodsListFragmentManager extends FragmentActivity {
             if (data.getCode() == HttpStatus.SC_OK) {
                 try {
                     JSONObject objJson = new JSONObject(json);
-
                     //地区
                     String areaListJson = objJson.getString("area_list");
                     if (!areaListJson.equals("[]")) {
@@ -478,7 +477,6 @@ public class GoodsListFragmentManager extends FragmentActivity {
                         areaList.add(0, defaultCityInfo);
                         AreaSpinnerAdapter adapter = new AreaSpinnerAdapter(GoodsListFragmentManager.this);
                         adapter.setAreaList(areaList);
-
                         final Spinner spAreaList = (Spinner) viewPopScreen.findViewById(R.id.spAreaList);
                         spAreaList.setAdapter(adapter);
                         spAreaList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -488,17 +486,14 @@ public class GoodsListFragmentManager extends FragmentActivity {
                                 tvArea.setText(areaInfo.getArea_name());
                                 etAreaId.setText(areaInfo.getArea_id());
                             }
-
                             @Override
                             public void onNothingSelected(AdapterView<?> adapterView) {
                             }
                         });
-
                         tvArea.setOnClickListener(view ->
                                 spAreaList.performClick()
                         );
                     }
-
                     //消保
                     String contractListJson = objJson.getString("contract_list");
                     if (!contractListJson.equals("[]")) {
@@ -508,6 +503,8 @@ public class GoodsListFragmentManager extends FragmentActivity {
                         gvContract.setAdapter(contractGridViewAdapter);
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             } else {

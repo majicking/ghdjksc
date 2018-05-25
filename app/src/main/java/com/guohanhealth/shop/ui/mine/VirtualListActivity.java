@@ -212,7 +212,6 @@ public class VirtualListActivity extends BaseActivity implements IXListViewListe
 
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     if (!data.isHasMore()) {
                         listViewID.setPullLoadEnable(false);
                     } else {
@@ -236,8 +235,9 @@ public class VirtualListActivity extends BaseActivity implements IXListViewListe
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(VirtualListActivity.this, json);
                 }

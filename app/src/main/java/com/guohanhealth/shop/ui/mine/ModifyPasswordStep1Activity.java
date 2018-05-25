@@ -109,6 +109,8 @@ public class ModifyPasswordStep1Activity extends BaseActivity {
                         ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(ModifyPasswordStep1Activity.this, json);
@@ -147,6 +149,8 @@ public class ModifyPasswordStep1Activity extends BaseActivity {
                         ShopHelper.showMessage(ModifyPasswordStep1Activity.this, "验证码发送成功");
                         ShopHelper.btnSmsCaptchaCountDown(ModifyPasswordStep1Activity.this, btnGetSmsCaptcha, smsTime);
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {

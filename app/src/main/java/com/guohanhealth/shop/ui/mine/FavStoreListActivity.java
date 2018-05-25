@@ -158,8 +158,9 @@ public class FavStoreListActivity extends BaseActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(FavStoreListActivity.this, json);
                 }

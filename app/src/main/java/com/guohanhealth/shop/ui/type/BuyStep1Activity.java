@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -176,6 +175,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
     private AlertDialog alertDialog;
     private View mPopupWindowView;
     private String distri_id;
+    private View textstatu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -271,7 +271,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         addressInFoLayoutID = (LinearLayout) findViewById(R.id.addressInFoLayoutID);
 //        availablePredepositID = (CheckBox) findViewById(R.id.availablePredepositID);
 //        availableRCBalanceID = (CheckBox) findViewById(R.id.availableRCBalanceID);
-
+        textstatu = findViewById(R.id.textstatu);
         LinearLayout fCodeLayoutID = (LinearLayout) findViewById(R.id.fCodeLayoutID);
 
         commitID = (Button) findViewById(R.id.commitID);
@@ -361,11 +361,13 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
 
     public void showEiditPassword() {
         if (isczk || isjkd || isyck) {
+            textstatu.setActivated(true);
             editPasswordID.setHint("请输入支付密码");
             editPasswordID.setEnabled(true);
         } else {
-            editPasswordID.setHint("不需要支付密码");
+            editPasswordID.setHint("其他方式支付订单");
             editPasswordID.setEnabled(false);
+            textstatu.setActivated(false);
         }
     }
 
@@ -429,19 +431,13 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 String json = data.getJson();
                 ProgressDialog.dismissDialog(dialogs);
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     BuyStep1 buyStep1 = BuyStep1.newInstanceList(json);
-
                     if (buyStep1 != null) {
-
                         AddressDetails addressDetails = AddressDetails.newInstanceDetails(buyStep1.getAddress_info());
-
                         //记录运费hash
                         freight_hash = buyStep1.getFreight_hash();
-
                         //记录发票hash
                         vat_hash = buyStep1.getVat_hash();
-
                         //判断是否显示货到付款
                         if (buyStep1.getIfshow_offpay().equals("true")) {
                             ifshow_offpay = true;
@@ -454,10 +450,8 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         if (addressDetails != null) {
                             noAreaInfoID.setVisibility(View.GONE);
                             addressInFoLayoutID.setVisibility(View.VISIBLE);
-
                             //记录地址ID
                             address_id = addressDetails.getAddress_id();
-
                             //显示收货信息
                             areaInfoID.setText(addressDetails.getArea_info() == null ? "" : addressDetails.getArea_info());
                             addressID.setText(addressDetails.getAddress() == null ? "" : addressDetails.getAddress());
@@ -472,24 +466,13 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                                 alertDialog.show();
                             }
                         }
-
-
                         InvoiceInFO inv_info = InvoiceInFO.newInstanceList(buyStep1.getInv_info());
-
                         if (inv_info != null) {
-
                             //记录发票ID
                             inv_id = inv_info.getInv_id() == null ? "0" : inv_info.getInv_id();
-
                             //显示发票信息
                             invInfoID.setText(inv_info.getContent() == null ? "" : inv_info.getContent());
                         }
-
-//
-//                        BuyStepInfo buyStepInfo = JSONParser.JSON2Object(json, BuyStepInfo.class);
-//                        if (buyStepInfo != null) {
-//                            Log.i("msg", buyStepInfo.toString());
-
                         //显示预存款 充值卡 健康豆
                         String Available_predeposit = buyStep1.getAvailable_predeposit();
                         String Available_Rcb_pay = buyStep1.getAvailable_rc_balance();
@@ -506,50 +489,21 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                                 }
                             });
                         }
-//                        }
-
-//                        //判断是否显示预存款
-//                        if (buyStep1.getAvailable_predeposit() != null && !buyStep1.getAvailable_predeposit().equals("null") && !buyStep1.getAvailable_predeposit().equals("")
-//                                && !buyStep1.getAvailable_predeposit().equals("0") && !buyStep1.getAvailable_predeposit().equals("0.00")) {
-//                            showAvailablePredeposit = true;
-//                            availablePredepositID.setVisibility(View.VISIBLE);
-//                        } else {
-//                            showAvailablePredeposit = false;
-//                            availablePredepositID.setVisibility(View.GONE);
-//                        }
-
-//                        //判断是否显示充值卡
-//                        if (buyStep1.getAvailable_rc_balance() != null && !buyStep1.getAvailable_rc_balance().equals("null") && !buyStep1.getAvailable_rc_balance().equals("")
-//                                && !buyStep1.getAvailable_rc_balance().equals("0") && !buyStep1.getAvailable_rc_balance().equals("0.00")) {
-//                            showAvailableRCBalance = true;
-//                            availableRCBalanceID.setVisibility(View.VISIBLE);
-//                        } else {
-//                            showAvailableRCBalance = false;
-//                            availableRCBalanceID.setVisibility(View.GONE);
-//                        }
-//
-//                        if (showAvailablePredeposit || showAvailableRCBalance) {
-//                            predepositLayoutID.setVisibility(View.VISIBLE);
-//                        } else {
-////                            predepositLayoutID.setVisibility(View.GONE);
-//                        }
-
-
                         //显示购买商品列表
                         try {
                             jsonObj = new JSONObject(buyStep1.getStore_cart_list());
                             showGoodsList();
                         } catch (JSONException e1) {
                             e1.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-
                     //判断是否显示红包
                     if (buyStep1.getRpt_list() != null && !buyStep1.getRpt_list().equals("null") && !buyStep1.getRpt_list().equals("")) {
                         rpacketList = RpacketInfo.newInstanceList(buyStep1.getRpt_list());
                         updateRpacketUseable();
                     }
-
                     //更新价格UI
                     upPriceUIData();
                 } else {
@@ -745,23 +699,22 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
             @Override
             public void dataLoaded(ResponseData data) {
                 ProgressDialog.dismissDialog(dialog);
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     UpdateAddress updateAddress = UpdateAddress.newInstanceList(json);
-
                     noSendId.clear();
                     String noSendIdString = updateAddress.getNo_send_tpl_ids();
                     if (!noSendIdString.equals("[]")) {
                         try {
                             JSONArray noSendIdArray = new JSONArray(noSendIdString);
-
                             int size = null == noSendIdArray ? 0 : noSendIdArray.length();
                             for (int i = 0; i < size; i++) {
                                 noSendId.add((String) noSendIdArray.get(i));
                             }
                         } catch (JSONException e) {
-                            Log.d("exception", "no_send_tpl_ids error");
-
+                            e.printStackTrace();
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
 
@@ -801,11 +754,10 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         updateRpacketUseable();
                         goods_voucher = 0.0;
                         upPriceUIData();//更新价格UI
-
 //						updateVoucher();
                     }
                 } else {
-                    Toast.makeText(BuyStep1Activity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(BuyStep1Activity.this, json);
                 }
             }
         });
@@ -949,45 +901,32 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 final String jsons = data.getJson();
                 dismissProgressDialog();
                 if (data.getCode() == HttpStatus.SC_OK) {
-//                    showToast("pay_info= " + JSONParser.getStringFromJsonString("pay_info", jsons));
-
                     if (JSONParser.getStringFromJsonString("pay_info", jsons).equals("true")) {
                         Utils.loadingPaymentListData(
-//                                mActivity,JSONParser.getStringFromJsonString("pay_sn",json)
-                                new DataCallback() {
-                                    @Override
-                                    public void data(Object o) {
-                                        ResponseData data = (ResponseData) o;
-                                        String json = data.getJson();
-                                        if (data.getCode() == HttpStatus.SC_OK) {
-                                            try {
-                                                JSONObject jsonObject = new JSONObject(json);
-                                                String JosnObj = jsonObject
-                                                        .getString("payment_list");
-                                                JSONArray arr = new JSONArray(JosnObj);
-                                                LogUtils.i(arr.toString());
-                                                int size = null == arr ? 0 : arr.length();
-                                                if (size < 1) {
-                                                    showToast("没有支付方式，请后台配置");
-                                                    return;
-                                                }
-                                                LogUtils.i("订单号--->" + JSONParser.getStringFromJsonString("pay_sn", jsons));
-                                                OrderPay(size, arr, JSONParser.getStringFromJsonString("pay_sn", jsons));
-                                            } catch (JSONException e1) {
-                                                e1.printStackTrace();
+                                o -> {
+                                    ResponseData data1 = (ResponseData) o;
+                                    String json = data1.getJson();
+                                    if (data1.getCode() == HttpStatus.SC_OK) {
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(json);
+                                            String JosnObj = jsonObject
+                                                    .getString("payment_list");
+                                            JSONArray arr = new JSONArray(JosnObj);
+                                            LogUtils.i(arr.toString());
+                                            int size = null == arr ? 0 : arr.length();
+                                            if (size < 1) {
+                                                showToast("没有支付方式，请后台配置");
+                                                return;
                                             }
-
-                                        } else {
-                                            try {
-                                                JSONObject obj2 = new JSONObject(json);
-                                                String error = obj2.getString("error");
-                                                if (error != null) {
-                                                    showToast(error);
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
+                                            LogUtils.i("订单号--->" + JSONParser.getStringFromJsonString("pay_sn", jsons));
+                                            OrderPay(size, arr, JSONParser.getStringFromJsonString("pay_sn", jsons));
+                                        } catch (JSONException e1) {
+                                            e1.printStackTrace();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
+                                    } else {
+                                        ShopHelper.showApiError(BuyStep1Activity.this, json);
                                     }
                                 }
                         );
@@ -1001,20 +940,11 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         startActivity(it);
                         finish();
                     }
-
-
                     //提交订单成功则广播显示购物车数量
                     Intent intent = new Intent(Constants.SHOW_CART_NUM);
                     BuyStep1Activity.this.sendBroadcast(intent);
-
-//						Intent intent = new Intent(BuyStep1Activity.this,OrderListActivity.class);
-//						BuyStep1Activity.this.startActivity(intent);
-//						BuyStep1Activity.this.finish();
-//						Intent mIntent = new Intent(Constants.APP_BORADCASTRECEIVER);
-//						sendBroadcast(mIntent);
                 } else {
                     ShopHelper.showApiError(mActivity, jsons);
-//						Toast.makeText(BuyStep1Activity.this, getString(R.string.datas_loading_fail_prompt), Toast.LENGTH_SHORT).show();;
                 }
             }
         });
@@ -1064,6 +994,9 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
             } catch (IOException e) {
                 e.printStackTrace();
                 ms.what = 2;
+            } catch (Exception e) {
+                ms.what = 2;
+                e.printStackTrace();
             } finally {
                 handler.sendMessage(ms);
             }
@@ -1071,67 +1004,53 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         }).start();
     }
 
-    DataCallback callback = new DataCallback() {
-        @Override
-        public void data(Object o) {
-            switch (((Message) o).what) {
-                case 1: {
-                    PayResult payResult = new PayResult((String) ((Message) o).obj);
-
-                    LogUtils.i("payResult------>" + payResult.toString());
-                    // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
-                    String resultInfo = payResult.getResult();
-                    String resultStatus = payResult.getResultStatus();
-
-                    // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
-                    if (TextUtils.equals(resultStatus, "9000")) {
-                        PayResult(resultInfo);
-
-
+    DataCallback callback = o -> {
+        switch (((Message) o).what) {
+            case 1: {
+                PayResult payResult = new PayResult((String) ((Message) o).obj);
+                LogUtils.i("payResult------>" + payResult.toString());
+                // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
+                String resultInfo = payResult.getResult();
+                String resultStatus = payResult.getResultStatus();
+                // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
+                if (TextUtils.equals(resultStatus, "9000")) {
+                    PayResult(resultInfo);
+                } else {
+                    if (TextUtils.equals(resultStatus, "8000")) {
+                        Toast.makeText(mActivity, "支付结果确认中",
+                                Toast.LENGTH_SHORT).show();
+                        showToast("订单生成成功！");
+                        Intent it = new Intent();
+                        it.putExtra(ORDERNUMBER, 1);
+                        it.putExtra(ORDERTYPE, false);
+                        it.setClass(BuyStep1Activity.this, OrderActivity.class);
+                        startActivity(it);
+                        finish();
                     } else {
-                        // 判断resultStatus 为非“9000”则代表可能支付失败
-                        // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
-                        if (TextUtils.equals(resultStatus, "8000")) {
-                            Toast.makeText(mActivity, "支付结果确认中",
-                                    Toast.LENGTH_SHORT).show();
-                            showToast("订单生成成功！");
-                            Intent it = new Intent();
-                            it.putExtra(ORDERNUMBER, 1);
-                            it.putExtra(ORDERTYPE, false);
-                            it.setClass(BuyStep1Activity.this, OrderActivity.class);
-                            startActivity(it);
-                            finish();
-                        } else {
-                            // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-//                            Toast.makeText(mActivity, "支付失败",
-//                                    Toast.LENGTH_SHORT).show();
-                            showToast("支付失败，已生成订单！");
-                            Intent it = new Intent();
-                            it.putExtra(ORDERNUMBER, 1);
-                            it.putExtra(ORDERTYPE, false);
-                            it.setClass(BuyStep1Activity.this, OrderActivity.class);
-                            startActivity(it);
-                            finish();
-
-                        }
+                        showToast("支付失败，已生成订单！");
+                        Intent it = new Intent();
+                        it.putExtra(ORDERNUMBER, 1);
+                        it.putExtra(ORDERTYPE, false);
+                        it.setClass(BuyStep1Activity.this, OrderActivity.class);
+                        startActivity(it);
+                        finish();
                     }
-                    break;
                 }
-                case 2: {
-                    Toast.makeText(mActivity, "检查结果为：" + ((Message) o).obj,
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                default:
-                    break;
+                break;
             }
+            case 2: {
+                Toast.makeText(mActivity, "检查结果为：" + ((Message) o).obj,
+                        Toast.LENGTH_SHORT).show();
+                break;
+            }
+            default:
+                break;
         }
     };
 
     PopupWindow.OnDismissListener listener = new PopupWindow.OnDismissListener() {
         @Override
         public void onDismiss() {
-//            showToast("popdismiss");
             Utils.backgroundAlpha(mActivity, 1f);
             if (payPopupWindow != null && payPopupWindow.isShowing()) {
                 payPopupWindow.dismiss();
@@ -1212,6 +1131,8 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(mActivity, json);
@@ -1250,8 +1171,9 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                                     }))
                                     .create().show();
                         }
-
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
@@ -1284,9 +1206,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         loadMobile();
 //                        setPwd();
                     }
-
                 } else {
-
                     ShopHelper.showApiError(myApplication, json);
                 }
             }
@@ -1509,17 +1429,8 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         backgroundAlpha(1f);
                         editFCodeID.setText(fcode);
                     }
-
                 } else {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            Toast.makeText(BuyStep1Activity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(BuyStep1Activity.this, json);
                 }
             }
         });

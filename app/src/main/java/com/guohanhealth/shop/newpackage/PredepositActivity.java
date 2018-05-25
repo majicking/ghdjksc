@@ -13,7 +13,6 @@ import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.ResponseData;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -117,6 +116,8 @@ public class PredepositActivity extends FragmentActivity implements OnFragmentIn
                     predepoit=obj.optString("predepoit");
                     tvPredeposit.setText("¥" + obj.optString("predepoit"));
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             } else {

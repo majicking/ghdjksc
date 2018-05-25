@@ -13,6 +13,7 @@
         android:background="@drawable/umeng_socialize_title_back_bt_selected"/>
 
     <EditText
+        android:maxLines="1"
         android:id="@+id/fcode_ed_text"
         android:layout_width="220dp"
         android:layout_height="40dp"

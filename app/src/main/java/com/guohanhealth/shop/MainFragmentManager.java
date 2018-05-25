@@ -30,9 +30,11 @@ import com.guohanhealth.shop.ui.mine.MineFragment;
 import com.guohanhealth.shop.ui.mine.UpdateManager;
 import com.guohanhealth.shop.ui.type.OneTypeFragment;
 import com.readystatesoftware.viewbadger.BadgeView;
+
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.HashMap;
 
 /**
@@ -185,21 +187,22 @@ public class MainFragmentManager extends FragmentActivity {
         String url = Constants.URL_GET_CART_NUM;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
-        RemoteDataHandler.asyncPostDataString(url, params, new Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String num = obj.getString("cart_count");
-                        badge.setText(num);
-                        badge.show();
-                    } catch (JSONException e) {
-                        Toast.makeText(MainFragmentManager.this, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
-                    }
-
+        RemoteDataHandler.asyncPostDataString(url, params, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject obj = new JSONObject(json);
+                    String num = obj.getString("cart_count");
+                    badge.setText(num);
+                    badge.show();
+                } catch (JSONException e) {
+                    Toast.makeText(MainFragmentManager.this, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            } else {
+                ShopHelper.showApiError(MainFragmentManager.this, json);
             }
         });
     }
@@ -272,8 +275,8 @@ public class MainFragmentManager extends FragmentActivity {
         RemoteDataHandler.asyncDataStringGet(Constants.URL_VERSION_UPDATE, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
                         JSONObject obj = new JSONObject(json);
                         String objJson = obj.getString("version");
@@ -287,6 +290,8 @@ public class MainFragmentManager extends FragmentActivity {
                             mUpdateManager.checkUpdateInfo();
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {

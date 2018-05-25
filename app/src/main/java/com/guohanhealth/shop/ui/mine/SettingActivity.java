@@ -87,6 +87,8 @@ public class SettingActivity extends BaseActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(SettingActivity.this, json);
@@ -113,6 +115,8 @@ public class SettingActivity extends BaseActivity {
                             tvPaypwd.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {

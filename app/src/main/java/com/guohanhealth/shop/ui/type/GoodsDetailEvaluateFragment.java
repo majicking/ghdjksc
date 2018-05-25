@@ -1,9 +1,9 @@
 package com.guohanhealth.shop.ui.type;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.ResponseData;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -173,36 +172,35 @@ public class GoodsDetailEvaluateFragment extends Fragment {
     public void loadingGoodsEvaluate() {
         String url = Constants.URL_GOODS_EVALUATE + "&goods_id=" + goodsId + "&type=" + currentType + "&curpage=" + String.valueOf(currentPage) + "&page=" + Constants.PAGESIZE;
 
-        RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    if (data.isHasMore()) {
-                        isHasMore = true;
-                    } else {
-                        isHasMore = false;
-                    }
-                    if (currentPage == 1) {
-                        goodsEvaluateInfoList.clear();
-                        lvEvaluateList.smoothScrollToPosition(0);
-                    }
-                    try {
-                        JSONObject jsonObject = new JSONObject(json);
-                        goodsEvaluateInfoList.addAll(GoodsEvaluateInfo.newInstanceList(jsonObject.getString("goods_eval_list")));
-                        if (goodsEvaluateInfoList.size() > 0) {
-                            llListEmpty.setVisibility(View.GONE);
-                            goodsEvaluateDetailListViewAdapter.setList(goodsEvaluateInfoList);
-                            goodsEvaluateDetailListViewAdapter.notifyDataSetChanged();
-                        } else {
-                            llListEmpty.setVisibility(View.VISIBLE);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        RemoteDataHandler.asyncDataStringGet(url, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                if (data.isHasMore()) {
+                    isHasMore = true;
                 } else {
-                    ShopHelper.showApiError(getActivity(), json);
+                    isHasMore = false;
                 }
+                if (currentPage == 1) {
+                    goodsEvaluateInfoList.clear();
+                    lvEvaluateList.smoothScrollToPosition(0);
+                }
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    goodsEvaluateInfoList.addAll(GoodsEvaluateInfo.newInstanceList(jsonObject.getString("goods_eval_list")));
+                    if (goodsEvaluateInfoList.size() > 0) {
+                        llListEmpty.setVisibility(View.GONE);
+                        goodsEvaluateDetailListViewAdapter.setList(goodsEvaluateInfoList);
+                        goodsEvaluateDetailListViewAdapter.notifyDataSetChanged();
+                    } else {
+                        llListEmpty.setVisibility(View.VISIBLE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else {
+                ShopHelper.showApiError(getActivity(), json);
             }
         });
     }

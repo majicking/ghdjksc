@@ -34,6 +34,7 @@ public class CustomDialog extends Dialog {
         private DialogInterface.OnClickListener negativeButtonClickListener;
         private Boolean cancelable;
         private Boolean canceledOnTouchOutside;
+        private Boolean onlyonebutton;
 
         public Builder(Context context) {
             this.context = context;
@@ -64,6 +65,13 @@ public class CustomDialog extends Dialog {
         public Builder setTitle(int title) {
             this.title = (String) context.getText(title);
             return this;
+        }
+
+
+        public Builder setOnlyOneButton(boolean flag) {
+            this.onlyonebutton = flag;
+            return this;
+
         }
 
         /**
@@ -176,6 +184,12 @@ public class CustomDialog extends Dialog {
                         .removeAllViews();
                 ((LinearLayout) layout.findViewById(R.id.content))
                         .addView(contentView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            }
+            if (onlyonebutton != null) {
+                if (onlyonebutton) {
+                    (layout.findViewById(R.id.btnleft)).setVisibility(View.GONE);
+                    (layout.findViewById(R.id.line)).setVisibility(View.GONE);
+                }
             }
             dialog.setContentView(layout);
             //点击外边 不消失

@@ -7,15 +7,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.InvoiceAddSpinnerAdapter;
 import com.guohanhealth.shop.bean.CityList;
 import com.guohanhealth.shop.common.Constants;
-import com.guohanhealth.shop.ncinterface.INCOnAddressDialogConfirm;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.ResponseData;
+import com.guohanhealth.shop.ncinterface.INCOnAddressDialogConfirm;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -146,32 +145,31 @@ public class NCAddressDialog extends Dialog {
     public void loadingGetCityData(final Spinner view, String area_id, final int level) {
         String url = Constants.URL_GET_CITY + "&area_id=" + area_id;
         HashMap<String, String> params = new HashMap<String, String>();
-        RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
-                    try {
-                        JSONObject objJSON = new JSONObject(json);
-                        String area_list = objJSON.getString("area_list");
-                        ArrayList<CityList> CList = new ArrayList<CityList>();
-                        if (!area_list.equals("[]")) {
-                            CList = CityList.newInstanceList(area_list);
-                            showArea(level);
-                        } else {
-                            hideArea(level);
-                        }
-                        InvoiceAddSpinnerAdapter addSpinnerAdapter = new InvoiceAddSpinnerAdapter(context);
-                        addSpinnerAdapter.setDatas(CList);
-                        view.setAdapter(addSpinnerAdapter);
-                        addSpinnerAdapter.notifyDataSetChanged();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        RemoteDataHandler.asyncDataStringGet(url, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject objJSON = new JSONObject(json);
+                    String area_list = objJSON.getString("area_list");
+                    ArrayList<CityList> CList = new ArrayList<CityList>();
+                    if (!area_list.equals("[]")) {
+                        CList = CityList.newInstanceList(area_list);
+                        showArea(level);
+                    } else {
+                        hideArea(level);
                     }
-                } else {
-                    Toast.makeText(context, context.getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    InvoiceAddSpinnerAdapter addSpinnerAdapter = new InvoiceAddSpinnerAdapter(context);
+                    addSpinnerAdapter.setDatas(CList);
+                    view.setAdapter(addSpinnerAdapter);
+                    addSpinnerAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+            } else {
+                ShopHelper.showApiError(context, json);
             }
         });
     }

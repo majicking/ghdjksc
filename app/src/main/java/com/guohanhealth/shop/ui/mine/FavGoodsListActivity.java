@@ -149,8 +149,9 @@ public class FavGoodsListActivity extends BaseActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(FavGoodsListActivity.this, json);
                 }
@@ -192,6 +193,6 @@ public class FavGoodsListActivity extends BaseActivity {
             }
         });
         ncDialog.showPopupWindow();
-            }
-        }
+    }
+}
 

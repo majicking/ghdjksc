@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.GoodsListViewAdapter;
 import com.guohanhealth.shop.bean.GoodsList;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.GridViewForScrollView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
@@ -75,22 +75,18 @@ public class StoreGoodsGridFragment extends Fragment {
             @Override
             public void dataLoaded(ResponseData data) {
 
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
-
                     if (!data.isHasMore()) {
                         textMore.setVisibility(View.GONE);
                     } else {
                         textMore.setVisibility(View.VISIBLE);
                         loadMoreData();
                     }
-
                     if (pageno == 1) {
                         goodsLists.clear();
                     }
-
                     try {
-
                         JSONObject obj = new JSONObject(json);
                         String array = obj.getString("goods_list");
                         if (array != "" && !array.equals("array") && array != null && !array.equals("[]")) {
@@ -105,9 +101,11 @@ public class StoreGoodsGridFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(getActivity(), json);
                 }
             }
         });

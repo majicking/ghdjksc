@@ -16,10 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.BrandGridViewAdapter;
@@ -38,6 +34,8 @@ import com.guohanhealth.shop.scannercode.android.CaptureActivity;
 import com.guohanhealth.shop.ui.home.SearchActivity;
 import com.guohanhealth.shop.ui.mine.IMNewListActivity;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -144,8 +142,8 @@ public class OneTypeFragment extends Fragment {
         RemoteDataHandler.asyncDataStringGet(url, new Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     LogUtils.i("分类返回数据：" + json);
                     try {
                         JSONObject obj = new JSONObject(json);
@@ -165,9 +163,11 @@ public class OneTypeFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(context, context.getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });
@@ -264,8 +264,8 @@ public class OneTypeFragment extends Fragment {
         RemoteDataHandler.asyncDataStringGet(Constants.URL_BRAND, new RemoteDataHandler.Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
 
                         JSONObject obj = new JSONObject(json);
@@ -278,9 +278,11 @@ public class OneTypeFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getActivity(), context.getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });
@@ -297,8 +299,8 @@ public class OneTypeFragment extends Fragment {
         RemoteDataHandler.asyncDataStringGet(Constants.URL_GOODS_CLASS_CHILD_ALL + "&gc_id=" + classId, new RemoteDataHandler.Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
                     try {
                         JSONObject obj = new JSONObject(json);
                         String list = obj.getString("class_list");
@@ -354,14 +356,11 @@ public class OneTypeFragment extends Fragment {
                                 tvGoodsClassName.setText(goodsClassInfo.getGcName());
 
                                 Button btnGoodsClass = (Button) view.findViewById(R.id.btnGoodsClass);
-                                btnGoodsClass.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(getActivity(), GoodsListFragmentManager.class);
-                                        intent.putExtra("gc_id", goodsClassInfo.getGcId());
-                                        intent.putExtra("gc_name", goodsClassInfo.getGcName());
-                                        startActivity(intent);
-                                    }
+                                btnGoodsClass.setOnClickListener(view1 -> {
+                                    Intent intent = new Intent(getActivity(), GoodsListFragmentManager.class);
+                                    intent.putExtra("gc_id", goodsClassInfo.getGcId());
+                                    intent.putExtra("gc_name", goodsClassInfo.getGcName());
+                                    startActivity(intent);
                                 });
 
                                 GridView gvGoodsClass = (GridView) view.findViewById(R.id.gvGoodsClass);
@@ -386,9 +385,11 @@ public class OneTypeFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(context, json);
                 }
             }
         });

@@ -101,18 +101,15 @@ public class GoodsBrowseActivity extends BaseActivity {
                 ProgressDialog.dismissDialog(dialog);
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     if (!data.isHasMore()) {
                         isHasMore = false;
                     } else {
                         isHasMore = true;
                     }
-
                     if (pageno == 1) {
                         goodsBrowseList.clear();
                         hideListEmpty();
                     }
-
                     try {
                         JSONObject obj = new JSONObject(json);
                         String objJson = obj.getString("goodsbrowse_list");
@@ -126,8 +123,9 @@ public class GoodsBrowseActivity extends BaseActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
                 } else {
                     ShopHelper.showApiError(GoodsBrowseActivity.this, json);
                 }

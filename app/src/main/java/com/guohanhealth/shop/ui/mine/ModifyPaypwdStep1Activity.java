@@ -110,6 +110,8 @@ public class ModifyPaypwdStep1Activity extends BaseActivity {
                         ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(ModifyPaypwdStep1Activity.this, json);
@@ -148,6 +150,8 @@ public class ModifyPaypwdStep1Activity extends BaseActivity {
                         ShopHelper.showMessage(ModifyPaypwdStep1Activity.this, "验证码发送成功");
                         ShopHelper.btnSmsCaptchaCountDown(ModifyPaypwdStep1Activity.this, btnGetSmsCaptcha, smsTime);
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 } else {

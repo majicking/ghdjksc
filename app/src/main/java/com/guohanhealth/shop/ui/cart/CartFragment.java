@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.guohanhealth.shop.MainFragmentManager;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.GoodsDetailStoreVoucherInfo;
@@ -23,16 +23,15 @@ import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.NCDialog;
 import com.guohanhealth.shop.custom.NCStoreVoucherPopupWindow;
 import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.ResponseData;
-import com.guohanhealth.shop.library.PullToRefreshBase;
 import com.guohanhealth.shop.library.PullToRefreshScrollView;
-import com.guohanhealth.shop.ncinterface.INCOnDialogConfirm;
 import com.guohanhealth.shop.ui.mine.LoginActivity;
 import com.guohanhealth.shop.ui.type.BuyStep1Activity;
+
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -429,7 +428,9 @@ public class CartFragment extends Fragment {
                     setCartTotal();
                     Intent intent = new Intent(Constants.SHOW_CART_NUM);
                     context.sendBroadcast(intent);
-                } catch (Exception e) {
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             } else {

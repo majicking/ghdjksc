@@ -10,8 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.Request;
-
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.EvaluateAddGoodsListAdapter;
@@ -24,11 +22,13 @@ import com.guohanhealth.shop.common.LogHelper;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.OkHttpUtil;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.custom.NoScrollListViewNormal;
 import com.guohanhealth.shop.custom.PhotoBottomDialog;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
+import com.squareup.okhttp.Request;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -44,7 +44,7 @@ import java.util.Set;
 
 /**
  * Created by wj on 2016/1/5.
- *追加评论界面
+ * 追加评论界面
  */
 public class EvaluateAddActivity extends BaseActivity {
 
@@ -59,7 +59,7 @@ public class EvaluateAddActivity extends BaseActivity {
     Map<String, String> commentCache = new HashMap<String, String>();
     private List<GoodsDetailForEvaluateAdd> goodsDetailForEvaluateAdd = new ArrayList<GoodsDetailForEvaluateAdd>();
     private String order_id;
-    private  Gson gson ;
+    private Gson gson;
 
     //商品图片缓存， 第一层标记商品编号，二层标记照片位置，第三层为图片属性
     HashMap<String, List<ImageFile>> itemImageBean = new HashMap<String, List<ImageFile>>();
@@ -67,6 +67,7 @@ public class EvaluateAddActivity extends BaseActivity {
     public static final int COMMENT_SUCCESS = 122;
     public static final int SELELCT_FILE_TO_UPLOAD_ITEM = 108;
     private static final int FLAG_CHOOSE_PHONE = 6;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +82,7 @@ public class EvaluateAddActivity extends BaseActivity {
         laodOrderData(order_id);
     }
 
-    private void initView(){
+    private void initView() {
 
         lvGoodEvaluate = (NoScrollListViewNormal) findViewById(R.id.lvGoodEvaluate);
         adapter = new EvaluateAddGoodsListAdapter(EvaluateAddActivity.this);
@@ -89,7 +90,7 @@ public class EvaluateAddActivity extends BaseActivity {
         adapter.notifyDataSetChanged();
         ll_description = (LinearLayout) findViewById(R.id.ll_description);
         ll_description.setVisibility(View.GONE);
-        btn_commit = (Button) findViewById(R.id.btn_commit) ;
+        btn_commit = (Button) findViewById(R.id.btn_commit);
 
     }
 
@@ -107,27 +108,21 @@ public class EvaluateAddActivity extends BaseActivity {
 
             @Override
             public void onResponse(String response) {
-                LogHelper.e("response", response);
                 ResponseData data = JsonFastUtil.fromJsonFast(response, ResponseData.class);
-                LogHelper.e("data", data.toString());
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
-
                         JSONObject obj = new JSONObject(data.getDatas());
-                        LogHelper.e("obj", obj.toString());
                         goodsDetailForEvaluateAdd = GoodsDetailForEvaluateAdd.newInstanceList(obj.optString("evaluate_goods"));
-                        LogHelper.e("goodsDetailForEvaluate", goodsDetailForEvaluateAdd.toString());
                         //刷新列表
                         adapter.setGoodsDetailForEvaluateList(goodsDetailForEvaluateAdd);
                         adapter.notifyDataSetChanged();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
-
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
-                    T.showLong(EvaluateAddActivity.this, "网络异常");
+                    ShopHelper.showApiError(EvaluateAddActivity.this, data.getJson());
                 }
 
 
@@ -172,6 +167,7 @@ public class EvaluateAddActivity extends BaseActivity {
 
     /**
      * 上传图片
+     *
      * @param file
      */
     public void uploadImage(File file) {
@@ -201,7 +197,7 @@ public class EvaluateAddActivity extends BaseActivity {
         }
         */
 
-        HashMap<String,String> params = new HashMap<String,String>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
         HashMap<String, File> fileMap = new HashMap<String, File>();
         fileMap.put("file", file);
@@ -213,7 +209,6 @@ public class EvaluateAddActivity extends BaseActivity {
             @Override
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
-                LogHelper.e("json", json);
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
                         JSONObject obj = new JSONObject(json);
@@ -237,18 +232,16 @@ public class EvaluateAddActivity extends BaseActivity {
 
                             itemImageBean.put(bottomDialog.getId(), imageList);
                         }
-
                         LogHelper.e("itemImageBean", itemImageBean.toString());
                         adapter.setData(itemImageBean);
                         bottomDialog.getmPhotoAdapter().setItemImageBean(itemImageBean);
                         itemImageBean = bottomDialog.getmPhotoAdapter().getItemImageBean();
                         bottomDialog.getmPhotoAdapter().notifyDataSetChanged();
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     T.showShort(EvaluateAddActivity.this, "文件上传失败");
                 }
@@ -260,11 +253,8 @@ public class EvaluateAddActivity extends BaseActivity {
     }
 
 
-
-
-
     //提交
-    public void btnCommitClick(View view){
+    public void btnCommitClick(View view) {
         String url = Constants.URL_ORDER_EVALUATE_ADD_COMMIT;
         commentCache = adapter.getCommentCache();
 
@@ -302,7 +292,7 @@ public class EvaluateAddActivity extends BaseActivity {
 
         }
 
-        LogHelper.e("params",params.toString());
+        LogHelper.e("params", params.toString());
         OkHttpUtil.postAsyn(EvaluateAddActivity.this, url, new OkHttpUtil.ResultCallback<String>() {
                     @Override
                     public void onError(Request request, Exception e) {
@@ -311,16 +301,22 @@ public class EvaluateAddActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response) {
-                        LogHelper.e("response", response);
-                         ResponseData data = JsonFastUtil.fromJsonFast(response, ResponseData.class);
-                        //ResponseData data = gson.fromJson(response, ResponseData.class);
-                        if (data.getCode() == HttpStatus.SC_OK) {
-                            if (data.getDatas().equals("1")) {
-                                setResult(COMMENT_SUCCESS);
-                                T.showShort(EvaluateAddActivity.this, "评论成功");
+                        try {
+                            ResponseData data = JsonFastUtil.fromJsonFast(response, ResponseData.class);
+                            //ResponseData data = gson.fromJson(response, ResponseData.class);
+                            if (data.getCode() == HttpStatus.SC_OK) {
+                                if (data.getDatas().equals("1")) {
+                                    setResult(COMMENT_SUCCESS);
+                                    T.showShort(EvaluateAddActivity.this, "评论成功");
+                                }
+                            } else {
+                                ShopHelper.showApiError(EvaluateAddActivity.this, data.getJson());
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            finish();
                         }
-                        finish();
 
                     }
                 }, params
@@ -332,6 +328,7 @@ public class EvaluateAddActivity extends BaseActivity {
 
     /**
      * 选择照片后的回调方法
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -357,7 +354,7 @@ public class EvaluateAddActivity extends BaseActivity {
             case FLAG_CHOOSE_PHONE:
                 if (resultCode == RESULT_OK) {
                     String imgpath = myApplication.getImgPath();
-                    LogHelper.e("imgpath",imgpath);
+                    LogHelper.e("imgpath", imgpath);
                     File file = new File(imgpath);
                     if (file.length() < 1024 * 1024) {
                         uploadImage(file);
@@ -369,7 +366,6 @@ public class EvaluateAddActivity extends BaseActivity {
         }
 
     }
-
 
 
 }

@@ -20,9 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.pay.PayResult;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.VirtualGoodsInFo;
@@ -31,6 +28,7 @@ import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.JSONParser;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.StringUtil;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.common.Utils;
@@ -42,6 +40,9 @@ import com.guohanhealth.shop.ncinterface.DataCallback;
 import com.guohanhealth.shop.newpackage.OrderActivity;
 import com.guohanhealth.shop.newpackage.ProgressDialog;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.zcw.togglebutton.ToggleButton;
 
 import org.apache.http.HttpStatus;
@@ -609,17 +610,8 @@ public class VBuyStep1Activity extends BaseActivity implements OnClickListener {
                 if (json.equals("1")) {
                     sendBuyStep2Data(password, buyer_phone);
                 }
-
             } else {
-                try {
-                    JSONObject obj = new JSONObject(json);
-                    String error = obj.getString("error");
-                    if (error != null) {
-                        Toast.makeText(VBuyStep1Activity.this, error, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                ShopHelper.showApiError(VBuyStep1Activity.this, json);
             }
         });
     }

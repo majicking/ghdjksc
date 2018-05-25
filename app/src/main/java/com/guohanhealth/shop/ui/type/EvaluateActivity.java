@@ -21,6 +21,7 @@ import com.guohanhealth.shop.common.FileUtils;
 import com.guohanhealth.shop.common.LogHelper;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.custom.NoScrollListViewNormal;
 import com.guohanhealth.shop.custom.PhotoBottomDialog;
@@ -115,7 +116,6 @@ public class EvaluateActivity extends BaseActivity {
             @Override
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
-//                LogHelper.e("json", json);
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
                         JSONObject obj = new JSONObject(json);
@@ -134,11 +134,11 @@ public class EvaluateActivity extends BaseActivity {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
-                    T.showLong(EvaluateActivity.this, "网络异常");
+                    ShopHelper.showApiError(EvaluateActivity.this, data.getJson());
                 }
 
             }
@@ -180,9 +180,7 @@ public class EvaluateActivity extends BaseActivity {
             @Override
             public void dataLoaded(ResponseData data) {
                 String json = data.getJson();
-//                LogHelper.e("xxjson", json);
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     try {
                         JSONObject obj = new JSONObject(json);
                         int file_id = obj.optInt("file_id");
@@ -211,12 +209,11 @@ public class EvaluateActivity extends BaseActivity {
                         bottomDialog.getmPhotoAdapter().setItemImageBean(itemImageBean);
                         itemImageBean = bottomDialog.getmPhotoAdapter().getItemImageBean();
                         bottomDialog.getmPhotoAdapter().notifyDataSetChanged();
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 } else {
                     T.showShort(EvaluateActivity.this, "文件上传失败");
                 }

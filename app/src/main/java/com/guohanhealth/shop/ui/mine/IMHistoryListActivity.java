@@ -1,9 +1,11 @@
 package com.guohanhealth.shop.ui.mine;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.ImHistoryListViewAdapter;
@@ -11,6 +13,7 @@ import com.guohanhealth.shop.bean.IMHistoryList;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.SmiliesData;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.custom.XListView.IXListViewListener;
@@ -22,13 +25,10 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
-import android.widget.Toast;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * 聊天记录列表界面
@@ -115,7 +115,6 @@ public class IMHistoryListActivity extends Activity implements OnClickListener, 
 
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-
                     if (!data.isHasMore()) {
                         listViewID.setPullLoadEnable(false);
                     } else {
@@ -124,32 +123,20 @@ public class IMHistoryListActivity extends Activity implements OnClickListener, 
                     if (pageno == 1) {
                         historyLists.clear();
                     }
-
                     try {
-
                         JSONObject obj = new JSONObject(json);
-
                         String objJson = obj.getString("list");
-
                         ArrayList<IMHistoryList> fList = IMHistoryList.newInstanceList(objJson);
-
                         historyLists.addAll(fList);
                         adapter.setHistoryLists(historyLists);
                         adapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
-
-                } else {
-                    try {
-                        JSONObject obj2 = new JSONObject(json);
-                        String error = obj2.getString("error");
-                        if (error != null) {
-                            Toast.makeText(IMHistoryListActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
+                } else {
+                    ShopHelper.showApiError(IMHistoryListActivity.this, json);
                 }
             }
         });

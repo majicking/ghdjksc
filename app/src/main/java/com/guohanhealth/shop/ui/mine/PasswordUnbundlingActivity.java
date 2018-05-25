@@ -108,6 +108,8 @@ public class PasswordUnbundlingActivity extends BaseActivity {
                         ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 } else {
                     ShopHelper.showApiError(PasswordUnbundlingActivity.this, json);

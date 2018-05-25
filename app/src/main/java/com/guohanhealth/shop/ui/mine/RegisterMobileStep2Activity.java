@@ -91,6 +91,10 @@ public class RegisterMobileStep2Activity extends BaseActivity {
                             smsTime = Integer.parseInt(obj.getString("sms_time"));
                             ShopHelper.btnSmsCaptchaCountDown(RegisterMobileStep2Activity.this, btnGetSmsCaptcha, smsTime);
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }finally {
                             Toast.makeText(RegisterMobileStep2Activity.this, "短信发送失败", Toast.LENGTH_SHORT).show();
                         }
                     } else {

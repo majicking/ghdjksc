@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.guohanhealth.shop.BaseActivity;
@@ -71,11 +72,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private UMShareAPI mShareAPI = null;
     private String uid;
+    private TextView viewById;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_view);
+        viewById = (TextView) findViewById(R.id.text);
         mShareAPI = UMShareAPI.get(this);
         myApplication = (MyShopApplication) getApplicationContext();
         MyExceptionHandler.getInstance().setContext(this);
@@ -197,8 +200,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      */
     public void btnFindPasswordClick(View v) {
         try {
-            Intent intent=new Intent(mActivity, WebViewActivity.class);
-            intent.putExtra("url",Constants.WAP_FIND_PASSWORD);
+            Intent intent = new Intent(mActivity, WebViewActivity.class);
+            intent.putExtra("url", Constants.WAP_FIND_PASSWORD);
 //            Intent intent = new Intent(Intent.ACTION_VIEW);
 //            intent.setData(Uri.parse(Constants.WAP_FIND_PASSWORD));
             startActivity(intent);
@@ -275,74 +278,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-//
-//    //授权
-//    private UMAuthListener umAuthListener = new UMAuthListener() {
-//
-//        @Override
-//        public void onStart(SHARE_MEDIA share_media) {
-//
-//        }
-//
-//        @Override
-//        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-//            if (data != null) {
-//                if (platform == SHARE_MEDIA.QQ) {
-//                    token = data.get("access_token");
-//                    openid = data.get("openid");
-//                    UMShareAPI.get(LoginActivity.this).getPlatformInfo(LoginActivity.this, platform, userinfo);
-//
-//                } else if (platform == SHARE_MEDIA.WEIXIN) {
-//                    String access_token = data.get("access_token");
-//                    String openid = data.get("openid");
-//                    loginWx(access_token, openid);
-//
-//                } else if (platform == SHARE_MEDIA.SINA) {
-//                    String accessToken = data.get("access_token");
-//                    String userId = data.get("uid");
-//                    loginWeibo(accessToken, userId);
-//                }
-//
-//            }
-//
-//        }
-//
-//        @Override
-//        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-//            Toast.makeText(getApplicationContext(), "授权失败", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        @Override
-//        public void onCancel(SHARE_MEDIA platform, int action) {
-//            Toast.makeText(getApplicationContext(), "取消授权", Toast.LENGTH_SHORT).show();
-//        }
-//    };
 
 
-    //获取用户信息
-    private UMAuthListener userinfo = new UMAuthListener() {
-
-
-        @Override
-        public void onStart(SHARE_MEDIA share_media) {
-
-        }
-
-        @Override
-        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-            Toast.makeText(getApplicationContext(), "获取用户信息失败", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA share_media, int i) {
-            Toast.makeText(getApplicationContext(), "取消授权", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -356,7 +293,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         SHARE_MEDIA platform = null;
         switch (view.getId()) {
             case R.id.btnQQ:
-
                 platform = SHARE_MEDIA.QQ;
                 break;
             case R.id.btnWeiXin:
@@ -375,7 +311,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     //授权
     private void authorization(SHARE_MEDIA share_media) {
-        if (share_media!=SHARE_MEDIA.SINA&&!UMShareAPI.get(LoginActivity.this).isInstall(this, share_media)) {
+        LogUtils.i("安装客户端？" + UMShareAPI.get(LoginActivity.this).isInstall(this, share_media));
+        if (share_media != SHARE_MEDIA.SINA && !UMShareAPI.get(LoginActivity.this).isInstall(this, share_media)) {
             Toast.makeText(LoginActivity.this, "未安装客户端", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -431,12 +368,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     public void onComplete(SHARE_MEDIA platform, int i, Map<String, String> map) {
+                        StringBuffer buffer = new StringBuffer();
                         if (map != null && map.size() > 0) {
                             for (Map.Entry e : map.entrySet()) {
                                 LogUtils.i("key " + e.getKey() + "VALUE=" + e.getValue());
+                                buffer.append("key " + e.getKey() + "VALUE=" + e.getValue() + "\n");
                             }
                         }
-
+//                        viewById.setText(buffer.toString());
                         LogUtils.i("onComplete " + "授权完成");
                         if (map != null) {
                             //sdk是6.4.4的,但是获取值的时候用的是6.2以前的(access_token)才能获取到值,未知原因

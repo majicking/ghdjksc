@@ -43,12 +43,6 @@
     <uses-permission android:name="android.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS" />
 
-    <!-- 适配Android N系统必需的ContentProvider写权限声明，写权限包含应用包名-->
-    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.guohanhealth.shop" />
-    <permission
-        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.guohanhealth.shop"
-        android:protectionLevel="normal">
-    </permission>
 
 
     <application
@@ -516,13 +510,6 @@
         </service>
         <service
             android:name="com.baidu.android.pushservice.CommandService"
-            android:exported="true" />
-        <!-- 适配Android N系统必需的ContentProvider声明，写权限包含应用包名-->
-        <provider
-            android:name="com.baidu.android.pushservice.PushInfoProvider"
-            android:authorities="com.guohanhealth.shop.bdpush"
-            android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.guohanhealth.shop"
-            android:protectionLevel = "signature"
             android:exported="true" />
         <!-- 在百度开发者中心查询应用的API Key -->
         <meta-data

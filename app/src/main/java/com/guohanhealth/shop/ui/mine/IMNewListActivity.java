@@ -11,16 +11,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
-
 import com.guohanhealth.shop.adapter.IMNewListViewAdapter;
 import com.guohanhealth.shop.bean.IMFriendsList;
 import com.guohanhealth.shop.bean.IMMsgList;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyShopApplication;
+import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
@@ -43,6 +42,7 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
     private IMNewListViewAdapter adapter;
     private HashMap<String, Integer> message_num = new HashMap<String, Integer>();
     private LinearLayout llNoData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +58,7 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
     public void initViewID() {
         common_listview = (XListView) findViewById(R.id.common_listview);
         adapter = new IMNewListViewAdapter(IMNewListActivity.this);
-        llNoData = (LinearLayout)findViewById(R.id.llNoData);
+        llNoData = (LinearLayout) findViewById(R.id.llNoData);
         llNoData.setVisibility(View.GONE);
         common_listview.setAdapter(adapter);
 
@@ -68,7 +68,7 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
         common_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                XListView listView = (XListView)adapterView;
+                XListView listView = (XListView) adapterView;
                 IMFriendsList bean = (IMFriendsList) listView.getItemAtPosition(i);
 
                 if (bean != null) {
@@ -107,6 +107,7 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
             }
         });
     }
+
     /**
      * 加载列表数据
      */
@@ -120,9 +121,8 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
             @Override
             public void dataLoaded(ResponseData data) {
                 common_listview.stopRefresh();
+                String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
-                    String json = data.getJson();
-
                     ArrayList<IMFriendsList> friendsC0List = new ArrayList<IMFriendsList>();
                     JSONObject object = new JSONObject();//记录UID
                     try {
@@ -130,16 +130,16 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
                         String uList = obj.getString("list");
                         JSONObject arr = new JSONObject(uList);
                         int size = null == arr ? 0 : arr.length();
-                        if(size<1){
+                        if (size < 1) {
                             llNoData.setVisibility(View.VISIBLE);
-                        }else{
+                        } else {
                             Iterator<?> itName = arr.keys();
                             while (itName.hasNext()) {
                                 String ID = itName.next().toString();
                                 String str = arr.getString(ID);
                                 IMFriendsList bean = IMFriendsList.newInstanceList(str);
 //                                if (bean.getFriend() != null && bean.getFriend().equals("1")) {
-                                    friendsC0List.add(bean);
+                                friendsC0List.add(bean);
 //                                }
                                 object.put(bean.getU_id(), "0");
                             }
@@ -150,13 +150,15 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
                     } catch (JSONException e) {
                         llNoData.setVisibility(View.VISIBLE);
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                     MyShopApplication.getInstance().UpDateUser();
 
                     MyShopApplication.getInstance().getmSocket().emit("get_state", object);
                 } else {
                     llNoData.setVisibility(View.VISIBLE);
-                    Toast.makeText(IMNewListActivity.this, getResources().getString(R.string.load_error), Toast.LENGTH_SHORT).show();
+                    ShopHelper.showApiError(IMNewListActivity.this,json);
                 }
             }
         });
@@ -180,21 +182,11 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
                     if (json.equals("1")) {
-                        T.showShort (IMNewListActivity.this, "删除成功");
-
+                        T.showShort(IMNewListActivity.this, "删除成功");
                         loadingFriendsListData();//初始化加载数据
                     }
                 } else {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        String error = obj.getString("error");
-                        if (error != null) {
-                            T.showShort (IMNewListActivity.this, error);
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ShopHelper.showApiError(IMNewListActivity.this, json);
                 }
             }
         });

@@ -54,6 +54,9 @@
                 android:padding="5dip" >
 
                 <EditText
+                    android:maxLines="1"
+                    android:maxLength="11"
+                    android:inputType="numberDecimal"
                     android:id="@+id/editPhoneID"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -534,7 +537,8 @@
                     android:background="@drawable/edit_bg"
                     android:hint="请输入支付密码"
                     android:padding="10dip"
-                    android:password="true"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="15dp" />
             </LinearLayout>

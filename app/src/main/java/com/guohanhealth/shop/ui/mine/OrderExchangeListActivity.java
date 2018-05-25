@@ -118,8 +118,9 @@ public class OrderExchangeListActivity extends BaseActivity {
                         }
                     }catch (JSONException e){
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 }else{
                     ShopHelper.showApiError(OrderExchangeListActivity.this,json);
                 }
@@ -148,8 +149,9 @@ public class OrderExchangeListActivity extends BaseActivity {
                         }
                     }catch (JSONException e){
                         e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
                 }else{
                     ShopHelper.showApiError(OrderExchangeListActivity.this,json);
                 }
