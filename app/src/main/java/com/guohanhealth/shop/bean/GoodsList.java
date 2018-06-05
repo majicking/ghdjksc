@@ -37,6 +37,7 @@ public class GoodsList {
         public static final String STORE_NAME = "store_name";
         public static final String IS_OWN_SHOP = "is_own_shop";
         public static final String GOODS_ADDTIME = "goods_addtime";
+        public static final String GOODS_GRADE = "goods_grade";
     }
 
     private String goods_id;
@@ -61,6 +62,7 @@ public class GoodsList {
     private String store_name;
     private String is_own_shop;
     private String goods_addtime;//INSERT
+    private String goods_grade;//星级
 
     public GoodsList() {
     }
@@ -73,7 +75,7 @@ public class GoodsList {
                      String xianshi_flag, String goods_image_url, String goods_name,
                      String is_virtual, String is_fcode, String is_appoint,
                      String is_presell, String have_gift, String sole_flag, String goods_jingle,
-                     String store_id, String store_name, String is_own_shop,String goods_addtime) {
+                     String store_id, String store_name, String is_own_shop,String goods_addtime,String goods_grade) {
         super();
         this.goods_id = goods_id;
         this.goods_price = goods_price;
@@ -97,6 +99,7 @@ public class GoodsList {
         this.store_name = store_name;
         this.is_own_shop = is_own_shop;
         this.goods_addtime = goods_addtime;
+        this.goods_grade = goods_grade;
     }
 
 
@@ -129,12 +132,13 @@ public class GoodsList {
                 String store_name = obj.optString(Attr.STORE_NAME);
                 String is_own_shop = obj.optString(Attr.IS_OWN_SHOP);
                 String goods_addtime = obj.optString(Attr.GOODS_ADDTIME);
+                String goods_grade = obj.optString(Attr.GOODS_GRADE);
                 GoodsList bean = new GoodsList(goods_id, goods_price,
                         goods_marketprice, goods_image, goods_salenum,
                         evaluation_good_star, evaluation_count, group_flag,
                         xianshi_flag, goods_image_url, goods_name, is_virtual,
                         is_fcode, is_appoint, is_presell, have_gift, sole_flag,
-                        goods_jingle, store_id, store_name, is_own_shop,goods_addtime);
+                        goods_jingle, store_id, store_name, is_own_shop,goods_addtime,goods_grade);
                 AdvertDatas.add(bean);
             }
         } catch (JSONException e) {
@@ -349,6 +353,14 @@ public class GoodsList {
 
     public void setGoods_addtime(String goods_addtime) {
         this.goods_addtime = goods_addtime;
+    }
+
+    public String getGoods_grade() {
+        return goods_grade;
+    }
+
+    public void setGoods_grade(String goods_grade) {
+        this.goods_grade = goods_grade;
     }
 
     @Override

@@ -773,23 +773,27 @@ public class ZhiBoActivity extends Activity {
             pwSpec = new FenxiaoGoodsSpecPopupWindow(this, incOnNumModify, incOnStringModify);
         }
         ifcart = goodsBean.getGoods_info().getCart() + "";
-        String goods_image = Arrays.asList(goodsBean.getGoods_image().split(",")).get(0);
+        try {
+            String goods_image = Arrays.asList(goodsBean.getGoods_image().split(",")).get(0);
 //        Logger.d(goods_image);
-        String store_info = goodsBean.getStore_info();
-        com.guohanhealth.shop.bean.StoreInfo storeInfo = StoreInfo.newInstanceList(store_info);
-        t_id = storeInfo.getStoreId();
-        t_name = storeInfo.getMemberName();
-        pwSpec.setGoodsInfo(goodsBean.getGoods_info().getGoods_name(), goods_image, goodsBean.getGoods_info().getGoods_price(),
-                goodsBean.getGoods_info().getGoods_storage(), goodsBean.getGoods_info().getGoods_id(), ifcart, goodsNum, goodsLimit,
-                goodsBean.getGoods_info().getIs_fcode(), goodsBean.getGoods_info().getIs_virtual(), t_id, t_name);
+            String store_info = goodsBean.getStore_info();
+            com.guohanhealth.shop.bean.StoreInfo storeInfo = StoreInfo.newInstanceList(store_info);
+            t_id = storeInfo.getStoreId();
+            t_name = storeInfo.getMemberName();
+            pwSpec.setGoodsInfo(goodsBean.getGoods_info().getGoods_name(), goods_image, goodsBean.getGoods_info().getGoods_price(),
+                    goodsBean.getGoods_info().getGoods_storage(), goodsBean.getGoods_info().getGoods_id(), ifcart, goodsNum, goodsLimit,
+                    goodsBean.getGoods_info().getIs_fcode(), goodsBean.getGoods_info().getIs_virtual(), t_id, t_name);
 
-        String spec_name = goodsBean.getGoods_info().getSpec_name();
-        String spec_value = goodsBean.getGoods_info().getSpec_value();
-        String goods_spec = goodsBean.getGoods_info().getGoods_spec();
+            String spec_name = goodsBean.getGoods_info().getSpec_name();
+            String spec_value = goodsBean.getGoods_info().getSpec_value();
+            String goods_spec = goodsBean.getGoods_info().getGoods_spec();
 
-        pwSpec.setSpecInfo(goodsBean.getSpec_list(), spec_name, spec_value, goods_spec);
+            pwSpec.setSpecInfo(goodsBean.getSpec_list(), spec_name, spec_value, goods_spec);
 
-        pwSpec.setFenxiao(distri_id);
+            pwSpec.setFenxiao(distri_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadingGoodsDetailsData(String goods_commonid, String dis_memberid) {
@@ -863,7 +867,7 @@ public class ZhiBoActivity extends Activity {
                 } else {
                     ShopHelper.showApiError(getApplicationContext(), json);
                 }
-               
+
                 ProgressDialog.dismissDialog(progressDialog);
             }
         });

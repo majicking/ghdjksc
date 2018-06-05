@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 public class RegisterMobileStep3Activity extends BaseActivity {
 
     private MyShopApplication myApplication;
-    private EditText etPassword;
+    private EditText etPassword, username, checkcode, pwd2;
     private ImageButton btnShowPassowrd;
     private Button btnRegSubmit;
 
@@ -48,7 +49,9 @@ public class RegisterMobileStep3Activity extends BaseActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnShowPassowrd = (ImageButton) findViewById(R.id.btnShowPassword);
         btnRegSubmit = (Button) findViewById(R.id.btnRegSubmit);
-
+        username = (EditText) findViewById(R.id.edusername);
+        checkcode = (EditText) findViewById(R.id.etcode);
+        pwd2 = (EditText) findViewById(R.id.etPassword1);
         etPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -62,7 +65,7 @@ public class RegisterMobileStep3Activity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (etPassword.getText().toString().length() > 0) {
+                if (etPassword.getText().toString().length() > 0&&pwd2.getText().toString().length()>0) {
                     btnRegSubmit.setActivated(true);
                 } else {
                     btnRegSubmit.setActivated(false);
@@ -79,9 +82,11 @@ public class RegisterMobileStep3Activity extends BaseActivity {
     public void btnShowPasswordClick(View v) {
         if (btnShowPassowrd.isSelected()) {
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            pwd2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             btnShowPassowrd.setSelected(false);
         } else {
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+            pwd2.setInputType(InputType.TYPE_CLASS_TEXT);
             btnShowPassowrd.setSelected(true);
         }
     }
@@ -92,13 +97,28 @@ public class RegisterMobileStep3Activity extends BaseActivity {
     public void btnRegSubmitClick(View v) {
         if (btnRegSubmit.isActivated()) {
             String password = etPassword.getText().toString();
+            String password1 = pwd2.getText().toString();
+            String name = username.getText().toString();
+            String code = checkcode.getText().toString();
             int length = password.length();
+            int length1 = password1.length();
+            int length2 = name.length();
             if (length < 6 || length > 20) {
                 ShopHelper.showMessage(RegisterMobileStep3Activity.this, "请输入6-20位密码");
                 return;
             }
+            if (length1 < 6 || length1 > 20) {
+                ShopHelper.showMessage(RegisterMobileStep3Activity.this, "请输入6-20位密码");
+                return;
+            }
+            if (length2 < 6 || length2 > 20) {
+                ShopHelper.showMessage(RegisterMobileStep3Activity.this, "请输入6-20用户名");
+                return;
+            }
 
             HashMap<String, String> params = new HashMap<String, String>();
+            params.put("referral_code", TextUtils.isEmpty(code) ? "" : code);
+            params.put("username", name);
             params.put("phone", phone);
             params.put("captcha", captcha);
             params.put("password", password);

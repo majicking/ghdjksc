@@ -192,6 +192,7 @@ public class MineFragment extends Fragment {
                             @Override
                             public void onFailure(Request request, IOException e) {
                             }
+
                             //得到从网上获取资源，转换成我们想要的类型
                             @Override
                             public void onResponse(Response response) throws IOException {
@@ -268,6 +269,7 @@ public class MineFragment extends Fragment {
             }
         });
     }
+
     /**
      * 初始化用户信息相关按钮
      *
@@ -310,6 +312,7 @@ public class MineFragment extends Fragment {
             }
         });
     }
+
     /**
      * 初始化订单相关按钮
      *
@@ -333,8 +336,11 @@ public class MineFragment extends Fragment {
         setOrderButtonEvent(llOrderNoeval, "state_noeval");
         //退款退货
         LinearLayout llRefund = (LinearLayout) viewLayout.findViewById(R.id.llRefund);
-        llRefund.setOnClickListener(view ->
-                startActivity(new Intent(getActivity(), OrderExchangeListActivity.class)));
+        llRefund.setOnClickListener(view -> {
+            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
+                startActivity(new Intent(getActivity(), OrderExchangeListActivity.class));
+            }
+        });
     }
 
     /**
@@ -400,6 +406,7 @@ public class MineFragment extends Fragment {
     private void setOrderButtonEvent(LinearLayout btn, final String stateType) {
         btn.setOnClickListener(view -> showOrderList(stateType));
     }
+
     /**
      * 显示订单列表
      */
@@ -458,6 +465,7 @@ public class MineFragment extends Fragment {
             }
         }
     };
+
     public void registerBoradcastReceiver() {
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(Constants.LOGIN_SUCCESS_URL);
@@ -562,7 +570,7 @@ public class MineFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {

@@ -58,7 +58,7 @@ public class DianboAudeoInfoActivity extends BaseActivity {
 
     private DemandInfo demandInfo;
     private GiraffePlayer player;
-    private ImageView dian_logo,dian_shoucang,iv_image_bg;
+    private ImageView dian_logo, dian_shoucang, iv_image_bg;
     private TextView dian_title;
     private LinearLayout img1_text;
 
@@ -74,6 +74,7 @@ public class DianboAudeoInfoActivity extends BaseActivity {
     private INCOnStringModify incOnStringModify;
     private FenxiaoGoodsSpecPopupWindow pwSpec;
     private String goods_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,19 +84,21 @@ public class DianboAudeoInfoActivity extends BaseActivity {
         initView();
         initDate();
     }
+
     private LinearLayout.LayoutParams params;
 
-    private int mDefaultHeadHeight,displayWidth;
-    public void initView(){
-        myListView = (MyListView)findViewById(R.id.list);
-        video_text = (LinearLayout)findViewById(R.id.video_text);
-        img1_text = (LinearLayout)findViewById(R.id.img1_text);
-        iv_image_bg = (ImageView)findViewById(R.id.iv_image_bg);
+    private int mDefaultHeadHeight, displayWidth;
+
+    public void initView() {
+        myListView = (MyListView) findViewById(R.id.list);
+        video_text = (LinearLayout) findViewById(R.id.video_text);
+        img1_text = (LinearLayout) findViewById(R.id.img1_text);
+        iv_image_bg = (ImageView) findViewById(R.id.iv_image_bg);
 
 
-        vocabulary_nested_scroll = (MyScrollView)findViewById(R.id.vocabulary_nested_scroll);
+        vocabulary_nested_scroll = (MyScrollView) findViewById(R.id.vocabulary_nested_scroll);
 
-        player = new GiraffePlayer(DianboAudeoInfoActivity.this,null);
+        player = new GiraffePlayer(DianboAudeoInfoActivity.this, null);
 
         player.onComplete(new Runnable() {
             @Override
@@ -126,21 +129,21 @@ public class DianboAudeoInfoActivity extends BaseActivity {
         }).onError(new GiraffePlayer.OnErrorListener() {
             @Override
             public void onError(int what, int extra) {
-                Toast.makeText(getApplicationContext(), "视频播放失败",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "视频播放失败", Toast.LENGTH_SHORT).show();
             }
         });
         audeoInfoAdapter = new DianboAudeoInfoAdapter(getApplicationContext());
         myListView.setAdapter(audeoInfoAdapter);
 
-        dian_logo = (ImageView)findViewById(R.id.dian_logo);
-        dian_shoucang = (ImageView)findViewById(R.id.dian_shoucang);
-        dian_title = (TextView)findViewById(R.id.dian_title);
+        dian_logo = (ImageView) findViewById(R.id.dian_logo);
+        dian_shoucang = (ImageView) findViewById(R.id.dian_shoucang);
+        dian_title = (TextView) findViewById(R.id.dian_title);
         dian_shoucang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!demandInfo.isIs_favorate()){
+                if (!demandInfo.isIs_favorate()) {
                     ShouCang(demandInfo.getStore_id());
-                }else {
+                } else {
                     UnShouCang(demandInfo.getStore_id());
                 }
             }
@@ -149,7 +152,7 @@ public class DianboAudeoInfoActivity extends BaseActivity {
         displayWidth = video_text.getWidth();
 
         final int navHeight = 60;
-        final int navWidth =  displayWidth;
+        final int navWidth = displayWidth;
         vocabulary_nested_scroll.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void onScroll(final int scrollY) {
@@ -182,48 +185,49 @@ public class DianboAudeoInfoActivity extends BaseActivity {
     }
 
 
-    public void initDate(){
-        String url = Constants.URL_DIANBO_CONTENT + "&video_id=" + demand_id + "&key=" + MyShopApplication.getInstance().getLoginKey() ;
+    public void initDate() {
+        String url = Constants.URL_DIANBO_CONTENT + "&video_id=" + demand_id + "&key=" + MyShopApplication.getInstance().getLoginKey();
         Logger.d(url);
         RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
             @Override
             public void dataLoaded(ResponseData data) {
                 Logger.d(data.getJson());
-                if(data.getCode() == 200){
-                    String demand_info = JsonUtil.getString(data.getJson(),"demand_info");
-                    demandInfo = JsonUtil.getBean(demand_info,DemandInfo.class);
+                if (data.getCode() == 200) {
+                    String demand_info = JsonUtil.getString(data.getJson(), "demand_info");
+                    demandInfo = JsonUtil.getBean(demand_info, DemandInfo.class);
 
-                    String recommend_goods_list = JsonUtil.getString(data.getJson(),"recommend_goods_common_list");
+                    String recommend_goods_list = JsonUtil.getString(data.getJson(), "recommend_goods_common_list");
 //                    String goods_detail = JsonUtil.getString(recommend_goods_list,"goods_detail");
 //                    ArrayList<TuijianGoods> list = TuijianGoods.getInstanceList(goods_detail);
-                    ArrayList<GoodsCommonLists> list = JsonUtil.getBean(recommend_goods_list,new TypeToken<ArrayList<GoodsCommonLists>>(){}.getType());
+                    ArrayList<GoodsCommonLists> list = JsonUtil.getBean(recommend_goods_list, new TypeToken<ArrayList<GoodsCommonLists>>() {
+                    }.getType());
 
                     mList.addAll(list);
                     audeoInfoAdapter.setmList(mList);
                     dian_title.setText(demandInfo.getStore_info().getStore_name());
 //                    LoadImage.loadImg(getApplicationContext(), dian_logo, demandInfo.getStore_info().getStore_label());
                     Glide.with(getApplicationContext()).load(demandInfo.getStore_info().getStore_label()).transform(new GlideCircleTransform(getApplicationContext())).into(dian_logo);
-                    if(!demandInfo.isIs_favorate()){
+                    if (!demandInfo.isIs_favorate()) {
                         dian_shoucang.setImageResource(R.drawable.shouocang);
-                    }else {
+                    } else {
                         dian_shoucang.setImageResource(R.drawable.yishoucang);
                     }
                     String palyerurl = demandInfo.getDemand_video_url();
 //                    String palyerurl = "http://live.shopnctest.com/shopnc/test1.m3u8";
 
-                    if(!StringUtils.isEmpty(palyerurl)) {
+                    if (!StringUtils.isEmpty(palyerurl)) {
 
                         video_text.setVisibility(View.VISIBLE);
                         img1_text.setVisibility(View.GONE);
                         player.play(palyerurl);
                         player.start();
-                    }else {
+                    } else {
                         video_text.setVisibility(View.GONE);
                         img1_text.setVisibility(View.VISIBLE);
-                        LoadImage.loadImg(getApplicationContext(),iv_image_bg,demandInfo.getPromote_image_url());
+                        LoadImage.loadImg(getApplicationContext(), iv_image_bg, demandInfo.getPromote_image_url());
                     }
-                }else {
-                    ShopHelper.showApiError(getApplicationContext(),data.getJson());
+                } else {
+                    ShopHelper.showApiError(getApplicationContext(), data.getJson());
                 }
             }
         });
@@ -232,7 +236,7 @@ public class DianboAudeoInfoActivity extends BaseActivity {
 
 
     /*收藏*/
-    public void ShouCang(String store_id){
+    public void ShouCang(String store_id) {
         String url = Constants.URL_STORE_ADD_FAVORITES;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", MyShopApplication.getInstance().getLoginKey());
@@ -248,13 +252,14 @@ public class DianboAudeoInfoActivity extends BaseActivity {
                         initDate();
                     }
                 } else {
-                    ShopHelper.showApiError(getApplicationContext(),json);
+                    ShopHelper.showApiError(getApplicationContext(), json);
                 }
             }
         });
     }
+
     /*取消收藏*/
-    public void UnShouCang(String store_id){
+    public void UnShouCang(String store_id) {
         String url = Constants.URL_STORE_DELETE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", MyShopApplication.getInstance().getLoginKey());
@@ -271,7 +276,7 @@ public class DianboAudeoInfoActivity extends BaseActivity {
                         initDate();
                     }
                 } else {
-                    ShopHelper.showApiError(getApplicationContext(),json);
+                    ShopHelper.showApiError(getApplicationContext(), json);
                 }
             }
         });
@@ -310,27 +315,31 @@ public class DianboAudeoInfoActivity extends BaseActivity {
         if (pwSpec == null) {
             pwSpec = new FenxiaoGoodsSpecPopupWindow(this, incOnNumModify, incOnStringModify);
         }
-        ifcart = goodsBean.getGoods_info().getCart()+"";
+        ifcart = goodsBean.getGoods_info().getCart() + "";
         String goods_image = Arrays.asList(goodsBean.getGoods_image().split(",")).get(0);
 //        Logger.d(goods_image);
         String store_info = goodsBean.getStore_info();
-        com.guohanhealth.shop.bean.StoreInfo  storeInfo = StoreInfo.newInstanceList(store_info);
+        com.guohanhealth.shop.bean.StoreInfo storeInfo = StoreInfo.newInstanceList(store_info);
         t_id = storeInfo.getStoreId();
         t_name = storeInfo.getMemberName();
-        pwSpec.setGoodsInfo(goodsBean.getGoods_info().getGoods_name(),goods_image , goodsBean.getGoods_info().getGoods_price(),
-                goodsBean.getGoods_info().getGoods_storage(), goodsBean.getGoods_info().getGoods_id(), ifcart, goodsNum, goodsLimit,
-                goodsBean.getGoods_info().getIs_fcode(), goodsBean.getGoods_info().getIs_virtual(),t_id,t_name);
-
+        try {
+            pwSpec.setGoodsInfo(goodsBean.getGoods_info().getGoods_name(), goods_image, goodsBean.getGoods_info().getGoods_price(),
+                    goodsBean.getGoods_info().getGoods_storage(), goodsBean.getGoods_info().getGoods_id(), ifcart, goodsNum, goodsLimit,
+                    goodsBean.getGoods_info().getIs_fcode(), goodsBean.getGoods_info().getIs_virtual(), t_id, t_name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String spec_name = goodsBean.getGoods_info().getSpec_name();
         String spec_value = goodsBean.getGoods_info().getSpec_value();
         String goods_spec = goodsBean.getGoods_info().getGoods_spec();
 
 
-        pwSpec.setSpecInfo(goodsBean.getSpec_list(),spec_name,spec_value, goods_spec);
+        pwSpec.setSpecInfo(goodsBean.getSpec_list(), spec_name, spec_value, goods_spec);
 
 
     }
-//    private void loadingGoodsDetailsData(String goods_id) {
+
+    //    private void loadingGoodsDetailsData(String goods_id) {
 //
 //        String url = Constants.URL_GOODSDETAILS + "&goods_id=" + goods_id + "&key=" + MyShopApplication.getInstance().getLoginKey();
 //
@@ -365,7 +374,7 @@ public class DianboAudeoInfoActivity extends BaseActivity {
 //        });
 //    }
     private void loadingGoodsDetailsData1(String goods_commonid) {
-       Dialog progressDialog = ProgressDialog.showLoadingProgress(DianboAudeoInfoActivity.this,"正在加载中...");
+        Dialog progressDialog = ProgressDialog.showLoadingProgress(DianboAudeoInfoActivity.this, "正在加载中...");
         progressDialog.show();
         String url = Constants.URL_RECOMMEND_GOODS_DETAIL + "&goods_id=" + goods_commonid + "&key=" + MyShopApplication.getInstance().getLoginKey();
 
@@ -378,22 +387,22 @@ public class DianboAudeoInfoActivity extends BaseActivity {
 
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
-                        String goods_detail = JsonUtil.getString(json,"goods_detail");
+                        String goods_detail = JsonUtil.getString(json, "goods_detail");
                         JSONObject obj = new JSONObject(goods_detail);
 
                         TuijianGoods goods = TuijianGoods.getInstance(obj);
                         initSpec(goods);
-                        if(!pwSpec.isShowing()) {
+                        if (!pwSpec.isShowing()) {
                             pwSpec.showPopupWindow();
                         }
-                    }catch (Exception e){
-                        ShopHelper.showApiError(getApplicationContext(),"加载失败");
+                    } catch (Exception e) {
+                        ShopHelper.showApiError(getApplicationContext(), "加载失败");
                         e.printStackTrace();
                     }
-                }else {
-                    ShopHelper.showApiError(getApplicationContext(),json);
+                } else {
+                    ShopHelper.showApiError(getApplicationContext(), json);
                 }
-           ProgressDialog.dismissDialog(progressDialog);
+                ProgressDialog.dismissDialog(progressDialog);
             }
         });
 

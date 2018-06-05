@@ -58,6 +58,7 @@ public class GoodsDetails {
         public static final String PRESELL_DELIVERDATE = "presell_deliverdate";//预售发货时间
         public static final String CONTRACT_LIST = "contractlist";//消保列表
         public static final String CART = "cart";
+        public static final String GOODS_GRADE = "goods_grade";
     }
 
     private String virtual_invalid_refundtiny;
@@ -106,6 +107,7 @@ public class GoodsDetails {
     private String have_gift;
     private String contractlist;
     private String cart;
+    private String goods_grade;
 
     public GoodsDetails() {
     }
@@ -127,7 +129,7 @@ public class GoodsDetails {
                         String upper_limit, String goods_url, String mobile_body,
                         String is_virtual, String virtual_indate, String virtual_limit,
                         String is_fcode, String is_appoint, String is_presell,
-                        String have_gift, String contractlist, String cart) {
+                        String have_gift, String contractlist, String cart,String goods_grade) {
         super();
         this.virtual_invalid_refundtiny = virtual_invalid_refundtiny;
         this.appoint_satedate = appoint_satedate;
@@ -175,6 +177,7 @@ public class GoodsDetails {
         this.have_gift = have_gift;
         this.contractlist = contractlist;
         this.cart = cart;
+        this.goods_grade = goods_grade;
     }
 
 
@@ -229,12 +232,21 @@ public class GoodsDetails {
                 String presell_deliverdate = obj.optString(Attr.PRESELL_DELIVERDATE);
                 String contractlist = obj.optString(Attr.CONTRACT_LIST);
                 String cart = obj.optString(Attr.CART);
-                bean = new GoodsDetails(virtual_invalid_refundtiny, appoint_satedate, presell_deliverdate, goods_name, goods_jingle, spec_name, spec_value, goods_attr, goods_specname, goods_price, goods_marketprice, goods_costprice, goods_discount, goods_serial, transport_id, transport_title, goods_freight, goods_vat, areaid_1, areaid_2, goods_stcids, plateid_top, plateid_bottom, goods_id, goods_click, goods_collect, goods_salenum, goods_spec, goods_storage, color_id, evaluation_good_star, evaluation_count, promotion_type, promotion_price, upper_limit, goods_url, mobile_body, is_virtual, virtual_indate, virtual_limit, is_fcode, is_appoint, is_presell, have_gift, contractlist,cart);
+                String goods_grade = obj.optString(Attr.GOODS_GRADE);
+                bean = new GoodsDetails(virtual_invalid_refundtiny, appoint_satedate, presell_deliverdate, goods_name, goods_jingle, spec_name, spec_value, goods_attr, goods_specname, goods_price, goods_marketprice, goods_costprice, goods_discount, goods_serial, transport_id, transport_title, goods_freight, goods_vat, areaid_1, areaid_2, goods_stcids, plateid_top, plateid_bottom, goods_id, goods_click, goods_collect, goods_salenum, goods_spec, goods_storage, color_id, evaluation_good_star, evaluation_count, promotion_type, promotion_price, upper_limit, goods_url, mobile_body, is_virtual, virtual_indate, virtual_limit, is_fcode, is_appoint, is_presell, have_gift, contractlist,cart,goods_grade);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return bean;
+    }
+
+    public String getGoods_grade() {
+        return goods_grade;
+    }
+
+    public void setGoods_grade(String goods_grade) {
+        this.goods_grade = goods_grade;
     }
 
     public String getVirtual_invalid_refundtiny() {

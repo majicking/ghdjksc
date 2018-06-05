@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.RechargeCardLogInfo;
+import com.umeng.debug.log.E;
 
 import java.util.ArrayList;
 
@@ -67,9 +68,13 @@ public class RechargeCardLogListViewAdapter extends BaseAdapter {
         RechargeCardLogInfo info = list.get(position);
         Log.d("dqw", info.toString());
         String[] desc = info.getDescription().split(" ");
-        holder.tvDesc.setText(desc[0]);
-        holder.tvSn.setText(desc[1]);
-        if (info.getType().equals("order_pay")||info.getType().equals("order_freeze")) {
+        try {
+            holder.tvDesc.setText(desc[0]);
+            holder.tvSn.setText(desc[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (info.getType().equals("order_pay") || info.getType().equals("order_freeze")) {
 
             holder.tvAmount.setText(info.getAvailableAmount());
             holder.tvAmount.setTextColor(context.getResources().getColor(R.color.nc_green));

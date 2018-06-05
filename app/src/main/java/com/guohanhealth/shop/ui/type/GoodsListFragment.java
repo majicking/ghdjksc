@@ -105,12 +105,9 @@ public class GoodsListFragment extends Fragment implements IXListViewListener {
         myListEmpty = (MyListEmpty) view.findViewById(R.id.myListEmpty);
         myListEmpty.setListEmpty(R.drawable.nc_icon_order, "没有找到符合条件的商品", "更换筛选条件找到你想要的商品");
 
-        top_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                top_btn.setVisibility(View.GONE);
-                listViewID.setSelectionFromTop(0, 0);
-            }
+        top_btn.setOnClickListener(view1 -> {
+            top_btn.setVisibility(View.GONE);
+            listViewID.setSelectionFromTop(0, 0);
         });
     }
 

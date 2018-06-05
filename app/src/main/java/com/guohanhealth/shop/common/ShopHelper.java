@@ -205,6 +205,7 @@ public class ShopHelper {
                     try {
                         JSONObject obj = new JSONObject(json);
                         String num = obj.getString("cart_count");
+
                         Intent intent = new Intent(Constants.SHOW_CART_NUM);
                         context.sendBroadcast(intent);
                     } catch (JSONException e) {

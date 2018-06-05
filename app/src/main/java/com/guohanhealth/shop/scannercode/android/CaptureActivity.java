@@ -238,27 +238,29 @@ public final class CaptureActivity extends Activity implements
 
     //获取地址中的参数 根据key
     private static String getParms(String strURL, String key) {
-
-        String[] arrSplit = null;
-        arrSplit = strURL.split("[?]");
-        if (strURL.length() > 1) {
-            if (arrSplit.length > 1) {
-                if (arrSplit[1] != null) {
-                    arrSplit = arrSplit[1].split("[&]");
-                    for (String strSplit : arrSplit) {
-                        String[] arrSplitEqual = null;
-                        arrSplitEqual = strSplit.split("[=]");
-                        if (arrSplitEqual.length > 1) {
-                            if (arrSplitEqual[0].equals(key)) {
-                                return arrSplitEqual[1];
+        try {
+            String[] arrSplit = null;
+            arrSplit = strURL.split("[?]");
+            if (strURL.length() > 1) {
+                if (arrSplit.length > 1) {
+                    if (arrSplit[1] != null) {
+                        arrSplit = arrSplit[1].split("[&]");
+                        for (String strSplit : arrSplit) {
+                            String[] arrSplitEqual = null;
+                            arrSplitEqual = strSplit.split("[=]");
+                            if (arrSplitEqual.length > 1) {
+                                if (arrSplitEqual[0].equals(key)) {
+                                    return arrSplitEqual[1];
+                                }
                             }
                         }
                     }
+
                 }
-
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return "";
     }
 
@@ -287,17 +289,17 @@ public final class CaptureActivity extends Activity implements
                     intent.putExtra("rcode", rcode);
                     startActivity(intent);
                 } else {
-                    String result=null;
+                    String result = null;
                     Pattern pattern = Pattern
                             .compile("(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.(com|net|cn|me|tw|fr)[^\u4e00-\u9fa5\\s]*");
                     // 空格结束
                     Matcher matcher = pattern
                             .matcher(key);
                     while (matcher.find()) {
-                        result=matcher.group(0);
+                        result = matcher.group(0);
                     }
 
-                    if (!TextUtils.isEmpty(result)&&Uri.parse(result) != null) {
+                    if (!TextUtils.isEmpty(result) && Uri.parse(result) != null) {
 //                        Intent intent = new Intent(Intent.ACTION_VIEW);
 //                        intent.setData(Uri.parse(key));
                         Intent intent = new Intent(CaptureActivity.this, WebViewActivity.class);
@@ -816,17 +818,21 @@ public final class CaptureActivity extends Activity implements
 
         String[] projection = {MediaStore.Images.Media.DATA};
         String selection = MediaStore.Images.Media._ID + "=?";
-        String[] selectionArgs = {id};
+        try {
+            String[] selectionArgs = {id};
 
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
-                selection, selectionArgs, null);
-        int columnIndex = cursor.getColumnIndex(projection[0]);
+            Cursor cursor = context.getContentResolver().query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
+                    selection, selectionArgs, null);
+            int columnIndex = cursor.getColumnIndex(projection[0]);
 
-        if (cursor.moveToFirst()) {
-            filePath = cursor.getString(columnIndex);
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        cursor.close();
         return filePath;
     }
 

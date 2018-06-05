@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -193,7 +194,7 @@ public class MainFragmentManager extends FragmentActivity {
                 try {
                     JSONObject obj = new JSONObject(json);
                     String num = obj.getString("cart_count");
-                    badge.setText(num);
+                    badge.setText(TextUtils.isEmpty(num) ? "0" : num);
                     badge.show();
                 } catch (JSONException e) {
                     Toast.makeText(MainFragmentManager.this, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
@@ -241,16 +242,20 @@ public class MainFragmentManager extends FragmentActivity {
      * 设置开启的tab我的页面
      */
     public void MineIn() {
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        hideFragments(transaction);
-        if (mineFragment == null) {
-            mineFragment = new MineFragment();
-            transaction.add(R.id.content, mineFragment);
-        } else {
-            mineFragment.setLoginInfo();
-            transaction.show(mineFragment);
+        try {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            hideFragments(transaction);
+            if (mineFragment == null) {
+                mineFragment = new MineFragment();
+                transaction.add(R.id.content, mineFragment);
+            } else {
+                mineFragment.setLoginInfo();
+                transaction.show(mineFragment);
+            }
+            transaction.commitAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        transaction.commitAllowingStateLoss();
     }
 
     /**
@@ -291,7 +296,7 @@ public class MainFragmentManager extends FragmentActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {

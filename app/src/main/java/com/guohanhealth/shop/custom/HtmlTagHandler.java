@@ -85,7 +85,7 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     /**
      * Mark the opening tag by using private classes
-     * 
+     *
      * @param output
      * @param mark
      */
@@ -124,7 +124,7 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     /**
      * Get last marked position of a specific tag kind (private class)
-     * 
+     *
      * @param text
      * @param kind
      * @return
@@ -144,24 +144,28 @@ public class HtmlTagHandler implements Html.TagHandler {
     }
 
     private void handleListTag(Editable output) {
-        if (mListParents.lastElement().equals("ul")) {
-            output.append("\n");
-            String[] split = output.toString().split("\n");
+        try {
+            if (mListParents.lastElement().equals("ul")) {
+                output.append("\n");
+                String[] split = output.toString().split("\n");
 
-            int lastIndex = split.length - 1;
-            int start = output.length() - split[lastIndex].length() - 1;
-            output.setSpan(new BulletSpan(15 * mListParents.size()), start, output.length(), 0);
-        } else if (mListParents.lastElement().equals("ol")) {
-            mListItemCount++;
+                int lastIndex = split.length - 1;
+                int start = output.length() - split[lastIndex].length() - 1;
+                output.setSpan(new BulletSpan(15 * mListParents.size()), start, output.length(), 0);
+            } else if (mListParents.lastElement().equals("ol")) {
+                mListItemCount++;
 
-            output.append("\n");
-            String[] split = output.toString().split("\n");
+                output.append("\n");
+                String[] split = output.toString().split("\n");
 
-            int lastIndex = split.length - 1;
-            int start = output.length() - split[lastIndex].length() - 1;
-            output.insert(start, mListItemCount + ". ");
-            output.setSpan(new LeadingMarginSpan.Standard(15 * mListParents.size()), start,
-                    output.length(), 0);
+                int lastIndex = split.length - 1;
+                int start = output.length() - split[lastIndex].length() - 1;
+                output.insert(start, mListItemCount + ". ");
+                output.setSpan(new LeadingMarginSpan.Standard(15 * mListParents.size()), start,
+                        output.length(), 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

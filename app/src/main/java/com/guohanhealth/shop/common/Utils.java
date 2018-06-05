@@ -168,8 +168,8 @@ public class Utils {
      * @param pay_sn 支付编号
      */
     public static void loadingWXPaymentData(final Context context, String pay_sn, String type) {
-        if (type.equals("3")){
-            RemoteDataHandler.asyncDataStringGet(Constants.WEIXINPAY_PREDBROADCAST+pay_sn+"&key="+MyShopApplication.getInstance().getLoginKey(),data -> {
+        if (type.equals("3")) {
+            RemoteDataHandler.asyncDataStringGet(Constants.WEIXINPAY_PREDBROADCAST + pay_sn + "&key=" + MyShopApplication.getInstance().getLoginKey(), data -> {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
@@ -198,7 +198,7 @@ public class Utils {
                         req.packageValue = packageStr;
                         req.sign = sign;
                         req.extData = "app data"; // optional
-                        LogUtils.i("id="+req.appId);
+                        LogUtils.i("id=" + req.appId);
 //                        Toast.makeText(context, "正常调起支付",
 //                                Toast.LENGTH_SHORT).show();
                         // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
@@ -206,11 +206,11 @@ public class Utils {
                         LogUtils.i("唤起微信结果=" + result);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    ShopHelper.showApiError(context,json);
+                    ShopHelper.showApiError(context, json);
                 }
             });
             return;
@@ -218,9 +218,9 @@ public class Utils {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", MyShopApplication.getInstance().getLoginKey());
         params.put("pay_sn", pay_sn);
-          LogUtils.i( Constants.URL_MEMBER_WX_PAYMENT);
-          LogUtils.i( MyShopApplication.getInstance().getLoginKey());
-          LogUtils.i( pay_sn);
+        LogUtils.i(Constants.URL_MEMBER_WX_PAYMENT);
+        LogUtils.i(MyShopApplication.getInstance().getLoginKey());
+        LogUtils.i(pay_sn);
 
         RemoteDataHandler.asyncLoginPostDataString(
                 type.equals("1") ? Constants.URL_MEMBER_WX_PAYMENT : Constants.URL_MEMBER_WX_VPAYMENT, params, MyShopApplication.getInstance(),
@@ -253,7 +253,7 @@ public class Utils {
                             req.packageValue = packageStr;
                             req.sign = sign;
                             req.extData = "app data"; // optional
-                            LogUtils.i("id="+req.appId);
+                            LogUtils.i("id=" + req.appId);
 //                            Toast.makeText(context, "正常调起支付",
 //                                    Toast.LENGTH_SHORT).show();
                             // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
@@ -261,22 +261,21 @@ public class Utils {
                             LogUtils.i("唤起微信结果=" + result);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     } else {
-                        ShopHelper.showApiError(context,json);
+                        ShopHelper.showApiError(context, json);
                     }
                 });
     }
 
     /**
      * 获取支付宝原生支付的参数act=member_payment_recharge&op=alipay_native_pay&pay_sn=&payment_code=alipay_native
-
      */
     public static void loadingAlipayNativePaymentData(final Context context, String pay_sn, String type, final DataCallback callback) {
-        if (type.equals("3")){
-            RemoteDataHandler.asyncDataStringGet(Constants.ALIPAY_MEMBERPAYMENTRECHARGE+pay_sn+"&key="+MyShopApplication.getInstance().getLoginKey(),data -> {
+        if (type.equals("3")) {
+            RemoteDataHandler.asyncDataStringGet(Constants.ALIPAY_MEMBERPAYMENTRECHARGE + pay_sn + "&key=" + MyShopApplication.getInstance().getLoginKey(), data -> {
                 String json = data.getJson();
                 if (data.getCode() == HttpStatus.SC_OK) {
                     try {
@@ -295,6 +294,8 @@ public class Utils {
                         PayDemoActivity payDemoActivity = new PayDemoActivity(context, signStr, callback);
                         payDemoActivity.doPay();
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
@@ -328,6 +329,8 @@ public class Utils {
                             PayDemoActivity payDemoActivity = new PayDemoActivity(context, signStr, callback);
                             payDemoActivity.doPay();
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        }catch (Exception e){
                             e.printStackTrace();
                         }
                     } else {

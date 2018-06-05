@@ -2,6 +2,7 @@ package com.guohanhealth.shop.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.guohanhealth.shop.R;
@@ -125,6 +127,10 @@ public class GoodsListViewAdapter extends BaseAdapter {
             holder.tvStoreServiceText = (TextView) convertView.findViewById(R.id.tvStoreServiceText);
             holder.tvStoreDeliveryPoint = (TextView) convertView.findViewById(R.id.tvStoreDeliveryPoint);
             holder.tvStoreDeliveryText = (TextView) convertView.findViewById(R.id.tvStoreDeliveryText);
+            holder.ratingBar = (RatingBar) convertView.findViewById(R.id.ratingbar);
+            holder.ratinglayout = (LinearLayout) convertView.findViewById(R.id.ratinglayout);
+            holder.imgrating = (ImageView) convertView.findViewById(R.id.imgrating);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -177,6 +183,15 @@ public class GoodsListViewAdapter extends BaseAdapter {
             holder.textZengPin.setVisibility(View.GONE);
         }
 
+        if (!TextUtils.isEmpty(bean.getGoods_grade()) && !bean.getGoods_grade().equals("0")) {
+            try {
+                LoadImage.loadImg(context, holder.imgrating, bean.getGoods_grade());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            holder.imgrating.setVisibility(View.GONE);
+        }
 
         //店铺信息控制
         if (bean.getIs_own_shop().equals("1")) {
@@ -214,7 +229,7 @@ public class GoodsListViewAdapter extends BaseAdapter {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                     holder.llStoreInfo.setVisibility(View.GONE);
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             } else {
@@ -308,5 +323,8 @@ public class GoodsListViewAdapter extends BaseAdapter {
         TextView tvStoreServiceText;
         TextView tvStoreDeliveryPoint;
         TextView tvStoreDeliveryText;
+        LinearLayout ratinglayout;
+        RatingBar ratingBar;
+        ImageView imgrating;
     }
 }

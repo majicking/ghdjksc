@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 /**
  * 预存款日志适配器
- *
+ * <p>
  * dqw
  * 2015/8/25
  */
@@ -66,21 +66,25 @@ public class PredepositLogListViewAdapter extends BaseAdapter {
         }
 
         PredepositLogInfo info = list.get(position);
-        String[] desc = info.getDesc().split(":");
-        if (info.getDesc()!=null&&desc!=null&&desc.length>0) {
-            holder.tvDesc.setText(desc[0]);
-            holder.tvSn.setText(desc[1]);
-        }
-        float avAmount = Float.valueOf(info.getAvAmount());
-        if(avAmount > 0) {
-            holder.tvAvAmount.setText("+" + info.getAvAmount());
-            holder.tvAvAmount.setTextColor(context.getResources().getColor(R.color.nc_red));
-        } else {
-            holder.tvAvAmount.setText(info.getAvAmount());
-            holder.tvAvAmount.setTextColor(context.getResources().getColor(R.color.nc_green));
-        }
-        holder.tvAddTimeText.setText(info.getAddTimeText());
+        try {
+            String[] desc = info.getDesc().split(":");
+            if (info.getDesc() != null && desc != null && desc.length > 0) {
+                holder.tvDesc.setText(desc[0]);
+                holder.tvSn.setText(desc[1]);
+            }
 
+            float avAmount = Float.valueOf(info.getAvAmount());
+            if (avAmount > 0) {
+                holder.tvAvAmount.setText("+" + info.getAvAmount());
+                holder.tvAvAmount.setTextColor(context.getResources().getColor(R.color.nc_red));
+            } else {
+                holder.tvAvAmount.setText(info.getAvAmount());
+                holder.tvAvAmount.setTextColor(context.getResources().getColor(R.color.nc_green));
+            }
+            holder.tvAddTimeText.setText(info.getAddTimeText());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return convertView;
     }
 

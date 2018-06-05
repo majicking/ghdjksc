@@ -90,25 +90,21 @@ public class RegisterMobileActivity extends BaseActivity {
      */
     private void loadSeccodeCode() {
         etCode.setText("");
-        RemoteDataHandler.asyncDataStringGet(Constants.URL_SECCODE_MAKECODEKEY, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        codeKey = obj.getString("codekey");
-                        imageLoader.displayImage(Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey, ivCode, options, animateFirstListener);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                } else {
-                    ShopHelper.showApiError(RegisterMobileActivity.this, json);
+        RemoteDataHandler.asyncDataStringGet(Constants.URL_SECCODE_MAKECODEKEY, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject obj = new JSONObject(json);
+                    codeKey = obj.getString("codekey");
+                    imageLoader.displayImage(Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey, ivCode, options, animateFirstListener);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+            } else {
+                ShopHelper.showApiError(RegisterMobileActivity.this, json);
             }
-
         });
     }
 
@@ -137,35 +133,32 @@ public class RegisterMobileActivity extends BaseActivity {
             ncDialog = new NCDialog(RegisterMobileActivity.this);
             ncDialog.setText1("我们将发送验证码短信至:");
             ncDialog.setText2(phone);
-            ncDialog.setOnDialogConfirm(new INCOnDialogConfirm() {
-                @Override
-                public void onDialogConfirm() {
-                    String url = Constants.URL_CONNECT_GET_SMS_CAPTCHA + "&phone=" + phone + "&type=1" + "&sec_key=" + codeKey + "&sec_val=" + code;
-                    RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
-                        @Override
-                        public void dataLoaded(ResponseData data) {
-                            String json = data.getJson();
-                            if (data.getCode() == HttpStatus.SC_OK) {
-                                try {
-                                    JSONObject obj = new JSONObject(json);
-                                    String smsTime = obj.getString("sms_time");
-                                    Intent intent = new Intent(RegisterMobileActivity.this, RegisterMobileStep2Activity.class);
-                                    intent.putExtra("phone", phone);
-                                    intent.putExtra("sms_time", smsTime);
-                                    startActivity(intent);
-                                    finish();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                ShopHelper.showApiError(RegisterMobileActivity.this, json);
-                                loadSeccodeCode();
+            ncDialog.setOnDialogConfirm(() -> {
+                String url = Constants.URL_CONNECT_GET_SMS_CAPTCHA + "&phone=" + phone + "&type=1" + "&sec_key=" + codeKey + "&sec_val=" + code;
+                RemoteDataHandler.asyncDataStringGet(url, new RemoteDataHandler.Callback() {
+                    @Override
+                    public void dataLoaded(ResponseData data) {
+                        String json = data.getJson();
+                        if (data.getCode() == HttpStatus.SC_OK) {
+                            try {
+                                JSONObject obj = new JSONObject(json);
+                                String smsTime = obj.getString("sms_time");
+                                Intent intent = new Intent(RegisterMobileActivity.this, RegisterMobileStep2Activity.class);
+                                intent.putExtra("phone", phone);
+                                intent.putExtra("sms_time", smsTime);
+                                startActivity(intent);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
+                        } else {
+                            ShopHelper.showApiError(RegisterMobileActivity.this, json);
+                            loadSeccodeCode();
                         }
-                    });
-                }
+                    }
+                });
             });
             ncDialog.showPopupWindow();
         }

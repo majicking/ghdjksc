@@ -146,8 +146,12 @@ public class StringUtil{
 		HashMap<String, String> map = new HashMap<String, String>();
 		for(int x=0;x<strs.length;x++){
 			String[] strs2 = strs[x].split("=");
-			if(strs2.length==2){
-				map.put(strs2[0], strs2[1]);
+			try {
+				if (strs2.length == 2) {
+					map.put(strs2[0], strs2[1]);
+				}
+			}catch (Exception e){
+				e.printStackTrace();
 			}
 		}
 

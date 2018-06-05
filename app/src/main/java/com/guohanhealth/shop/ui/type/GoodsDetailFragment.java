@@ -52,6 +52,7 @@ import com.guohanhealth.shop.bean.ManSongRules;
 import com.guohanhealth.shop.bean.StoreInfo;
 import com.guohanhealth.shop.bean.StoreO2oAddressInfo;
 import com.guohanhealth.shop.common.Constants;
+import com.guohanhealth.shop.common.LoadImage;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
@@ -184,7 +185,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
 
 
     private MyShopApplication myApplication;
-
+    private  ImageView imgrating;
 
     private String mobile_body;//商品手机版详情
 
@@ -267,6 +268,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
             }
             return false;
         });
+        imgrating= (ImageView) layout.findViewById(R.id.imgrating);
         ll_btnHairAreaName = (RelativeLayout) layout.findViewById(R.id.ll_btnHairAreaName);
         ll_btnHairAreaName.setOnClickListener(this);
         btnShowGoodsDetail = (Button) layout.findViewById(R.id.btnShowGoodsDetail);
@@ -459,7 +461,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                     String num = obj.getString("cart_count");
                     Message msg = new Message();
                     msg.what = 1;
-                    msg.obj = num;
+                    msg.obj = TextUtils.isEmpty(num)?"0":num;
                     handler.sendMessage(msg);
                 } catch (JSONException e) {
                     Toast.makeText(getActivity(), "获取购物车数量失败", Toast.LENGTH_SHORT).show();
@@ -578,12 +580,15 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                         isAudio = true;
                         imageList.add(video_path);
                     }
-
-                    imageList.addAll(Arrays.asList(goods_image.split(",")));
-                    if (com.guohanhealth.shop.common.StringUtils.isEmpty(video_path)) {
-                        goodsWapUrl = imageList.get(0);
-                    } else {
-                        goodsWapUrl = imageList.get(1);
+                    try {
+                        imageList.addAll(Arrays.asList(goods_image.split(",")));
+                        if (com.guohanhealth.shop.common.StringUtils.isEmpty(video_path)) {
+                            goodsWapUrl = imageList.get(0);
+                        } else {
+                            goodsWapUrl = imageList.get(1);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     initHeadImage();
 
@@ -930,6 +935,17 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
             goodsPrice = goodsBean.getGoods_price();
             goodsPriceID.setText("￥" + (goodsBean.getGoods_price() == null ? "0" : goodsBean.getGoods_price()));
         }
+        if (!TextUtils.isEmpty(goodsBean.getGoods_grade()) && !goodsBean.getGoods_grade().equals("0")) {
+            try {
+                LoadImage.loadImg(context, imgrating, goodsBean.getGoods_grade());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+          imgrating.setVisibility(View.GONE);
+        }
+
+
 
         //显示商品销量数量
         goodsSalenumID.setText(goodsBean.getGoods_salenum() == null ? "0" : goodsBean.getGoods_salenum() + "件");
@@ -1120,6 +1136,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                     ShopHelper.showApiError(getActivity(), errorMsg);
                 } else {
                     initSpec(goodsDetails, specList);
+                    if (pwSpec!=null)
                     pwSpec.showPopupWindow();
                 }
                 break;
@@ -1129,13 +1146,15 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                         ShopHelper.showApiError(getActivity(), errorMsg);
                     } else {
                         initSpec(goodsDetails, specList);
+                        if (pwSpec!=null)
                         pwSpec.showPopupWindow();
                     }
                 }
                 break;
 
             case R.id.specNameID:
-                pwSpec.showPopupWindow();
+                if (pwSpec != null)
+                    pwSpec.showPopupWindow();
                 break;
 
             case R.id.imID:
@@ -1148,7 +1167,8 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                 intent = new Intent(getActivity(), MainFragmentManager.class);
                 //广播通知显示购物车
                 myApplication.sendBroadcast(new Intent(Constants.SHOW_CART_URL));
-                pwSpec.closePoperWindow();
+                if (pwSpec != null)
+                    pwSpec.closePoperWindow();
                 break;
             case R.id.ll_btnHairAreaName:
             case R.id.btnHairAreaName:
