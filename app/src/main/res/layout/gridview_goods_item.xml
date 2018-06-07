@@ -3,18 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/nc_white"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageGoodsPic"
-            android:layout_width="@dimen/main_goods_size"
-            android:layout_height="@dimen/main_goods_size"
-            android:layout_gravity="center"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_goods_size">
+
+            <ImageView
+                android:id="@+id/imageGoodsPic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+        </RelativeLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -23,9 +28,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="3dp"
                 android:layout_gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="3dp">
 
                 <LinearLayout
                     android:id="@+id/llGoodsItem"
@@ -66,6 +71,12 @@
                             android:textColor="@color/nc_red"
                             android:textSize="16dp" />
 
+                        <ImageView
+                            android:id="@+id/imgrating"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_margin="5dp" />
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -98,7 +109,31 @@
                                 android:textSize="12dp"
                                 android:visibility="gone" />
                         </LinearLayout>
+
                     </LinearLayout>
+                </LinearLayout>
+                <!--星级-->
+                <LinearLayout
+                    android:id="@+id/ratinglayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="商品星级："
+                        android:textColor="@color/nc_text" />
+
+                    <RatingBar
+                        android:id="@+id/ratingbar"
+                        style="@style/mRatingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/nc_red"
+                        android:rating="0" />
+
                 </LinearLayout>
 
                 <RelativeLayout

@@ -122,7 +122,12 @@
                         style="@style/NCText"
                         android:layout_marginLeft="3dp"
                         android:textSize="12dp" />
-
+                    <ImageView
+                        android:id="@+id/imgrating"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="5dp" />
                 </LinearLayout>
 
                 <LinearLayout

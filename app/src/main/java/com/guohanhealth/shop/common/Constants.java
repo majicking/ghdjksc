@@ -52,7 +52,7 @@ public final class Constants {
     //新浪key
     public static final String WEIBO_APP_KEY = BuildConfig.WEIBO_APP_KEY;
     public static final String WEIBO_APP_SECRET = BuildConfig.WEIBO_APP_SECRET;
-    public static final String WEIBO_REDIRECT_URL = "http://www.guohanhealth.com/data/resource/api/sina/return_url.php";
+    public static final String WEIBO_REDIRECT_URL = BuildConfig.HOST+"/data/resource/api/sina/return_url.php";
     public static final String WEIBO_SCOPE =
             "email,direct_messages_read,direct_messages_write,"
                     + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"

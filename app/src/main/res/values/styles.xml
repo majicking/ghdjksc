@@ -35,7 +35,7 @@
     </style>
 
     <!-- 整title主题 -->
-    <style name="TitleBasic" >
+    <style name="TitleBasic">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:screenOrientation">portrait</item>
@@ -340,7 +340,7 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-  <!--等待loading对话框-->
+    <!--等待loading对话框-->
     <style name="dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -351,6 +351,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:textSize">25sp</item>
     </style>
+
     <style name="jc_style_dialog_progress" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
@@ -374,6 +375,7 @@
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:minWidth">1dp</item>
     </style>
+
     <style name="dialogAnimation">
         <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
         <!--//进入时的动画-->
@@ -400,4 +402,12 @@
         <item name="android:backgroundDimEnabled">true</item> <!--背景是否模糊显示-->
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <!--星级-->
+    <style name="mRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar</item>
+        <item name="android:minHeight">15dp</item>
+        <item name="android:maxHeight">15dp</item>
+
+    </style>
+
 </resources>

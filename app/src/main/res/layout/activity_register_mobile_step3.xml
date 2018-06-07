@@ -7,6 +7,7 @@
     <include layout="@layout/app_common_header" />
 
     <TextView
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginLeft="20dp"
@@ -17,6 +18,7 @@
         android:textSize="12dp" />
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/nc_white"
@@ -33,17 +35,90 @@
 
             <TextView
                 style="@style/NCFormText"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
+                android:text="用户名：" />
+
+            <EditText
+                android:id="@+id/edusername"
+                style="@style/NCFormEditNoBorder"
+                android:layout_alignParentLeft="true"
+                android:hint="请输入6-20位用户名"
+                android:maxLength="20"
+                android:maxLines="1" />
+
+        </LinearLayout>
+
+        <TextView style="@style/NCLine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/NCFormText"
+                android:layout_width="wrap_content"
+                android:text="推荐码：" />
+
+            <EditText
+                android:id="@+id/etcode"
+                style="@style/NCFormEditNoBorder"
+                android:layout_alignParentLeft="true"
+                android:hint="请输入推荐码（选填）"
+                android:maxLength="20"
+                android:maxLines="1" />
+
+        </LinearLayout>
+
+        <TextView style="@style/NCLine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/NCFormText"
+                android:layout_width="wrap_content"
                 android:text="设置密码：" />
 
             <EditText
-                android:maxLines="1"
-                android:maxLength="20"
                 android:id="@+id/etPassword"
                 style="@style/NCFormEditNoBorder"
                 android:layout_alignParentLeft="true"
                 android:hint="请输入6-20位密码"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:maxLines="1" />
+
+        </LinearLayout>
+
+        <TextView style="@style/NCLine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/NCFormText"
+                android:layout_width="wrap_content"
+                android:text="确认密码：" />
+
+            <EditText
+                android:id="@+id/etPassword1"
+                style="@style/NCFormEditNoBorder"
+                android:layout_alignParentLeft="true"
+                android:hint="请输入6-20位密码"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:maxLines="1" />
 
         </LinearLayout>
 
@@ -80,8 +155,8 @@
         android:id="@+id/btnRegSubmit"
         style="@style/NCCornerButton"
         android:layout_width="match_parent"
-        android:onClick="btnRegSubmitClick"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:onClick="btnRegSubmitClick"
         android:text="完成" />
 </LinearLayout>
