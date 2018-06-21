@@ -46,15 +46,7 @@ android {
         multiDexEnabled true
         flavorDimensions "versionCode"
         buildConfigField "String", "PROTOCOL", '"http://"'
-//        47.104.66.170
-//        http://192.168.1.252/wap/
-//        buildConfigField "String", "HOST", '"shop.ghbacoin.com/"'
-//        buildConfigField "String", "WAP_URL", '"shop.ghbacoin.com//wap/"'
-//        buildConfigField "String", "IM_HOST", '"shop.ghbacoin.com/:33"'
 
-        /* buildConfigField "String", "HOST", '"47.104.66.170"'
-         buildConfigField "String", "WAP_URL", '"47.104.66.170/wap/"'
-         buildConfigField "String", "IM_HOST", '"47.104.66.170:8090"'*/
 
         buildConfigField "String", "HOST", '"www.guohanhealth.com"'
         buildConfigField "String", "WAP_URL", '"www.guohanhealth.com/wap/"'
@@ -206,5 +198,5 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:24.1.1'
     //加载动画
     api 'com.wang.avi:library:1.0.0'
-
+    implementation 'com.android.support:cardview-v7:25.2.0'
 }

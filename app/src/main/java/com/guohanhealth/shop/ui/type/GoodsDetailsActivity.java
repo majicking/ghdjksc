@@ -39,6 +39,7 @@ public class GoodsDetailsActivity extends FragmentActivity implements GoodsDetai
     ArrayList<Fragment> list = new ArrayList<Fragment>();
     int currfragment = 0;
     public ImageView moremenu;
+    private VpAdapter vpadapter;
 
 
     @Override
@@ -52,13 +53,10 @@ public class GoodsDetailsActivity extends FragmentActivity implements GoodsDetai
         btnGoodsEvaluate = (RadioButton) findViewById(R.id.btnGoodsEvaluate);
         moremenu = (ImageView) findViewById(R.id.moremenu);
         vp = (ViewPager) findViewById(R.id.main_viewpager);
-        goodsDetailFragment = GoodsDetailFragment.newInstance(goods_id);
-        goodsDetailBodyFragment = GoodsDetailBodyFragment.newInstance(goods_id);
-        goodsDetailEvaluateFragment = GoodsDetailEvaluateFragment.newInstance(goods_id);
-        list.add(goodsDetailFragment);
-        list.add(goodsDetailBodyFragment);
-        list.add(goodsDetailEvaluateFragment);
-        VpAdapter vpadapter = new VpAdapter(fragmentManager);
+        list.add(GoodsDetailFragment.newInstance(goods_id));
+        list.add(GoodsDetailBodyFragment.newInstance(goods_id));
+        list.add(GoodsDetailEvaluateFragment.newInstance(goods_id));
+        vpadapter = new VpAdapter(fragmentManager);
         vpadapter.setList(list);
         vp.setAdapter(vpadapter);
         vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -109,6 +107,12 @@ public class GoodsDetailsActivity extends FragmentActivity implements GoodsDetai
      */
     public void changeGoods(String goodsId) {
         goods_id = goodsId;
+        list.clear();
+        list.add(GoodsDetailFragment.newInstance(goods_id));
+        list.add(GoodsDetailBodyFragment.newInstance(goods_id));
+        list.add(GoodsDetailEvaluateFragment.newInstance(goods_id));
+        vpadapter.setList(list);
+        vpadapter.notifyDataSetChanged();
     }
 
     public void changeFreagemt(int num) {
@@ -171,13 +175,12 @@ public class GoodsDetailsActivity extends FragmentActivity implements GoodsDetai
     }
 
 
-
     @Override
     public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.moremenu:
-                    showPopupWindow();
-                    break;
-            }
+        switch (view.getId()) {
+            case R.id.moremenu:
+                showPopupWindow();
+                break;
+        }
     }
 }

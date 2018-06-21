@@ -26,6 +26,7 @@ import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.MyExpandableListView;
+import com.guohanhealth.shop.custom.MyScrollView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
 import com.guohanhealth.shop.http.ResponseData;
@@ -165,9 +166,9 @@ public class IMFriendsListActivity extends BaseActivity {
         });
 
         //下拉刷新监听
-        mPullRefreshScrollView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
+        mPullRefreshScrollView.setOnRefreshListener(new OnRefreshListener<MyScrollView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+            public void onRefresh(PullToRefreshBase<MyScrollView> refreshView) {
                 loadingFriendsListData();
             }
         });

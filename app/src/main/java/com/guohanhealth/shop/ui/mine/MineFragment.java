@@ -3,6 +3,7 @@ package com.guohanhealth.shop.ui.mine;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -16,14 +17,17 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.guohanhealth.shop.BuildConfig;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.bean.Mine;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
@@ -32,13 +36,17 @@ import com.guohanhealth.shop.common.JSONParser;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
+import com.guohanhealth.shop.common.StringUtil;
 import com.guohanhealth.shop.common.StringUtils;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.common.T;
+import com.guohanhealth.shop.custom.CustomDialog;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
+import com.guohanhealth.shop.newpackage.CommonAdapter;
 import com.guohanhealth.shop.newpackage.OrderActivity;
 import com.guohanhealth.shop.newpackage.PredepositActivity;
+import com.guohanhealth.shop.newpackage.ViewHolder;
 import com.guohanhealth.shop.ui.fenxiao.ApplyLiveActivity;
 import com.guohanhealth.shop.ui.fenxiao.BeginLiveActivity;
 import com.guohanhealth.shop.ui.fenxiao.FenxiaoAllActivity;
@@ -48,6 +56,7 @@ import com.guohanhealth.shop.ui.fenxiao.FenxiaoSettlementActivity;
 import com.guohanhealth.shop.ui.fenxiao.FenxiaoTixianActivity;
 import com.guohanhealth.shop.ui.type.AddressListActivity;
 import com.guohanhealth.shop.ui.type.GoodsBrowseActivity;
+import com.guohanhealth.shop.xrefresh.utils.LogUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -63,7 +72,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.guohanhealth.shop.common.Constants.ORDERNUMBER;
 import static com.guohanhealth.shop.common.Constants.ORDERTYPE;
@@ -268,6 +280,7 @@ public class MineFragment extends Fragment {
                 showPopWindow();
             }
         });
+
     }
 
     /**

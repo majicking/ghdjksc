@@ -2,12 +2,16 @@ package com.guohanhealth.shop.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -49,11 +53,13 @@ import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.custom.MyGridView;
+import com.guohanhealth.shop.custom.MyScrollView;
 import com.guohanhealth.shop.custom.ViewFlipperScrollView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
 import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.library.PullToRefreshScrollView;
+import com.guohanhealth.shop.library.OnScrollViewListener;
 import com.guohanhealth.shop.newpackage.CommonAdapter;
 import com.guohanhealth.shop.newpackage.OrderActivity;
 import com.guohanhealth.shop.newpackage.ViewHolder;
@@ -66,6 +72,7 @@ import com.guohanhealth.shop.ui.mine.SigninActivity;
 import com.guohanhealth.shop.ui.type.GoodsBrowseActivity;
 import com.guohanhealth.shop.ui.type.GoodsDetailsActivity;
 import com.guohanhealth.shop.ui.type.GoodsListFragmentManager;
+import com.guohanhealth.shop.xrefresh.utils.LogUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -77,6 +84,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.guohanhealth.shop.common.Constants.ORDERNUMBER;
 import static com.guohanhealth.shop.common.Constants.ORDERTYPE;
@@ -90,9 +98,6 @@ import static com.guohanhealth.shop.common.Constants.ORDERTYPE;
 public class HomeFragment extends Fragment implements OnGestureListener, OnTouchListener {
     private MyShopApplication myApplication;
     private Intent intent = null;
-    private TextView tvSearch;
-    private Button btnCamera;
-    private LinearLayout llIm;
     private TextView tvSearchD;
     private Button btnCameraD;
     private LinearLayout llImD;
@@ -114,11 +119,9 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     private DisplayImageOptions options = SystemHelper.getDisplayImageOptions();
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
     private LinearLayout homeSearch;
-    private LinearLayout search;
     private Button toTopBtn;// 返回顶部的按钮
-    private int scrollY = 0;// 标记上次滑动位置
     private View contentView;
-    private ScrollView scrollView;
+    private MyScrollView scrollView;
     private CommonAdapter<HomeMenuBtn> adapter;
 
     @Override
@@ -138,23 +141,10 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
      */
     public void initViewID(View view) {
         myApplication = (MyShopApplication) getActivity().getApplicationContext();
-        //搜索
-        tvSearch = (TextView) view.findViewById(R.id.tvSearch);
-        tvSearch.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), SearchActivity.class)));
         tvSearchD = (TextView) view.findViewById(R.id.tvSearchD);
         tvSearchD.setOnClickListener(view13 -> startActivity(new Intent(getActivity(), SearchActivity.class)));
-        //摄像头
-        btnCamera = (Button) view.findViewById(R.id.btnCamera);
-        btnCamera.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), CaptureActivity.class)));
         btnCameraD = (Button) view.findViewById(R.id.btnCameraD);
         btnCameraD.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), CaptureActivity.class)));
-        //IM
-        llIm = (LinearLayout) view.findViewById(R.id.llIm);
-        llIm.setOnClickListener(view16 -> {
-            if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
-                startActivity(new Intent(getActivity(), IMNewListActivity.class));
-            }
-        });
         llImD = (LinearLayout) view.findViewById(R.id.llImD);
         llImD.setOnClickListener(view17 -> {
             if (ShopHelper.isLogin(getActivity(), myApplication.getLoginKey())) {
@@ -238,61 +228,26 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
         right_in = AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_in);
         right_out = AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_out);
         homeSearch = (LinearLayout) view.findViewById(R.id.homeSearch);
-        search = (LinearLayout) view.findViewById(R.id.search);
         homeSearch.setOnTouchListener((v, event) -> true);
         //下拉刷新监听
         mPullRefreshScrollView.setOnRefreshListener(refreshView -> {
             toTopBtn.setVisibility(View.GONE);
-            search.setVisibility(View.GONE);
-            homeSearch.setVisibility(View.VISIBLE);
             loadUIData();
         });
-        scrollView = mPullRefreshScrollView.getRefreshableView();
+        scrollView = (MyScrollView) mPullRefreshScrollView.getRefreshableView();
         if (contentView == null) {
             contentView = scrollView.getChildAt(0);
         }
+        scrollView.setScrollViewListener((view12, x, y, oldx, oldy) -> {
+            setTitleBackgroundColor(y);
+        });
         toTopBtn = (Button) view.findViewById(R.id.top_btn);
         toTopBtn.setOnClickListener(view18 -> {
             scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_UP));
             toTopBtn.setVisibility(View.GONE);
-            search.setVisibility(View.GONE);
-            homeSearch.setVisibility(View.VISIBLE);
         });
-        scrollView.setOnTouchListener(new OnTouchListener() {
-            private int lastY = 0;
-            private int touchEventId = -9983761;
-            Handler handler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    View scroller = (View) msg.obj;
-                    if (msg.what == touchEventId) {
-                        if (lastY == scroller.getScrollY()) {
-                            handleStop(scroller);
-                        } else {
-                            handler.sendMessageDelayed(handler.obtainMessage(
-                                    touchEventId, scroller), 5);
-                            lastY = scroller.getScrollY();
-                        }
-                    }
-                }
-            };
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    handler.sendMessageDelayed(
-                            handler.obtainMessage(touchEventId, view), 5);
-                }
-                return false;
-            }
 
-            private void handleStop(Object view) {
-                ScrollView scroller = (ScrollView) view;
-                scrollY = scroller.getScrollY();
-                doOnBorderListener();
-            }
-        });
         loadUIData();
         //读取热门关键词
         getSearchHot();
@@ -300,24 +255,21 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
         getSearchKeyList();
     }
 
-    private void doOnBorderListener() {
-        // 底部判断
-        if (contentView != null
-                && contentView.getMeasuredHeight() <= scrollView.getScrollY()
-                + scrollView.getHeight()) {
-            toTopBtn.setVisibility(View.VISIBLE);
-            search.setVisibility(View.VISIBLE);
-            homeSearch.setVisibility(View.GONE);
-        } else if (scrollView.getScrollY() == 0) {//顶部判断
+    private void setTitleBackgroundColor(int y) {
+        if (y < 150) {
             toTopBtn.setVisibility(View.GONE);
-            homeSearch.setVisibility(View.VISIBLE);
-            search.setVisibility(View.GONE);
-        } else if (scrollView.getScrollY() > 13) {
+            homeSearch.setBackgroundColor(context.getResources().getColor(R.color.translucent));
+        } else if (y > 150 && y < 650) {
             toTopBtn.setVisibility(View.VISIBLE);
-            search.setVisibility(View.VISIBLE);
-            homeSearch.setVisibility(View.GONE);
+            float scale = (float) y / 650;
+            float alpha = (255 * scale);
+            homeSearch.setBackgroundColor(Color.argb((int) alpha, 237, 89, 104));
+        } else {
+            toTopBtn.setVisibility(View.VISIBLE);
+            homeSearch.setBackgroundColor(context.getResources().getColor(R.color.nc_red));
         }
     }
+
 
     /**
      * 初始化加载数据
@@ -391,6 +343,8 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 View goodsView = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_goods, null);
                 TextView textView = (TextView) goodsView.findViewById(R.id.TextViewTitle);
                 MyGridView gridview = (MyGridView) goodsView.findViewById(R.id.gridview);
+                View linev = goodsView.findViewById(R.id.linev);
+                LinearLayout titleview = (LinearLayout) goodsView.findViewById(R.id.titleview);
                 gridview.setFocusable(false);
                 CommonAdapter<HomeGoodsList> adapter = new CommonAdapter<HomeGoodsList>(context, goodsList, R.layout.tab_home_item_goods_gridview_item) {
                     @Override
@@ -408,10 +362,11 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     context.startActivity(intent);
                 });
                 if (!title.equals("") && !title.equals("null") && title != null) {
-                    textView.setVisibility(View.VISIBLE);
+                    titleview.setVisibility(View.VISIBLE);
                     textView.setText(title);
+                    linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
                 } else {
-                    textView.setVisibility(View.GONE);
+                    titleview.setVisibility(View.GONE);
                 }
                 HomeView.addView(goodsView);
             }
@@ -434,12 +389,15 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 View goodsView = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_goods, null);
                 TextView textView = (TextView) goodsView.findViewById(R.id.TextViewTitle);
                 MyGridView gridview = (MyGridView) goodsView.findViewById(R.id.gridview);
+                View linev = goodsView.findViewById(R.id.linev);
+                LinearLayout titleview = (LinearLayout) goodsView.findViewById(R.id.titleview);
                 gridview.setFocusable(false);
                 if (!title.equals("") && !title.equals("null") && title != null) {
-                    textView.setVisibility(View.VISIBLE);
+                    linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
+                    titleview.setVisibility(View.VISIBLE);
                     textView.setText(title);
                 } else {
-                    textView.setVisibility(View.GONE);
+                    titleview.setVisibility(View.GONE);
                 }
                 gridview.setNumColumns(1);
                 CommonAdapter<Goods1Bean> adapter = new CommonAdapter<Goods1Bean>(context, list, R.layout.tab_home_item_goods1_adapter) {
@@ -522,6 +480,8 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 View goodsView = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_goods, null);
                 TextView textView = (TextView) goodsView.findViewById(R.id.TextViewTitle);
                 MyGridView gridview = (MyGridView) goodsView.findViewById(R.id.gridview);
+                View linev = goodsView.findViewById(R.id.linev);
+                LinearLayout titleview = (LinearLayout) goodsView.findViewById(R.id.titleview);
                 gridview.setFocusable(false);
                 CommonAdapter<Goods2Bean> adapter = new CommonAdapter<Goods2Bean>(context, list, R.layout.tab_home_item_goods2_adapter) {
                     @Override
@@ -539,10 +499,11 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                     context.startActivity(intent);
                 });
                 if (!title.equals("") && !title.equals("null") && title != null) {
-                    textView.setVisibility(View.VISIBLE);
+                    linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
+                    titleview.setVisibility(View.VISIBLE);
                     textView.setText(title);
                 } else {
-                    textView.setVisibility(View.GONE);
+                    titleview.setVisibility(View.GONE);
                 }
                 HomeView.addView(goodsView);
             }
@@ -586,11 +547,14 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             View home1View = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_home1, null);
             TextView textView = (TextView) home1View.findViewById(R.id.TextViewHome1Title01);
             ImageView imageView = (ImageView) home1View.findViewById(R.id.ImageViewHome1Imagepic01);
+            View linev = home1View.findViewById(R.id.linev);
+            LinearLayout titleview = (LinearLayout) home1View.findViewById(R.id.titleview);
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
-                textView.setVisibility(View.VISIBLE);
+                titleview.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
+                linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
             } else {
-                textView.setVisibility(View.GONE);
+                titleview.setVisibility(View.GONE);
             }
             imageLoader.displayImage(bean.getImage(), imageView, options, animateFirstListener);
             OnImageViewClick(imageView, bean.getType(), bean.getData());
@@ -598,6 +562,13 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static Drawable tintDrawable(Drawable drawable, int colors) {
+        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(colors));
+        return wrappedDrawable;
     }
 
     /**
@@ -612,6 +583,8 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             Home2Data bean = Home2Data.newInstanceDetelis(home2Json);
             View home2View = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_home2_left, null);
             TextView textView = (TextView) home2View.findViewById(R.id.TextViewTitle);
+            View linev = home2View.findViewById(R.id.linev);
+            LinearLayout titleview = (LinearLayout) home2View.findViewById(R.id.titleview);
             ImageView imageViewSquare = (ImageView) home2View.findViewById(R.id.ImageViewSquare);
             ImageView imageViewRectangle1 = (ImageView) home2View.findViewById(R.id.ImageViewRectangle1);
             ImageView imageViewRectangle2 = (ImageView) home2View.findViewById(R.id.ImageViewRectangle2);
@@ -622,10 +595,11 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             OnImageViewClick(imageViewRectangle1, bean.getRectangle1_type(), bean.getRectangle1_data());
             OnImageViewClick(imageViewRectangle2, bean.getRectangle2_type(), bean.getRectangle2_data());
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
-                textView.setVisibility(View.VISIBLE);
+                titleview.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
+                linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
             } else {
-                textView.setVisibility(View.GONE);
+                titleview.setVisibility(View.GONE);
             }
             HomeView.addView(home2View);
         } catch (Exception e) {
@@ -647,16 +621,19 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             View home3View = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_home3, null);
             TextView textView = (TextView) home3View.findViewById(R.id.TextViewTitle);
             MyGridView gridview = (MyGridView) home3View.findViewById(R.id.gridview);
+            View linev = home3View.findViewById(R.id.linev);
+            LinearLayout titleview = (LinearLayout) home3View.findViewById(R.id.titleview);
             gridview.setFocusable(false);
             HomeActivityMyGridViewListAdapter adapter = new HomeActivityMyGridViewListAdapter(getActivity());
             adapter.setHome3Datas(home3Datas);
             gridview.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
-                textView.setVisibility(View.VISIBLE);
+                linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
+                titleview.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
             } else {
-                textView.setVisibility(View.GONE);
+                titleview.setVisibility(View.GONE);
             }
             HomeView.addView(home3View);
         } catch (Exception e) {
@@ -676,6 +653,8 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             Home2Data bean = Home2Data.newInstanceDetelis(home2Json);
             View home4View = getActivity().getLayoutInflater().inflate(R.layout.tab_home_item_home2_rehit, null);
             TextView textView = (TextView) home4View.findViewById(R.id.TextViewTitle);
+            View linev = home4View.findViewById(R.id.linev);
+            LinearLayout titleview = (LinearLayout) home4View.findViewById(R.id.titleview);
             ImageView imageViewSquare = (ImageView) home4View.findViewById(R.id.ImageViewSquare);
             ImageView imageViewRectangle1 = (ImageView) home4View.findViewById(R.id.ImageViewRectangle1);
             ImageView imageViewRectangle2 = (ImageView) home4View.findViewById(R.id.ImageViewRectangle2);
@@ -686,10 +665,11 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             OnImageViewClick(imageViewRectangle1, bean.getRectangle1_type(), bean.getRectangle1_data());
             OnImageViewClick(imageViewRectangle2, bean.getRectangle2_type(), bean.getRectangle2_data());
             if (!bean.getTitle().equals("") && !bean.getTitle().equals("null") && bean.getTitle() != null) {
-                textView.setVisibility(View.VISIBLE);
+                linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
+                titleview.setVisibility(View.VISIBLE);
                 textView.setText(bean.getTitle());
             } else {
-                textView.setVisibility(View.GONE);
+                titleview.setVisibility(View.GONE);
             }
             HomeView.addView(home4View);
         } catch (Exception e) {
@@ -711,6 +691,7 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
             View titlelayout = homeView.findViewById(R.id.titlelayout);
             TextView title1 = (TextView) homeView.findViewById(R.id.title1);
             TextView title2 = (TextView) homeView.findViewById(R.id.title2);
+            View linev = homeView.findViewById(R.id.linev);
             ImageView img1 = (ImageView) homeView.findViewById(R.id.img1);
             ImageView img2 = (ImageView) homeView.findViewById(R.id.img2);
             ImageView img3 = (ImageView) homeView.findViewById(R.id.img3);
@@ -729,6 +710,7 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 titlelayout.setVisibility(View.VISIBLE);
                 title1.setText(TextUtils.isEmpty(titlemain) ? "" : titlemain);
                 title2.setText(TextUtils.isEmpty(titlemain1) ? "" : titlemain1);
+                linev.setBackgroundColor(Constants.BGCOLORS[new Random().nextInt(10)]);
             } else {
                 titlelayout.setVisibility(View.GONE);
             }
@@ -909,13 +891,13 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                         myApplication.setSearchHotValue(hotInfoObj.getString("value"));
                     }
                     if (searchHotName != null && !searchHotName.equals("")) {
-                        tvSearch.setHint(searchHotName);
+                        tvSearchD.setHint(searchHotName);
                     } else {
-                        tvSearch.setHint(context.getResources().getString(R.string.default_search_text));
+                        tvSearchD.setHint(context.getResources().getString(R.string.default_search_text));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
@@ -954,9 +936,9 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                 } else {
                     ShopHelper.showApiError(getActivity(), json);
                 }
-        }
-    });
-}
+            }
+        });
+    }
 
     @Override
     public boolean onDown(MotionEvent arg0) {
@@ -1081,21 +1063,21 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
     }
 
 
-public class FenXiaoAudeoListTabOnclienr implements View.OnClickListener {
-    private String mCate_id;
+    public class FenXiaoAudeoListTabOnclienr implements View.OnClickListener {
+        private String mCate_id;
 
-    public FenXiaoAudeoListTabOnclienr(String cate_id) {
-        this.mCate_id = cate_id;
+        public FenXiaoAudeoListTabOnclienr(String cate_id) {
+            this.mCate_id = cate_id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getActivity(), FenXiaoAudeoListTabActivity.class);
+            intent.putExtra("cate_id", mCate_id);
+            startActivity(intent);
+        }
+
     }
-
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), FenXiaoAudeoListTabActivity.class);
-        intent.putExtra("cate_id", mCate_id);
-        startActivity(intent);
-    }
-
-}
 
     private Context context;
 

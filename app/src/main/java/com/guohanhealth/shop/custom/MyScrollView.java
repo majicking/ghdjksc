@@ -7,6 +7,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
 
+import com.guohanhealth.shop.library.OnScrollViewListener;
+
 /**
  * Created by dqw on 2015/8/10.
  */
@@ -60,6 +62,13 @@ public class MyScrollView extends ScrollView {
         };
 
     };
+    private OnScrollViewListener scrollViewListener = null;
+
+
+
+    public void setScrollViewListener(OnScrollViewListener scrollViewListener) {
+        this.scrollViewListener = scrollViewListener;
+    }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
@@ -69,8 +78,10 @@ public class MyScrollView extends ScrollView {
         if (diff == 0 && mListener != null) {
             mListener.onBottomReached();
         }
-
         super.onScrollChanged(l, t, oldl, oldt);
+        if (scrollViewListener != null) {
+            scrollViewListener.onScrollChanged(this, l, t, oldl, oldt);
+        }
     }
 
 

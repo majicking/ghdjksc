@@ -177,6 +177,8 @@ public class GoodsListViewAdapter extends BaseAdapter {
         } else {
             holder.textGoodsType.setVisibility(View.GONE);
         }
+
+
         if (bean.getHave_gift().equals("1")) {
             holder.textZengPin.setVisibility(View.VISIBLE);
         } else {

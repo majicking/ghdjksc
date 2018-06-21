@@ -6,9 +6,11 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.view.ViewGroup;
 
-public class VpAdapter extends FragmentPagerAdapter{
+public class VpAdapter extends FragmentStatePagerAdapter {
 	private List<Fragment> list;
 	@SuppressWarnings("unused")
 	private  FragmentManager fm;
@@ -36,6 +38,11 @@ public class VpAdapter extends FragmentPagerAdapter{
 	}
 
 	@Override
+	public int getItemPosition(Object object) {
+		return PagerAdapter.POSITION_NONE;
+	}
+
+	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
 		return list.size();
@@ -44,7 +51,7 @@ public class VpAdapter extends FragmentPagerAdapter{
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		// TODO Auto-generated method stub
-		 lists.add(makeFramentName(container.getId(),(int)getItemId(position)));
+		 lists.add(makeFramentName(container.getId(),position));
 		return super.instantiateItem(container, position);
 	}
 	public static  String makeFramentName(int view , int index){

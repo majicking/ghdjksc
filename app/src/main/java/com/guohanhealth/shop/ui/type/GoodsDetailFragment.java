@@ -202,7 +202,6 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
 
     private boolean isAudio = false;
 
-    private Dialog progressDialog;
 
     private Handler handler = new Handler() {
         @Override
@@ -246,7 +245,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
 
         initViewID(layout);
 
-        loadingGoodsDetailsData();//初始化加载数据
+
         return layout;
     }
 
@@ -545,8 +544,8 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         }
         Logger.d(url);
         final long starttime = System.currentTimeMillis();
-        progressDialog = ProgressDialog.showLoadingProgress(getActivity(), "正在加载中...");
-        progressDialog.show();
+//        Dialog progressDialog = ProgressDialog.showLoadingProgress(getActivity(), "正在加载中...");
+//        progressDialog.show();
         RemoteDataHandler.asyncDataStringGet(url, data -> {
 //                viewList.clear();
             String json = data.getJson();
@@ -689,14 +688,15 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                     e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
-                } finally {
-                    ProgressDialog.dismissDialog(progressDialog);
                 }
+//                finally {
+//                    ProgressDialog.dismissDialog(progressDialog);
+//                }
             } else {
-                ProgressDialog.dismissDialog(progressDialog);
+//                ProgressDialog.dismissDialog(progressDialog);
                 ShopHelper.showApiError(getActivity(), json);
             }
-            ProgressDialog.dismissDialog(progressDialog);
+
         });
     }
 
@@ -1310,11 +1310,12 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         myApplication = (MyShopApplication) getActivity().getApplicationContext();
-        if (!is_virtual.equals("1")) {
-            ifCanBuyS();
-        } else {
-            ifCanBuyV();
-        }
+        loadingGoodsDetailsData();//初始化加载数据
+//        if (!is_virtual.equals("1")) {
+//            ifCanBuyS();
+//        } else {
+//            ifCanBuyV();
+//        }
     }
 
 

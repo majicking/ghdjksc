@@ -1,8 +1,11 @@
 package com.guohanhealth.shop.common;
 
+import android.graphics.Color;
 import android.os.Environment;
 
 import com.guohanhealth.shop.BuildConfig;
+
+import java.util.Random;
 
 /**
  * 常量类
@@ -52,7 +55,7 @@ public final class Constants {
     //新浪key
     public static final String WEIBO_APP_KEY = BuildConfig.WEIBO_APP_KEY;
     public static final String WEIBO_APP_SECRET = BuildConfig.WEIBO_APP_SECRET;
-    public static final String WEIBO_REDIRECT_URL = BuildConfig.HOST+"/data/resource/api/sina/return_url.php";
+    public static final String WEIBO_REDIRECT_URL = BuildConfig.HOST + "/data/resource/api/sina/return_url.php";
     public static final String WEIBO_SCOPE =
             "email,direct_messages_read,direct_messages_write,"
                     + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
@@ -167,16 +170,15 @@ public final class Constants {
     /**
      * 服务器域名
      */
-//    public static final String HOST = "192.168.1.4/b2b2c/";
-//    public static final String HOST = "www.shopnc2015.com";
-//	public static final String HOST = "b2b2c.shopnctest.com/test1";
-    //public static final String HOST = "b2b2c.shopnctest.com/test1";
-    public static final String HOST = BuildConfig.HOST;
-//	public static final String HOST = "b2b2c.shopnctest.com/test1";
+    public static final String HOST0 = BuildConfig.HOST;
+    public static final String HOST1 = "b2b2c.shopnctest.com/dema/shop";
+    public static final String HOST2 = "test.shopnctest.com";
+    public static final String HOST3 = "192.168.1.252/wap/";
+    public static final String HOST = HOST2;
 
     //WAPURL
     public static final String WAP_URL = BuildConfig.WAP_URL;
-    public static final String WAP_URL_ALL = PROTOCOL +BuildConfig.WAP_URL;
+    public static final String WAP_URL_ALL = PROTOCOL + BuildConfig.WAP_URL;
     public static final String WAP_GOODS_URL = PROTOCOL + WAP_URL + "tmpl/product_detail.html?goods_id=";
 
     /**
@@ -849,10 +851,26 @@ public final class Constants {
     //获取健康豆
     public static final String HEALTHNUMBER = URL_CONTEXTPATH + "act=healthbean&op=GetHealthbeanValue&key=";
     //订单-绑定手机
-    public static final int  BUNDERMOBILE =  10001;
+    public static final int BUNDERMOBILE = 10001;
     //订单-设置支付密码
-    public static final int  BUNDERPAYPWD =  10002;
+    public static final int BUNDERPAYPWD = 10002;
     //订单-绑定手机
-    public static final String  SETTINGPWD =  "settingpwd";
+    public static final String SETTINGPWD = "settingpwd";
+
+    public static final int[] BGCOLORS = new int[]{
+            Color.parseColor("#ED5564"),
+            Color.parseColor("#FB6E52"),
+            Color.parseColor("#FFCE55"),
+            Color.parseColor("#A0D468"),
+            Color.parseColor("#48CFAE"),
+            Color.parseColor("#4FC0E8"),
+            Color.parseColor("#5D9CEC"),
+            Color.parseColor("#AC92ED"),
+            Color.parseColor("#EC87BF"),
+            Color.parseColor("#ED5564")
+    };
+
+    public static final int RANDOMCOLOR = BGCOLORS[new Random().nextInt(10)];
+
 
 }

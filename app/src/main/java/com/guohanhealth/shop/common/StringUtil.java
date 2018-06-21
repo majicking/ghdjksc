@@ -54,7 +54,7 @@ public class StringUtil{
 
 	/**
 	 * 判断字符串是否为空 空返回false，反之返回true
-	 * 
+	 *
 	 * @param s
 	 * @return
 	 */
@@ -76,16 +76,16 @@ public class StringUtil{
 		}
 		Pattern p = null;
 		Matcher m = null;
-		boolean b = false;   
+		boolean b = false;
 		p = Pattern.compile("^1(3|5|7|8|4)\\d{9}$"); // 验证手机号
-		m = p.matcher(mobiles);  
-		b = m.matches();   
-		return b;  
+		m = p.matcher(mobiles);
+		b = m.matches();
+		return b;
 	}
 
 	/**
 	 * 使用正则表达式检查邮箱地址格式
-	 * 
+	 *
 	 * @param email
 	 * @return
 	 */
@@ -127,7 +127,7 @@ public class StringUtil{
 
 	/**
 	 * 校验身份证
-	 * 
+	 *
 	 * @param idCard
 	 * @return 校验通过返回true，否则返回false
 	 */
@@ -159,14 +159,14 @@ public class StringUtil{
 			if (TextUtils.equals("code", key)) {
 				code = map.get(key);
 				break;
-			} 
-		} 
+			}
+		}
 		return code;
 	}
 
 	/**
 	 * 校验URL
-	 * 
+	 *
 	 * @param url
 	 * @return 校验通过返回true，否则返回false
 	 */
@@ -176,14 +176,14 @@ public class StringUtil{
 
 	/**
 	 * 校验密码
-	 * 
+	 *
 	 * @param password 8-16位字母数字组合
 	 * @return 校验通过返回true，否则返回false
 	 */
 	public static boolean isPassword(String password) {
 		return Pattern.matches(REGEX_PASSWORD, password);
 	}
-	
+
 	/**
 	 * 校验密码
 	 * @param password 6-20位字母数字组合
@@ -234,7 +234,7 @@ public class StringUtil{
 			int end = m.end();
 			s.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
-		return s;	
+		return s;
 	}
 
 	/**
@@ -246,9 +246,9 @@ public class StringUtil{
 		Pattern pattern = Pattern.compile("[0-9]*");
 		Matcher isNum = pattern.matcher(str);
 		if( !isNum.matches() ){
-			return false; 
-		} 
-		return true; 
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -258,30 +258,30 @@ public class StringUtil{
 	 */
 	public static boolean isPhoneNumberValid(String phoneNumber){
 
-		boolean isValid = false;  
-		/* 可接受的电话格式有: * ^\\(? :   
-		 * 可以使用 "(" 作为开头 * (\\d{3}): 紧接着三个数字 * \\)? :   
-		 * 可以使用")"接续 * [- ]? : 在上述格式后可以使用具选择性的 "-". * (\\d{3}) :  
-		 *  再紧接着三个数字 * [- ]? : 可以使用具选择性的 "-" 接续. * (\\d{4})$:   
-		 *  以四个数字结束. * 可以比对下列数字格式:  
-		 *   * (123)456-7890, 123-456-7890, 1234567890, (123)-456-7890 */  
+		boolean isValid = false;
+		/* 可接受的电话格式有: * ^\\(? :
+		 * 可以使用 "(" 作为开头 * (\\d{3}): 紧接着三个数字 * \\)? :
+		 * 可以使用")"接续 * [- ]? : 在上述格式后可以使用具选择性的 "-". * (\\d{3}) :
+		 *  再紧接着三个数字 * [- ]? : 可以使用具选择性的 "-" 接续. * (\\d{4})$:
+		 *  以四个数字结束. * 可以比对下列数字格式:
+		 *   * (123)456-7890, 123-456-7890, 1234567890, (123)-456-7890 */
 		String expression = "^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$";
 		String expression2 ="^\\(?(\\d{2})\\)?[- ]?(\\d{4})[- ]?(\\d{4})$";
 		CharSequence inputStr = phoneNumber;
-		/*建立Pattern*/   
+		/*建立Pattern*/
 		Pattern pattern = Pattern.compile(expression);
-		/*将Pattern 以参数传入Matcher作Regular expression*/  
+		/*将Pattern 以参数传入Matcher作Regular expression*/
 		Matcher matcher = pattern.matcher(inputStr);
-		/*建立Pattern2*/  
+		/*建立Pattern2*/
 		Pattern pattern2 = Pattern.compile(expression2);
-		/*将Pattern2 以参数传入Matcher2作Regular expression*/  
+		/*将Pattern2 以参数传入Matcher2作Regular expression*/
 		Matcher matcher2= pattern2.matcher(inputStr);
-		if(matcher.matches()||matcher2.matches())   
-		{   
-			isValid = true;  
-		}  
-		return isValid;  
-	}  
+		if(matcher.matches()||matcher2.matches())
+		{
+			isValid = true;
+		}
+		return isValid;
+	}
 
 	/**
 	 * 设置数字显示为英文状态下带“,”，如（1,254.00）

@@ -1,19 +1,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg_color"
-    android:orientation="vertical"
->
+    android:orientation="vertical">
 
-
-    <ImageView
-        android:id="@+id/ImageViewImagePic01"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/main_home2_height"
-        android:adjustViewBounds="true"
-        android:padding="5dp"
-        android:background="@drawable/dic_home3_item_pic_bg"
-        android:scaleType="centerCrop"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_3"
+        app:cardBackgroundColor="@color/nc_white"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="3dp"
+        app:cardPreventCornerOverlap="false">
 
+        <ImageView
+            android:id="@+id/ImageViewImagePic01"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/dic_home3_item_pic_bg"
+            android:scaleType="fitXY" />
+    </android.support.v7.widget.CardView>
 </LinearLayout>

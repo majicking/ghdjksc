@@ -126,6 +126,17 @@ public class LogUtils {
             Log.i(tag, content);
         }
     }
+    public static void i(Object content) {
+        if (!allowI) return;
+        StackTraceElement caller = getCallerStackTraceElement();
+        String tag = generateTag(caller);
+
+        if (customLogger != null) {
+            customLogger.i(tag, ""+content);
+        } else {
+            Log.i(tag, ""+content);
+        }
+    }
 
     public static void i(String content, Throwable tr) {
         if (!allowI) return;

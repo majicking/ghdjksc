@@ -7,37 +7,42 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="#FFFFFF"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/TextViewTitle"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/titleview"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textColor="#6D6D6D"
-            android:textSize="15dp"
-            android:visibility="gone" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/cart_listview_gap"
-            android:visibility="gone" />
+            <View
+                android:id="@+id/linev"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/nc_red" />
+
+            <TextView
+                android:id="@+id/TextViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="#6D6D6D"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <com.guohanhealth.shop.custom.MyGridView
         android:id="@+id/gridview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:background="@null"
-        android:horizontalSpacing="5dp"
         android:listSelector="@null"
-        android:numColumns="2"
-        android:verticalSpacing="5dp" />
+        android:numColumns="2" />
 
 
 </LinearLayout>
