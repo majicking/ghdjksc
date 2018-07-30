@@ -73,13 +73,18 @@ public class ShopHelper {
      * 检查是否已登录，如果未登录直接弹出登录页面
      */
     public static Boolean isLogin(Context context, String key) {
-        if (StringUtils.isEmpty(key)) {
-            Intent intent = new Intent(context, LoginActivity.class);
-            context.startActivity(intent);
-            return false;
-        } else {
-            return true;
+        try {
+            if (StringUtils.isEmpty(key)) {
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+                return false;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return true;
     }
 
     /**
@@ -210,7 +215,7 @@ public class ShopHelper {
                         context.sendBroadcast(intent);
                     } catch (JSONException e) {
                         Toast.makeText(context, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {

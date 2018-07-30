@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/nc_bg">
@@ -16,7 +17,7 @@
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/main_home_adv_height">
+                android:layout_height="350dp">
 
                 <!-- 幻灯图片 -->
                 <com.guohanhealth.shop.custom.ViewFlipperScrollView
@@ -34,172 +35,84 @@
                         <ViewFlipper
                             android:id="@+id/viewflipper"
                             android:layout_width="fill_parent"
-                            android:layout_height="@dimen/main_home_adv_height" />
+                            android:layout_height="220dp" />
 
-                        <LinearLayout
-                            android:id="@+id/ll_bottomNavPoint"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|center"
-                            android:background="#00000000"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:paddingBottom="5dp">
-
-                            <LinearLayout
-                                android:id="@+id/dian"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:orientation="horizontal" />
-
-                        </LinearLayout>
 
                     </FrameLayout>
                 </com.guohanhealth.shop.custom.ViewFlipperScrollView>
 
+                <RelativeLayout
+                    android:id="@+id/cardview_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="172dp"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/home_bg_color" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:padding="@dimen/dimen_3"
+                        android:background="@drawable/bg_line"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp">
+
+                        <com.guohanhealth.shop.custom.MyGridView
+                            android:id="@+id/gridemenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fadingEdge="none"
+                            android:forceHasOverlappingRendering="true"
+                            android:horizontalSpacing="0dp"
+                            android:listSelector="#00000000"
+                            android:numColumns="4"
+                            android:verticalSpacing="0dp"></com.guohanhealth.shop.custom.MyGridView>
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_bottomNavPoint"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/cardview_menu"
+                    android:layout_gravity="bottom|center"
+                    android:background="#00000000"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/dian"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal" />
+
+                </LinearLayout>
 
             </RelativeLayout>
 
-            <com.guohanhealth.shop.custom.MyGridView
-                android:id="@+id/gridemenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:numColumns="4"
-                android:verticalSpacing="3dp"></com.guohanhealth.shop.custom.MyGridView>
-            <!-- 首页4个功能按钮 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/nc_white"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:id="@+id/llHomeFavGoods"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/nc_home_icon_bg_1">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/browse_list_w" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="分类"
-                        android:textColor="@color/nc_text"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llHomeMyOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/nc_home_icon_bg_2">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/cart_w" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="购物车"
-                        android:textColor="@color/nc_text"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llHomeMyAsset"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/nc_home_icon_bg_3">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/member_w" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="我的商城"
-                        android:textColor="@color/nc_text"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llHomeSignin"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/nc_home_icon_bg_4">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/nc_icon_eval" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="每日签到"
-                        android:textColor="@color/nc_text"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
 
             <!--<include layout="@layout/tab_home_item_video"></include>-->
 
@@ -235,9 +148,9 @@
     <!-- 搜索框 -->
     <LinearLayout
         android:id="@+id/homeSearch"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_alignParentTop="true"
         android:background="@android:color/transparent"
         android:orientation="horizontal">
 

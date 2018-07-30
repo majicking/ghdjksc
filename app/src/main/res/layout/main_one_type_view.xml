@@ -85,6 +85,7 @@
             android:background="@color/nc_bg_light"
             android:horizontalSpacing="5dp"
             android:numColumns="3"
+
             android:verticalSpacing="5dp"></GridView>
 
         <ScrollView
@@ -100,5 +101,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"></LinearLayout>
         </ScrollView>
+        <com.guohanhealth.shop.custom.MyListEmpty
+            android:id="@+id/emptyview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.guohanhealth.shop.custom.MyListEmpty>
     </LinearLayout>
 </LinearLayout>

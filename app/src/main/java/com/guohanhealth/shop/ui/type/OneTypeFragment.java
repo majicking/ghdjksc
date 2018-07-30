@@ -27,6 +27,7 @@ import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyExceptionHandler;
 import com.guohanhealth.shop.common.MyShopApplication;
 import com.guohanhealth.shop.common.ShopHelper;
+import com.guohanhealth.shop.custom.MyListEmpty;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
 import com.guohanhealth.shop.http.ResponseData;
@@ -56,6 +57,7 @@ public class OneTypeFragment extends Fragment {
     private View currentGoodsClassView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     private GridView gvBrand;
+    private MyListEmpty emptyview;
     private ScrollView svGoodsClass;
     private LinearLayout llGoodsClass;
 
@@ -112,6 +114,8 @@ public class OneTypeFragment extends Fragment {
                 }
             }
         });
+        emptyview = (MyListEmpty) viewLayout.findViewById(R.id.emptyview);
+        emptyview.setListEmpty(R.drawable.nc_icon_order, "没有找到符合条件的类型", "选择其它分类或直接搜索");
 
 
         return viewLayout;
@@ -214,8 +218,7 @@ public class OneTypeFragment extends Fragment {
                 TextView tvGoodsClassId1 = (TextView) view.findViewById(R.id.tvGoodsClassId);
                 String goodsClassId = tvGoodsClassId1.getText().toString();
                 if (goodsClassId.equals("0")) {
-                    gvBrand.setVisibility(View.VISIBLE);
-                    svGoodsClass.setVisibility(View.GONE);
+                    loadBrandList();
                 } else {
                     showGoodsClass(goodsClassId);
                 }
@@ -272,13 +275,22 @@ public class OneTypeFragment extends Fragment {
                         String brandList = obj.getString("brand_list");
                         if (brandList != "" && brandList != null && !brandList.equals("[]")) {
                             ArrayList<BrandInfo> brandArray = BrandInfo.newInstanceList(brandList);
-                            BrandGridViewAdapter brandGridViewAdapter = new BrandGridViewAdapter(context);
-                            brandGridViewAdapter.setBrandArray(brandArray);
-                            gvBrand.setAdapter(brandGridViewAdapter);
+                            if (brandArray != null && brandArray.size() > 0) {
+                                gvBrand.setVisibility(View.VISIBLE);
+                                svGoodsClass.setVisibility(View.GONE);
+                                emptyview.setVisibility(View.VISIBLE);
+                                BrandGridViewAdapter brandGridViewAdapter = new BrandGridViewAdapter(context);
+                                brandGridViewAdapter.setBrandArray(brandArray);
+                                gvBrand.setAdapter(brandGridViewAdapter);
+                            }
+                        }else {
+                            gvBrand.setVisibility(View.GONE);
+                            svGoodsClass.setVisibility(View.GONE);
+                            emptyview.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
@@ -293,8 +305,6 @@ public class OneTypeFragment extends Fragment {
      */
     private void showGoodsClass(String classId) {
         //隐藏品牌列表
-        gvBrand.setVisibility(View.GONE);
-        svGoodsClass.setVisibility(View.VISIBLE);
         svGoodsClass.scrollTo(0, 0);
         RemoteDataHandler.asyncDataStringGet(Constants.URL_GOODS_CLASS_CHILD_ALL + "&gc_id=" + classId, new RemoteDataHandler.Callback() {
             @Override
@@ -307,85 +317,94 @@ public class OneTypeFragment extends Fragment {
                         if (list != "" && list != null && !list.equals("[]")) {
                             ArrayList<GoodsClassInfo> array = GoodsClassInfo.newInstanceList(list);
                             llGoodsClass.removeAllViews();
-                            for (int i = 0; i < array.size(); i++) {
-                                final GoodsClassInfo goodsClassInfo = array.get(i);
+                            if (array != null && array.size() > 0) {
+                                gvBrand.setVisibility(View.GONE);
+                                svGoodsClass.setVisibility(View.VISIBLE);
+                                emptyview.setVisibility(View.GONE);
+                                for (int i = 0; i < array.size(); i++) {
+                                    final GoodsClassInfo goodsClassInfo = array.get(i);
 
-                                LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                View view = vi.inflate(R.layout.item_goods_class, null);
-                                if (i == 0) {
-                                    TextView tvLine = (TextView) view.findViewById(R.id.tvLine);
-                                    tvLine.setVisibility(View.INVISIBLE);
-                                }
+                                    LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    View view = vi.inflate(R.layout.item_goods_class, null);
+                                    if (i == 0) {
+                                        TextView tvLine = (TextView) view.findViewById(R.id.tvLine);
+                                        tvLine.setVisibility(View.INVISIBLE);
+                                    }
 
-                                ImageView ivGoodsClassDot = (ImageView) view.findViewById(R.id.tvGoodsClassDot);
-                                int index = i % 10;
-                                switch (index) {
-                                    case 0:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot0));
-                                        break;
-                                    case 1:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot1));
-                                        break;
-                                    case 2:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot2));
-                                        break;
-                                    case 3:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot3));
-                                        break;
-                                    case 4:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot4));
-                                        break;
-                                    case 5:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot5));
-                                        break;
-                                    case 6:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot6));
-                                        break;
-                                    case 7:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot7));
-                                        break;
-                                    case 8:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot8));
-                                        break;
-                                    case 9:
-                                        ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot9));
-                                        break;
-                                }
+                                    ImageView ivGoodsClassDot = (ImageView) view.findViewById(R.id.tvGoodsClassDot);
+                                    int index = i % 10;
+                                    switch (index) {
+                                        case 0:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot0));
+                                            break;
+                                        case 1:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot1));
+                                            break;
+                                        case 2:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot2));
+                                            break;
+                                        case 3:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot3));
+                                            break;
+                                        case 4:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot4));
+                                            break;
+                                        case 5:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot5));
+                                            break;
+                                        case 6:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot6));
+                                            break;
+                                        case 7:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot7));
+                                            break;
+                                        case 8:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot8));
+                                            break;
+                                        case 9:
+                                            ivGoodsClassDot.setImageDrawable(context.getResources().getDrawable(R.drawable.nc_sharp_dot9));
+                                            break;
+                                    }
 
-                                TextView tvGoodsClassName = (TextView) view.findViewById(R.id.tvGoodsClassName);
-                                tvGoodsClassName.setText(goodsClassInfo.getGcName());
+                                    TextView tvGoodsClassName = (TextView) view.findViewById(R.id.tvGoodsClassName);
+                                    tvGoodsClassName.setText(goodsClassInfo.getGcName());
 
-                                Button btnGoodsClass = (Button) view.findViewById(R.id.btnGoodsClass);
-                                btnGoodsClass.setOnClickListener(view1 -> {
-                                    Intent intent = new Intent(getActivity(), GoodsListFragmentManager.class);
-                                    intent.putExtra("gc_id", goodsClassInfo.getGcId());
-                                    intent.putExtra("gc_name", goodsClassInfo.getGcName());
-                                    startActivity(intent);
-                                });
-
-                                GridView gvGoodsClass = (GridView) view.findViewById(R.id.gvGoodsClass);
-
-                                ArrayList<GoodsClassInfo> goodsClassList = GoodsClassInfo.newInstanceList(goodsClassInfo.getChild());
-
-                                final GoodsClassGridViewAdapter goodsClassGridViewAdapter = new GoodsClassGridViewAdapter(getActivity());
-                                goodsClassGridViewAdapter.setGoodsClassInfoList(goodsClassList);
-                                gvGoodsClass.setAdapter(goodsClassGridViewAdapter);
-                                gvGoodsClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                        GoodsClassInfo goodsClassInfo = (GoodsClassInfo) goodsClassGridViewAdapter.getItem(i);
+                                    Button btnGoodsClass = (Button) view.findViewById(R.id.btnGoodsClass);
+                                    btnGoodsClass.setOnClickListener(view1 -> {
                                         Intent intent = new Intent(getActivity(), GoodsListFragmentManager.class);
                                         intent.putExtra("gc_id", goodsClassInfo.getGcId());
                                         intent.putExtra("gc_name", goodsClassInfo.getGcName());
                                         startActivity(intent);
-                                    }
-                                });
-                                llGoodsClass.addView(view);
+                                    });
+
+                                    GridView gvGoodsClass = (GridView) view.findViewById(R.id.gvGoodsClass);
+
+                                    ArrayList<GoodsClassInfo> goodsClassList = GoodsClassInfo.newInstanceList(goodsClassInfo.getChild());
+
+                                    final GoodsClassGridViewAdapter goodsClassGridViewAdapter = new GoodsClassGridViewAdapter(getActivity());
+                                    goodsClassGridViewAdapter.setGoodsClassInfoList(goodsClassList);
+                                    gvGoodsClass.setAdapter(goodsClassGridViewAdapter);
+                                    gvGoodsClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                            GoodsClassInfo goodsClassInfo = (GoodsClassInfo) goodsClassGridViewAdapter.getItem(i);
+                                            Intent intent = new Intent(getActivity(), GoodsListFragmentManager.class);
+                                            intent.putExtra("gc_id", goodsClassInfo.getGcId());
+                                            intent.putExtra("gc_name", goodsClassInfo.getGcName());
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    llGoodsClass.addView(view);
+                                }
                             }
+                        } else {
+                            gvBrand.setVisibility(View.GONE);
+                            svGoodsClass.setVisibility(View.GONE);
+                            emptyview.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {

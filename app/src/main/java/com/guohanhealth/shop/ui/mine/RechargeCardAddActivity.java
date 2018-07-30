@@ -111,25 +111,21 @@ public class RechargeCardAddActivity extends BaseActivity{
      */
     private void loadSeccodeCode() {
         etCode.setText("");
-        RemoteDataHandler.asyncDataStringGet(Constants.URL_SECCODE_MAKECODEKEY, new RemoteDataHandler.Callback() {
-            @Override
-            public void dataLoaded(ResponseData data) {
-                String json = data.getJson();
-                if (data.getCode() == HttpStatus.SC_OK) {
-                    try {
-                        JSONObject obj = new JSONObject(json);
-                        codeKey = obj.getString("codekey");
-                        ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                } else {
-                    ShopHelper.showApiError(RechargeCardAddActivity.this, json);
+        RemoteDataHandler.asyncDataStringGet(Constants.URL_SECCODE_MAKECODEKEY, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                try {
+                    JSONObject obj = new JSONObject(json);
+                    codeKey = obj.getString("codekey");
+                    ShopHelper.loadImage(ivCode, Constants.URL_SECCODE_MAKECODE + "&k=" + codeKey);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+            } else {
+                ShopHelper.showApiError(RechargeCardAddActivity.this, json);
             }
-
         });
     }
 

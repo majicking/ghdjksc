@@ -44,10 +44,10 @@ public class OrderActivity extends FragmentActivity implements OrderFragment.OnF
         initView();
         initData();
     }
-    String[] reatitle = {"全部", "待付款", "待收货", "待自提", "待评价"};
-    String[] reatype = {"", "state_new", "state_send", "state_notakes", "state_noeval"};
-    String[] viltitle = {"全部", "待付款", "待使用"};
-    String[] viltype = {"", "state_new", "state_pay"};
+    public String[] reatitle = {"全部", "待付款", "待收货", "待自提", "待评价"};
+    public String[] reatype = {"", "state_new", "state_send", "state_notakes", "state_noeval"};
+    public String[] viltitle = {"全部", "待付款", "待使用"};
+    public String[] viltype = {"", "state_new", "state_pay"};
     String[] titles;
     String[] ordertype;//订单标识
     boolean select = false;//当前是虚拟订单还是实物订单  虚拟订单true      实物订单false
@@ -86,7 +86,6 @@ public class OrderActivity extends FragmentActivity implements OrderFragment.OnF
             fragmentlist.add(OrderFragment.newInstance(titles[i], ordertype[i], TextUtils.isEmpty(searchtext) ? "" : searchtext, url, select));
         }
         adapter.updataAdapter(fragmentlist, titles);
-        adapter.notifyDataSetChanged();
     }
     public void initData() {
         num = getIntent().getIntExtra(ORDERNUMBER, 0);

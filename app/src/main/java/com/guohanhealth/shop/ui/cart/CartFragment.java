@@ -254,6 +254,7 @@ public class CartFragment extends Fragment {
         }
         //店铺选择按钮
         final ImageButton btnSelectStore = (ImageButton) cartListItemView.findViewById(R.id.btnSelectStore);
+
         //商品
         LinearLayout llCartGoodsList = (LinearLayout) cartListItemView.findViewById(R.id.llCartGoodsList);
         String goodsListString = cartItemObj.optString("goods");
@@ -283,6 +284,7 @@ public class CartFragment extends Fragment {
                     } else {
                         item.checkBtn.setSelected(true);
                     }
+
                     int length = storeCardId.size();
                     int num = 0;
                     for (String cartId1 : storeCardId) {

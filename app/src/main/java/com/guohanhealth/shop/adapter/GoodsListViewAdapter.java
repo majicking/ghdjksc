@@ -143,7 +143,7 @@ public class GoodsListViewAdapter extends BaseAdapter {
 
         holder.textGoodsName.setText((StringUtils.isEmpty(bean.getGoods_name()) ? "" : bean.getGoods_name()));
         holder.textGoodsJingle.setText(StringUtils.isEmpty(bean.getGoods_jingle()) ? "" : bean.getGoods_jingle());
-        holder.textGoodsPrice.setText("￥" + (StringUtils.isEmpty(bean.getGoods_price()) ? "0.00" : bean.getGoods_price()));
+        holder.textGoodsPrice.setText((StringUtils.isEmpty(bean.getGoods_price()) ? "0.00" : bean.getGoods_price()));
         holder.tvGoodsSalenum.setText("销量:" + (StringUtils.isEmpty(bean.getGoods_salenum()) ? "0" : bean.getGoods_salenum()));
 
         if (Boolean.valueOf(bean.getSole_flag())) {

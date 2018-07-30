@@ -1,9 +1,15 @@
 package com.guohanhealth.shop.custom;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.GridView;
+
+import com.guohanhealth.shop.R;
 
 public class MyGridView extends GridView {
     public MyGridView(android.content.Context context,
@@ -38,4 +44,6 @@ public class MyGridView extends GridView {
         // TODO Auto-generated method stub
         return false;
     }
+
+
 }

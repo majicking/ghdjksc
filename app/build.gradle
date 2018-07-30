@@ -41,8 +41,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         applicationId "com.guohanhealth.shop"
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 4
+        versionName "1.0.3"
         multiDexEnabled true
         flavorDimensions "versionCode"
         buildConfigField "String", "PROTOCOL", '"http://"'

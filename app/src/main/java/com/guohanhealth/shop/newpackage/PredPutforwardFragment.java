@@ -190,7 +190,6 @@ public class PredPutforwardFragment extends Fragment {
         params.put("pdc_bank_user", username.getText().toString().trim());
         params.put("mobilenum", phonenumber.getText().toString().trim());
         params.put("password", paypwd.getText().toString().trim());
-        params.put("key", MyShopApplication.getInstance().getLoginKey());
         params.put("client", "android");
         Dialog dialog = ProgressDialog.showLoadingProgress(context, "正在提现申请...");
         dialog.show();

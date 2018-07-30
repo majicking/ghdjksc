@@ -67,21 +67,27 @@
                         android:layout_height="25dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="￥"
+                            android:textColor="@color/nc_red"
+                            android:textSize="12sp" />
                         <TextView
                             android:id="@+id/textGoodsPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
-                            android:text="$ 0.00"
+                            android:text="0.00"
+                            android:textStyle="bold"
                             android:textColor="@color/nc_red"
                             android:textSize="16dp" />
                         <ImageView
                             android:id="@+id/imgrating"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="5dp" />
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="5dp"
+                              />
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

@@ -914,7 +914,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         //显示商品价格
         if (goodsBean.getPromotion_price() != null && !goodsBean.getPromotion_price().equals("") && !goodsBean.getPromotion_price().equals("null")) {
             goodsPrice = goodsBean.getPromotion_price();
-            goodsPriceID.setText("￥" + (goodsBean.getPromotion_price() == null ? "" : goodsBean.getPromotion_price()));
+            goodsPriceID.setText( (goodsBean.getPromotion_price() == null ? "" : goodsBean.getPromotion_price()));
             tvGoodsMarketPrice.setText("￥" + (goodsBean.getGoods_price() == null ? "" : goodsBean.getGoods_price()));
             tvGoodsMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             //显示促销
@@ -933,7 +933,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
             }
         } else {
             goodsPrice = goodsBean.getGoods_price();
-            goodsPriceID.setText("￥" + (goodsBean.getGoods_price() == null ? "0" : goodsBean.getGoods_price()));
+            goodsPriceID.setText((goodsBean.getGoods_price() == null ? "0" : goodsBean.getGoods_price()));
         }
         if (!TextUtils.isEmpty(goodsBean.getGoods_grade()) && !goodsBean.getGoods_grade().equals("0")) {
             try {

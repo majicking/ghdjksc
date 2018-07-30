@@ -8,12 +8,12 @@
     <com.guohanhealth.shop.custom.MyScrollView
         android:id="@+id/svMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:background="@color/nc_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/nc_white"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -24,10 +24,10 @@
                 android:orientation="vertical">
 
 
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/vpImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vpImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
 
                 <LinearLayout
@@ -60,10 +60,12 @@
             </RelativeLayout>
 
             <TextView style="@style/NCLine" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tvGoodsType"
                     android:layout_width="wrap_content"
@@ -71,7 +73,8 @@
                     android:layout_marginLeft="3dp"
                     android:background="@color/nc_red"
                     android:textColor="@color/nc_white"
-                    android:textSize="12dp"   />
+                    android:textSize="12dp" />
+
                 <TextView
                     android:id="@+id/goodsNameID"
                     android:layout_width="match_parent"
@@ -82,7 +85,7 @@
                     android:paddingLeft="5dp"
                     android:textColor="@color/nc_text_dark"
                     android:textSize="16dp" />
-                </LinearLayout>
+            </LinearLayout>
 
 
             <TextView
@@ -110,24 +113,33 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/goodsPriceID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="￥"
                         android:textColor="@color/nc_red"
-                        android:textSize="18dp" />
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/goodsPriceID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textColor="@color/nc_red"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvGoodsMarketPrice"
                         style="@style/NCText"
                         android:layout_marginLeft="3dp"
                         android:textSize="12dp" />
+
                     <ImageView
                         android:id="@+id/imgrating"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_margin="5dp" />
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="5dp"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -311,8 +323,9 @@
                         </LinearLayout>
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:layout_alignParentRight="true"
                             android:src="@drawable/nc_icon_location" />
                     </RelativeLayout>

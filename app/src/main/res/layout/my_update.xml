@@ -62,13 +62,13 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:layout_below="@id/v2"
             android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/btu_on"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:text="下载"
@@ -84,7 +84,7 @@
 
             <Button
                 android:id="@+id/btu_off"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#909090"

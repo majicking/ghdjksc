@@ -210,7 +210,6 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent noAddressIntent = new Intent(BuyStep1Activity.this, AddressListActivity.class);
                         noAddressIntent.putExtra("addressFlag", "1");//1是提交订单跳转过去的 0或者没有是 个人中心
-                        noAddressIntent.putExtra("addressFlag", "1");//1是提交订单跳转过去的 0或者没有是 个人中心
                         startActivityForResult(noAddressIntent, 5);
                     }
                 })
@@ -243,6 +242,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
     ToggleButton toggle_yck, toggle_czk, toggle_jkd;
     boolean isyck, isczk, isjkd;
     TextView num_yck, num_czk, num_jkd;
+    View view_yck, view_czk, view_jkd;
 
     /**
      * 初始化注册控件ID
@@ -356,6 +356,9 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         num_yck = (TextView) findViewById(R.id.textview_yck);
         num_czk = (TextView) findViewById(R.id.textview_czk);
         num_jkd = (TextView) findViewById(R.id.textview_jkd);
+        view_yck = findViewById(R.id.view_yck);
+        view_czk = findViewById(R.id.view_czk);
+        view_jkd = findViewById(R.id.view_jkd);
 
     }
 
@@ -364,10 +367,12 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
             textstatu.setActivated(true);
             editPasswordID.setHint("请输入支付密码");
             editPasswordID.setEnabled(true);
+            predepositLayoutID.setVisibility(View.VISIBLE);
         } else {
-            editPasswordID.setHint("其他方式支付订单");
-            editPasswordID.setEnabled(false);
-            textstatu.setActivated(false);
+            predepositLayoutID.setVisibility(View.GONE);
+//            editPasswordID.setHint("其他方式支付订单");
+//            editPasswordID.setEnabled(false);
+//            textstatu.setActivated(false);
         }
     }
 
@@ -477,18 +482,46 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         String Available_predeposit = buyStep1.getAvailable_predeposit();
                         String Available_Rcb_pay = buyStep1.getAvailable_rc_balance();
                         String member_available_healthbean = buyStep1.getMember_available_healthbean();
-                        num_yck.setText("可用余额:￥" + (Available_predeposit == null || Available_predeposit.equals("") || Available_predeposit.equals("null") ? "0.00" : buyStep1.getAvailable_predeposit()));
-                        num_czk.setText("可用余额:￥" + (Available_Rcb_pay == null | Available_Rcb_pay.equals("") || Available_Rcb_pay.equals("null") ? "0.00" : buyStep1.getAvailable_rc_balance()));
-                        num_jkd.setText("可用余额:￥" + (member_available_healthbean == null | member_available_healthbean.equals("") || member_available_healthbean.equals("null") ? "0.00" : buyStep1.getMember_available_healthbean()));
-                        if (!buyStep1.getHealthbean_allow().equals("1")) {
-                            toggle_jkd.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(mActivity, "无法使用健康豆", Toast.LENGTH_SHORT).show();
-                                    toggle_jkd.setToggleOff();
-                                }
-                            });
+
+
+                        if (buyStep1.getPredeposit_allow().equals("0") &&
+                                buyStep1.getRc_balance_allow().equals("0") &&
+                                buyStep1.getHealthbean_allow().equals("0")) {
+                            howtopay.setVisibility(View.GONE);
+                        } else {
+                            howtopay.setVisibility(View.VISIBLE);
+
+                            if (buyStep1.getPredeposit_allow().equals("0")) {
+                                view_yck.setVisibility(View.GONE);
+                            } else {
+                                num_yck.setText("可用余额:￥" + (Available_predeposit == null || Available_predeposit.equals("") || Available_predeposit.equals("null") ? "0.00" : buyStep1.getAvailable_predeposit()));
+                                view_yck.setVisibility(View.VISIBLE);
+                            }
+
+                            if (buyStep1.getRc_balance_allow().equals("0")) {
+                                view_czk.setVisibility(View.GONE);
+                            } else {
+                                view_czk.setVisibility(View.VISIBLE);
+                                num_czk.setText("可用余额:￥" + (Available_Rcb_pay == null | Available_Rcb_pay.equals("") || Available_Rcb_pay.equals("null") ? "0.00" : buyStep1.getAvailable_rc_balance()));
+                            }
+                            if (buyStep1.getHealthbean_allow().equals("0")) {
+                                view_jkd.setVisibility(View.GONE);
+                            } else {
+                                view_jkd.setVisibility(View.VISIBLE);
+                                num_jkd.setText("可用余额:￥" + (member_available_healthbean == null | member_available_healthbean.equals("") || member_available_healthbean.equals("null") ? "0.00" : buyStep1.getMember_available_healthbean()));
+                            }
                         }
+
+//
+//                        if (!buyStep1.getHealthbean_allow().equals("1")) {
+//                            toggle_jkd.setOnClickListener(new OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    Toast.makeText(mActivity, "无法使用健康豆", Toast.LENGTH_SHORT).show();
+//                                    toggle_jkd.setToggleOff();
+//                                }
+//                            });
+//                        }
                         //显示购买商品列表
                         try {
                             jsonObj = new JSONObject(buyStep1.getStore_cart_list());
@@ -713,7 +746,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

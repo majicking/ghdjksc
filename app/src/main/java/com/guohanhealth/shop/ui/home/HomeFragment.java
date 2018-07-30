@@ -22,6 +22,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -62,6 +63,7 @@ import com.guohanhealth.shop.library.PullToRefreshScrollView;
 import com.guohanhealth.shop.library.OnScrollViewListener;
 import com.guohanhealth.shop.newpackage.CommonAdapter;
 import com.guohanhealth.shop.newpackage.OrderActivity;
+import com.guohanhealth.shop.newpackage.SpecialActivity;
 import com.guohanhealth.shop.newpackage.ViewHolder;
 import com.guohanhealth.shop.scannercode.android.CaptureActivity;
 import com.guohanhealth.shop.ui.fenxiao.FenXiaoAudeoListTabActivity;
@@ -774,9 +776,13 @@ public class HomeFragment extends Fragment implements OnGestureListener, OnTouch
                             intent.putExtra("gc_name", data);
                             startActivity(intent);
                         } else if (type.equals("special")) {//专题编号
-                            Intent intent = new Intent(getActivity(), SubjectWebActivity.class);
-                            intent.putExtra("data", Constants.URL_SPECIAL + "&special_id=" + data + "&type=html");
+//                            Intent intent = new Intent(getActivity(), SubjectWebActivity.class);
+
+//                            intent.putExtra("data", Constants.URL_SPECIAL + "&special_id=" + data + "&type=html");
+                            Intent intent = new Intent(getActivity(), SpecialActivity.class);
+                            intent.putExtra("special_id", data);
                             startActivity(intent);
+//                            startActivity(intent);
                         } else if (type.equals("goods")) {//商品编号
                             Intent intent = new Intent(getActivity(), GoodsDetailsActivity.class);
                             intent.putExtra("goods_id", data);
