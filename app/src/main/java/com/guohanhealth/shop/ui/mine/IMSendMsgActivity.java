@@ -344,7 +344,7 @@ public class IMSendMsgActivity extends Activity implements OnClickListener {
             adapter.setIMMsgList(imMsgLists);
             adapter.notifyDataSetChanged();
             listViewID.setSelection(imMsgLists.size());
-            if (datas.size() != 0) {
+            if (datas.size() != 0) {//表示已读
                 myApplication.getmSocket().emit("del_msg", new JSONObject("{'max_id':" + datas.get(datas.size() - 1).getM_id() + ",'f_id':" + t_id + "}"));
             }
 

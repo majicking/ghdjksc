@@ -43,6 +43,12 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/homeView"
                 android:layout_width="match_parent"

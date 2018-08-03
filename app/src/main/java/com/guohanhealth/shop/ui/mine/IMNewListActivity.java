@@ -76,8 +76,7 @@ public class IMNewListActivity extends BaseActivity implements XListView.IXListV
                         T.showShort(IMNewListActivity.this, "对不起，您不可以和自己聊天");
                         return;
                     }
-                    if (MyShopApplication.getInstance().isIMConnect()) {
-
+                    if (MyShopApplication.getInstance().isIMConnect()) {//本人在线
                         if (adapter.userState != null && adapter.userState.size() > 0) {
                             if (adapter.userState.get(bean.getU_id()) != null && adapter.userState.get(bean.getU_id()).equals("1")) {
                                 message_num.remove(bean.getU_id());

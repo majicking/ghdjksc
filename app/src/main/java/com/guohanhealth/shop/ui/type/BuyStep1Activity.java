@@ -59,6 +59,7 @@ import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.common.Utils;
 import com.guohanhealth.shop.custom.CustomDialog;
+import com.guohanhealth.shop.custom.HtmlTextView;
 import com.guohanhealth.shop.http.HttpHelper;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
@@ -414,6 +415,8 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         flMain.getForeground().setAlpha(150);
     }
 
+    boolean isPermission = false;
+
     /**
      * 加载购买一数据
      */
@@ -438,6 +441,11 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 if (data.getCode() == HttpStatus.SC_OK) {
                     BuyStep1 buyStep1 = BuyStep1.newInstanceList(json);
                     if (buyStep1 != null) {
+                        if (buyStep1.getIf_present_gold().equals("1")) {
+                            showAgreement();
+                        }else{
+                            isPermission=true;
+                        }
                         AddressDetails addressDetails = AddressDetails.newInstanceDetails(buyStep1.getAddress_info());
                         //记录运费hash
                         freight_hash = buyStep1.getFreight_hash();
@@ -544,6 +552,27 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 }
             }
         });
+    }
+
+    private void showAgreement() {
+        CustomDialog.Builder builder = new CustomDialog.Builder(BuyStep1Activity.this);
+        HtmlTextView htmlTextView = new HtmlTextView(BuyStep1Activity.this);
+        String html = "\n" +
+                "<div style=\"overflow:scroll; width:100%; height:87%;font-size: 15px;\">\n" +
+                "  <p>温馨提示：</p><p>尊敬的国翰大健康商城广大消费者:</p><p>您好：</p><p>感谢您一直以来对本商城的关注和支持，衷心感谢您来到我们商城消费，现温馨提示您：</p><p>（1）您已经详尽了解黄金商品信息</p><p>（2）您已确定自愿购买黄金商品</p><p>（3）您自愿委托本商城协助您将您的黄金商品购买订单信息转交给黄金商品销售企业，并自愿接受商城代为收取全款及协助完成后续金企货款支付服务。</p><p>（4）您的订单在支付完成后，黄金销售企业将在72小时内给您安排发货，您确定您所填写的收货地址和联系方式均正确无误且不影响正常收货；若因收货地址和联系方式不对，导致收货受到影响，则相应责任均由您本人负责承担；黄金商品的快递费和保险费均由您负责承担，货到付款。</p><p>（5）当您收到黄金商品时，建议您在监控区域内开包检查您所购买的黄金商品；若发生所购黄金商品重量及质量不符等销售问题，您可以选择拒签收件并及时联系本商城客服人员或者金企客服人员。</p><p>（6）再次感谢您对本商城的支持，欢迎您再次光临。请勾选我已阅读并知晓，点击“确定”进入支付环节</p>\n" +
+                "</div>";
+        htmlTextView.setHtmlFromString(html, false);
+        htmlTextView.setMaxHeight(Utils.getScreenHeight(mActivity) / 2);
+        builder.setTitle("电子协议内容")
+                .setContentView(htmlTextView)
+                .setCancelable(false)
+                .setPositiveButton("同意协议", (d, w) -> {
+                    d.dismiss();
+                    isPermission = true;
+                })
+                .setNegativeButton("拒绝", (d, w) -> {
+                    d.dismiss();
+                }).create().show();
     }
 
     private void showGoodsList() {
@@ -1358,10 +1387,12 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 break;
 
             case R.id.commitID:
-
                 //判断是否使用预存款或者充值卡如果使用验证密码
+                if (!isPermission) {
+                    showAgreement();
+                    return;
+                }
                 if (isyck || isjkd || isczk) {
-
                     String password = editPasswordID.getText().toString().trim();
 //                    if (StringUtil.isNoEmpty(password)) {
                     CheackPassword(password);

@@ -25,6 +25,7 @@ public class BuyStep1 {
         public static final String HEALTHBEAN_ALLOW = "healthbean_allow";
         public static final String PREDEPOSIT_ALLOW = "predeposit_allow";
         public static final String RC_BALANCE_ALLOW = "rc_balance_allow";
+        public static final String IF_PRESENT_GOLD = "if_present_gold";
 
     }
 
@@ -41,6 +42,7 @@ public class BuyStep1 {
     private String healthbean_allow;
     private String predeposit_allow;
     private String rc_balance_allow;
+    private String if_present_gold;
 
     public BuyStep1() {
     }
@@ -48,7 +50,8 @@ public class BuyStep1 {
     public BuyStep1(String store_cart_list, String freight_hash,
                     String address_info, String ifshow_offpay, String vat_hash,
                     String inv_info, String available_predeposit, String available_rc_balance,
-                    String member_available_healthbean, String rpt_list, String healthbean_allow, String predeposit_allow, String rc_balance_allow) {
+                    String member_available_healthbean, String rpt_list, String healthbean_allow,
+                    String predeposit_allow, String rc_balance_allow,String if_present_gold) {
         super();
         this.store_cart_list = store_cart_list;
         this.freight_hash = freight_hash;
@@ -63,6 +66,7 @@ public class BuyStep1 {
         this.healthbean_allow = healthbean_allow;
         this.rc_balance_allow = rc_balance_allow;
         this.predeposit_allow = predeposit_allow;
+        this.if_present_gold = if_present_gold;
     }
 
     public static BuyStep1 newInstanceList(String json) {
@@ -82,10 +86,12 @@ public class BuyStep1 {
                 String healthbean_allow = obj.optString(Attr.HEALTHBEAN_ALLOW);
                 String predeposit_allow = obj.optString(Attr.PREDEPOSIT_ALLOW);
                 String rc_balance_allow = obj.optString(Attr.RC_BALANCE_ALLOW);
+                String if_present_gold = obj.optString(Attr.IF_PRESENT_GOLD);
                 String rpt_list = obj.optString(Attr.RPT_LIST);
                 bean = new BuyStep1(store_cart_list, freight_hash, address_info, ifshow_offpay,
                         vat_hash, inv_info, available_predeposit,
-                        available_rc_balance, member_available_healthbean, rpt_list, healthbean_allow, predeposit_allow, rc_balance_allow);
+                        available_rc_balance, member_available_healthbean, rpt_list,
+                        healthbean_allow, predeposit_allow, rc_balance_allow,if_present_gold);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -195,6 +201,14 @@ public class BuyStep1 {
 
     public void setRc_balance_allow(String rc_balance_allow) {
         this.rc_balance_allow = rc_balance_allow;
+    }
+
+    public String getIf_present_gold() {
+        return if_present_gold;
+    }
+
+    public void setIf_present_gold(String if_present_gold) {
+        this.if_present_gold = if_present_gold;
     }
 
     @Override

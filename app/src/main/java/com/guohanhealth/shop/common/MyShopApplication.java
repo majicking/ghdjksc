@@ -200,6 +200,7 @@ public class MyShopApplication extends Application {
             mSocket = IO.socket(Constants.IM_HOST, options);
             mSocket.io().reconnectionDelay(2000);
             mSocket.connect();
+            LogUtils.i("连接-> " +mSocket.connected());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (Exception e) {

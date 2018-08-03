@@ -1,6 +1,7 @@
 package com.guohanhealth.shop.newpackage;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.HomeActivityMyGridViewListAdapter;
 import com.guohanhealth.shop.bean.AdvertList;
@@ -40,9 +42,14 @@ import com.guohanhealth.shop.library.PullToRefreshScrollView;
 import com.guohanhealth.shop.ui.home.SubjectWebActivity;
 import com.guohanhealth.shop.ui.type.GoodsDetailsActivity;
 import com.guohanhealth.shop.ui.type.GoodsListFragmentManager;
+import com.guohanhealth.shop.xrefresh.utils.LogUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -68,6 +75,8 @@ public class SpecialActivity extends Activity {
     TextView title;
     @BindView(R.id.pull_refresh_scrollview)
     PullToRefreshScrollView pullRefreshScrollview;
+    @BindView(R.id.banner)
+    Banner banner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,6 +338,7 @@ public class SpecialActivity extends Activity {
         }
     }
 
+
     /**
      * 显示广告块
      *
@@ -343,7 +353,36 @@ public class SpecialActivity extends Activity {
             if (!item.equals("[]")) {
                 ArrayList<AdvertList> advertList = AdvertList.newInstanceList(item);
                 if (advertList.size() > 0 && advertList != null) {
+                    banner.setVisibility(View.VISIBLE);
 //                    initHeadImage(advertList);
+                    //设置banner样式
+                    banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+                    banner.setImages(advertList);
+                    //设置图片加载器
+                    banner.setImageLoader(new com.youth.banner.loader.ImageLoader() {
+                        @Override
+                        public void displayImage(Context context, Object path, ImageView imageView) {
+                            LogUtils.i(path);
+                            ImageLoader.getInstance().displayImage(((AdvertList) path).getImage(), imageView);
+                        }
+                    });
+                    //设置banner动画效果
+                    banner.setBannerAnimation(Transformer.DepthPage);
+//                    //设置标题集合（当banner样式有显示title时）
+//                    banner.setBannerTitles(titles);
+                    //设置自动轮播，默认为true
+                    banner.isAutoPlay(true);
+                    //设置轮播时间
+                    banner.setDelayTime(1500);
+                    //设置指示器位置（当banner模式中有指示器时）
+                    banner.setIndicatorGravity(BannerConfig.CENTER);
+//                    //banner设置方法全部调用完毕时最后调用
+                    banner.start();
+                    banner.setOnBannerListener(position -> {
+                        OnImageViewClick(banner, advertList.get(position).getType(), advertList.get(position).getData());
+                    });
+                } else {
+                    banner.setVisibility(View.GONE);
                 }
             }
         } catch (Exception e) {
@@ -584,4 +623,20 @@ public class SpecialActivity extends Activity {
             return flag;
         });
     }
+
+    //如果你需要考虑更好的体验，可以这么操作
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //开始轮播
+        banner.startAutoPlay();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //结束轮播
+        banner.stopAutoPlay();
+    }
+
 }

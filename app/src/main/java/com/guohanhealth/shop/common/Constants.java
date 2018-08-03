@@ -176,9 +176,8 @@ public final class Constants {
     public static final String HOST3 = "192.168.1.231";
     public static final String HOST4 = "192.168.1.252";
     public static final String HOST = HOST4;
-
     //WAPURL
-    public static final String WAP_URL = HOST+"/wap/";
+    public static final String WAP_URL = HOST + "/wap/";
     public static final String WAP_URL_ALL = PROTOCOL + WAP_URL;
     public static final String WAP_GOODS_URL = PROTOCOL + WAP_URL + "tmpl/product_detail.html?goods_id=";
 
