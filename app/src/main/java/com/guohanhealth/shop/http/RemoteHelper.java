@@ -1,6 +1,5 @@
 package com.guohanhealth.shop.http;
 
-import com.squareup.okhttp.Request;
 
 
 import com.guohanhealth.shop.BaseActivity;
@@ -13,6 +12,7 @@ import com.guohanhealth.shop.common.OkHttpUtil;
 import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.xrefresh.XRefreshView;
 
+import com.squareup.okhttp.Request;
 import org.apache.http.HttpStatus;
 
 import java.io.File;

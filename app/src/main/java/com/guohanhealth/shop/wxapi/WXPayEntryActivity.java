@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.guohanhealth.shop.http.RxBus;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -44,16 +45,16 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 	public void onResp(BaseResp resp) {
 		LogUtils.i("支付失败code=  "+resp.errCode);
 		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-
-			if (resp.errCode == 0) {
-				Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
-				sendBroadcast(new Intent(Constants.PAYMENT_SUCCESS));
-				sendBroadcast(new Intent(Constants.VPAYMENT_SUCCESS));
-			}else if(resp.errCode == -2){
-				Toast.makeText(this, "取消交易", Toast.LENGTH_SHORT).show();
-			}else{
-				Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
-			}
+			RxBus.getDefault().post(resp);
+//			if (resp.errCode == 0) {
+//				Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
+//				sendBroadcast(new Intent(Constants.PAYMENT_SUCCESS));
+//				sendBroadcast(new Intent(Constants.VPAYMENT_SUCCESS));
+//			}else if(resp.errCode == -2){
+//				Toast.makeText(this, "取消交易", Toast.LENGTH_SHORT).show();
+//			}else{
+//				Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
+//			}
 			finish();
 		}
 	}

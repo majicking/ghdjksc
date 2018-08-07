@@ -59,6 +59,7 @@ public class GoodsDetails {
         public static final String CONTRACT_LIST = "contractlist";//消保列表
         public static final String CART = "cart";
         public static final String GOODS_GRADE = "goods_grade";
+        public static final String BUYNOW = "buynow";
     }
 
     private String virtual_invalid_refundtiny;
@@ -108,6 +109,7 @@ public class GoodsDetails {
     private String contractlist;
     private String cart;
     private String goods_grade;
+    private String buynow;
 
     public GoodsDetails() {
     }
@@ -129,7 +131,7 @@ public class GoodsDetails {
                         String upper_limit, String goods_url, String mobile_body,
                         String is_virtual, String virtual_indate, String virtual_limit,
                         String is_fcode, String is_appoint, String is_presell,
-                        String have_gift, String contractlist, String cart,String goods_grade) {
+                        String have_gift, String contractlist, String cart,String goods_grade,String buynow) {
         super();
         this.virtual_invalid_refundtiny = virtual_invalid_refundtiny;
         this.appoint_satedate = appoint_satedate;
@@ -178,6 +180,7 @@ public class GoodsDetails {
         this.contractlist = contractlist;
         this.cart = cart;
         this.goods_grade = goods_grade;
+        this.buynow = buynow;
     }
 
 
@@ -233,7 +236,8 @@ public class GoodsDetails {
                 String contractlist = obj.optString(Attr.CONTRACT_LIST);
                 String cart = obj.optString(Attr.CART);
                 String goods_grade = obj.optString(Attr.GOODS_GRADE);
-                bean = new GoodsDetails(virtual_invalid_refundtiny, appoint_satedate, presell_deliverdate, goods_name, goods_jingle, spec_name, spec_value, goods_attr, goods_specname, goods_price, goods_marketprice, goods_costprice, goods_discount, goods_serial, transport_id, transport_title, goods_freight, goods_vat, areaid_1, areaid_2, goods_stcids, plateid_top, plateid_bottom, goods_id, goods_click, goods_collect, goods_salenum, goods_spec, goods_storage, color_id, evaluation_good_star, evaluation_count, promotion_type, promotion_price, upper_limit, goods_url, mobile_body, is_virtual, virtual_indate, virtual_limit, is_fcode, is_appoint, is_presell, have_gift, contractlist,cart,goods_grade);
+                String buynow = obj.optString(Attr.BUYNOW);
+                bean = new GoodsDetails(virtual_invalid_refundtiny, appoint_satedate, presell_deliverdate, goods_name, goods_jingle, spec_name, spec_value, goods_attr, goods_specname, goods_price, goods_marketprice, goods_costprice, goods_discount, goods_serial, transport_id, transport_title, goods_freight, goods_vat, areaid_1, areaid_2, goods_stcids, plateid_top, plateid_bottom, goods_id, goods_click, goods_collect, goods_salenum, goods_spec, goods_storage, color_id, evaluation_good_star, evaluation_count, promotion_type, promotion_price, upper_limit, goods_url, mobile_body, is_virtual, virtual_indate, virtual_limit, is_fcode, is_appoint, is_presell, have_gift, contractlist,cart,goods_grade,buynow);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -243,6 +247,14 @@ public class GoodsDetails {
 
     public String getGoods_grade() {
         return goods_grade;
+    }
+
+    public String getBuynow() {
+        return buynow;
+    }
+
+    public void setBuynow(String buynow) {
+        this.buynow = buynow;
     }
 
     public void setGoods_grade(String goods_grade) {

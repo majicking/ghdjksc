@@ -25,6 +25,7 @@ import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.custom.XListView;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
+import com.guohanhealth.shop.http.RxBus;
 import com.guohanhealth.shop.xrefresh.utils.LogUtils;
 
 import org.apache.http.HttpStatus;
@@ -166,7 +167,9 @@ public class OrderFragment extends Fragment implements XListView.IXListViewListe
     public void onDestroy() {
         super.onDestroy();
         context.unregisterReceiver(mBroadcastReceiver);
+        RxBus.getDefault().unRegister(this);
     }
+
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override

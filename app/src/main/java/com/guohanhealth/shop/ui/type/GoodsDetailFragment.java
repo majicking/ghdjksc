@@ -185,7 +185,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
 
 
     private MyShopApplication myApplication;
-    private  ImageView imgrating;
+    private ImageView imgrating;
 
     private String mobile_body;//商品手机版详情
 
@@ -267,7 +267,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
             }
             return false;
         });
-        imgrating= (ImageView) layout.findViewById(R.id.imgrating);
+        imgrating = (ImageView) layout.findViewById(R.id.imgrating);
         ll_btnHairAreaName = (RelativeLayout) layout.findViewById(R.id.ll_btnHairAreaName);
         ll_btnHairAreaName.setOnClickListener(this);
         btnShowGoodsDetail = (Button) layout.findViewById(R.id.btnShowGoodsDetail);
@@ -460,7 +460,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                     String num = obj.getString("cart_count");
                     Message msg = new Message();
                     msg.what = 1;
-                    msg.obj = TextUtils.isEmpty(num)?"0":num;
+                    msg.obj = TextUtils.isEmpty(num) ? "0" : num;
                     handler.sendMessage(msg);
                 } catch (JSONException e) {
                     Toast.makeText(getActivity(), "获取购物车数量失败", Toast.LENGTH_SHORT).show();
@@ -705,6 +705,11 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
      * 初始化规格
      */
     private void initSpec(final GoodsDetails goodsBean, final String specList) {
+        if (goodsBean.getBuynow().equals("0")) {
+            buyStepID.setBackgroundColor(context.getResources().getColor(R.color.nc_text_dark));
+        } else {
+            buyStepID.setBackgroundColor(context.getResources().getColor(R.color.nc_red));
+        }
         if (goodsBean == null) {
             return;
         }
@@ -731,7 +736,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         if (pwSpec == null) {
             pwSpec = new NCGoodsSpecPopupWindow(getActivity(), incOnNumModify, incOnStringModify, t_id, t_name);
         }
-        pwSpec.setGoodsInfo(goodsName, goodsWapUrl, goodsPrice, goodsStorage, goodsId, ifcart, goodsNum, goodsLimit, is_fcode, is_virtual);
+        pwSpec.setGoodsInfo(goodsName, goodsWapUrl, goodsPrice, goodsStorage, goodsId, ifcart, goodsNum, goodsLimit, is_fcode, is_virtual,goodsBean);
         pwSpec.setSpecInfo(specList, goodsBean.getSpec_name(), goodsBean.getSpec_value(), goodsBean.getGoods_spec());
 
        /* specNameID.setOnClickListener(new View.OnClickListener() {
@@ -914,7 +919,7 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
         //显示商品价格
         if (goodsBean.getPromotion_price() != null && !goodsBean.getPromotion_price().equals("") && !goodsBean.getPromotion_price().equals("null")) {
             goodsPrice = goodsBean.getPromotion_price();
-            goodsPriceID.setText( (goodsBean.getPromotion_price() == null ? "" : goodsBean.getPromotion_price()));
+            goodsPriceID.setText((goodsBean.getPromotion_price() == null ? "" : goodsBean.getPromotion_price()));
             tvGoodsMarketPrice.setText("￥" + (goodsBean.getGoods_price() == null ? "" : goodsBean.getGoods_price()));
             tvGoodsMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             //显示促销
@@ -942,9 +947,8 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                 e.printStackTrace();
             }
         } else {
-          imgrating.setVisibility(View.GONE);
+            imgrating.setVisibility(View.GONE);
         }
-
 
 
         //显示商品销量数量
@@ -1136,8 +1140,8 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                     ShopHelper.showApiError(getActivity(), errorMsg);
                 } else {
                     initSpec(goodsDetails, specList);
-                    if (pwSpec!=null)
-                    pwSpec.showPopupWindow();
+                    if (pwSpec != null)
+                        pwSpec.showPopupWindow();
                 }
                 break;
             case R.id.buyStepID:
@@ -1146,8 +1150,8 @@ public class GoodsDetailFragment extends Fragment implements View.OnClickListene
                         ShopHelper.showApiError(getActivity(), errorMsg);
                     } else {
                         initSpec(goodsDetails, specList);
-                        if (pwSpec!=null)
-                        pwSpec.showPopupWindow();
+                        if (pwSpec != null)
+                            pwSpec.showPopupWindow();
                     }
                 }
                 break;

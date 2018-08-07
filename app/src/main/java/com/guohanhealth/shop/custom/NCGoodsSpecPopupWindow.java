@@ -1,5 +1,6 @@
 package com.guohanhealth.shop.custom;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,15 +19,14 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.guohanhealth.shop.bean.*;
+import com.guohanhealth.shop.common.*;
+import com.guohanhealth.shop.newpackage.ProgressDialog;
+import com.orhanobut.logger.Logger;
 import com.readystatesoftware.viewbadger.BadgeView;
 
 import com.guohanhealth.shop.MainFragmentManager;
 import com.guohanhealth.shop.R;
-import com.guohanhealth.shop.bean.Spec;
-import com.guohanhealth.shop.common.Constants;
-import com.guohanhealth.shop.common.MyShopApplication;
-import com.guohanhealth.shop.common.ShopHelper;
-import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.http.RemoteDataHandler;
 import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ncinterface.INCOnNumModify;
@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * 商品详细页代金券选择弹出窗口
+ * 商品详细页
  *
  * @author dqw
  * @date 2015/6/30.
@@ -103,20 +103,12 @@ public class NCGoodsSpecPopupWindow {
         mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable(context.getResources(), (Bitmap) null));
-        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-            }
+        mPopupWindow.setOnDismissListener(() -> {
         });
 
         //半透明背景
         FrameLayout flBack = (FrameLayout) popupView.findViewById(R.id.flBack);
-        flBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPopupWindow.dismiss();
-            }
-        });
+        flBack.setOnClickListener(view -> mPopupWindow.dismiss());
 
         //商品信息
         ivGoodsImage = (ImageView) popupView.findViewById(R.id.ivGoodsImage);
@@ -166,6 +158,7 @@ public class NCGoodsSpecPopupWindow {
                 T.showShort(context, "库存不足，请重新选择");
                 return;
             }
+
             if (ShopHelper.isLogin(context, myApplication.getLoginKey())) {
                 if (isVirtual.equals("1")) {
                     Intent intent = new Intent(context, VBuyStep1Activity.class);
@@ -176,12 +169,8 @@ public class NCGoodsSpecPopupWindow {
                     intent.putExtra("goods_id", goodsId);
                     context.startActivity(intent);
                 } else {
-                    Intent intent = new Intent(context, BuyStep1Activity.class);
-                    intent.putExtra("is_fcode", isFcode);
-                    intent.putExtra("ifcart", 0);
-                    intent.putExtra("goods_id", goodsId);
-                    intent.putExtra("cart_id", goodsId + "|" + tvAppCommonCount.getText().toString());
-                    context.startActivity(intent);
+
+                    getBuyStep1Data(goodsId + "|" + tvAppCommonCount.getText().toString(), "0");
                 }
             }
         });
@@ -204,6 +193,31 @@ public class NCGoodsSpecPopupWindow {
 
     }
 
+    /**
+     * 加载购买一数据
+     */
+    public void getBuyStep1Data(String cart_id, String ifcart) {
+        String url = Constants.URL_BUY_STEP1;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("key", myApplication.getLoginKey());
+        params.put("cart_id", cart_id);
+        params.put("ifcart", ifcart);
+        params.put("client", "android");
+        RemoteDataHandler.asyncLoginPostDataString(url, params, myApplication, data -> {
+            String json = data.getJson();
+            if (data.getCode() == HttpStatus.SC_OK) {
+                Intent intent = new Intent(context, BuyStep1Activity.class);
+                intent.putExtra("is_fcode", isFcode);
+                intent.putExtra("ifcart", 0);
+                intent.putExtra("goods_id", goodsId);
+                intent.putExtra("cart_id", goodsId + "|" + tvAppCommonCount.getText().toString());
+                intent.putExtra("data", json);
+                context.startActivity(intent);
+            } else {
+                ShopHelper.showApiError(context, json);
+            }
+        });
+    }
 
     /**
      * 添加购物车
@@ -253,7 +267,7 @@ public class NCGoodsSpecPopupWindow {
                         handler.sendMessage(msg);
                     } catch (JSONException e) {
                         Toast.makeText(context, "获取购物车数量失败", Toast.LENGTH_SHORT).show();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
@@ -278,14 +292,18 @@ public class NCGoodsSpecPopupWindow {
      * @param isFcode
      * @param isVirtual
      */
-    public void setGoodsInfo(String goodsName, String goodsImage, String goodsPrice, String goodsStorage, String goodsId, String ifCart, int goodsNum, final int goodsLimit, String isFcode, String isVirtual) {
+    public void setGoodsInfo(String goodsName, String goodsImage, String goodsPrice, String goodsStorage, String goodsId, String ifCart, int goodsNum, final int goodsLimit, String isFcode, String isVirtual, final GoodsDetails goodsBean) {
         this.goodsId = goodsId;
         this.ifCart = ifCart;
         this.goodsNum = goodsNum;
         this.goodsLimit = goodsLimit;
         this.isFcode = isFcode;
         this.isVirtual = isVirtual;
-
+        if (goodsBean.getBuynow().equals("0")) {
+            buyStepID.setBackgroundColor(context.getResources().getColor(R.color.nc_text_dark));
+        } else {
+            buyStepID.setBackgroundColor(context.getResources().getColor(R.color.nc_red));
+        }
         //商品信息显示
         ShopHelper.loadImage(ivGoodsImage, goodsImage);
         tvGoodsName.setText(goodsName);

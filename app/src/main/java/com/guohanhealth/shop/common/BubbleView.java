@@ -1,26 +1,17 @@
 package com.guohanhealth.shop.common;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.TypeEvaluator;
-import android.animation.ValueAnimator;
+import android.animation.*;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import com.guohanhealth.shop.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by Yasic on 2016/6/1.
@@ -126,41 +117,41 @@ public class BubbleView extends RelativeLayout{
         return this;
     }
 
-    public void startAnimation(final int rankWidth, final int rankHeight){
-        Observable.timer(innerDelay, TimeUnit.MILLISECONDS)
-                .repeat((int)(Math.random() * (maxHeartNum - minHeartNum)) + minHeartNum)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        bubbleAnimation(rankWidth, rankHeight);
-                    }
-                });
-    }
+//    public void startAnimation(final int rankWidth, final int rankHeight){
+//        Observable.timer(innerDelay, TimeUnit.MILLISECONDS)
+//                .repeat((int)(Math.random() * (maxHeartNum - minHeartNum)) + minHeartNum)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<Long>() {
+//                    @Override
+//                    public void call(Long aLong) {
+//                        bubbleAnimation(rankWidth, rankHeight);
+//                    }
+//                });
+//    }
 
-    public void startAnimation(final int rankWidth, final int rankHeight, int count){
-        Observable.timer(innerDelay, TimeUnit.MILLISECONDS)
-                .repeat(count)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        bubbleAnimation(rankWidth, rankHeight);
-                    }
-                });
-    }
-
-    public void startAnimation(final int rankWidth, final int rankHeight, int delay, int count){
-        Observable.timer(delay, TimeUnit.MILLISECONDS)
-                .repeat(count)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        bubbleAnimation(rankWidth, rankHeight);
-                    }
-                });
-    }
+//    public void startAnimation(final int rankWidth, final int rankHeight, int count){
+//        Observable.timer(innerDelay, TimeUnit.MILLISECONDS)
+//                .repeat(count)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<Long>() {
+//                    @Override
+//                    public void call(Long aLong) {
+//                        bubbleAnimation(rankWidth, rankHeight);
+//                    }
+//                });
+//    }
+//
+//    public void startAnimation(final int rankWidth, final int rankHeight, int delay, int count){
+//        Observable.timer(delay, TimeUnit.MILLISECONDS)
+//                .repeat(count)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<Long>() {
+//                    @Override
+//                    public void call(Long aLong) {
+//                        bubbleAnimation(rankWidth, rankHeight);
+//                    }
+//                });
+//    }
 
     private void bubbleAnimation(int rankWidth, int rankHeight){
         rankHeight -= bottomPadding;

@@ -49,9 +49,9 @@ public class PayDemoActivity {
      */
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
+
             if (callback != null) {
                 callback.data(msg);
-
                 return;
             }
             switch (msg.what) {

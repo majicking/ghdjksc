@@ -30,13 +30,16 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareConfig;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import rx.Observable;
-import rx.Observer;
 
 
 /**
@@ -317,12 +320,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
 
-        Observable.create((Observable.OnSubscribe<Integer>) subscriber -> {
-            subscriber.onNext(1);
-            subscriber.onCompleted();
-        }).subscribe(new Observer<Integer>() {
+        // 第一步：初始化Observable
+        Observable.create((ObservableOnSubscribe<Integer>) e -> {
+            e.onNext(1);
+            e.onComplete();
+        }).subscribe(new Observer<Integer>() { // 第三步：订阅
+            // 第二步：初始化Observer
+            private int i;
+            private Disposable mDisposable;
+
             @Override
-            public void onNext(Integer integer) {
+            public void onSubscribe(Disposable d) {
+                mDisposable = d;
+            }
+
+            @Override
+            public void onNext( Integer integer) {
                 UMShareAPI.get(LoginActivity.this).deleteOauth(LoginActivity.this, share_media, new UMAuthListener() {
                     @Override
                     public void onStart(SHARE_MEDIA share_media) {
@@ -354,7 +367,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
 
             @Override
-            public void onCompleted() {
+            public void onError( Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
                 UMShareConfig config = new UMShareConfig();
                 config.isNeedAuthOnGetUserInfo(true);
                 UMShareAPI.get(LoginActivity.this).setShareConfig(config);
@@ -418,13 +435,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         Toast.makeText(mActivity, "授权取消" + i, Toast.LENGTH_SHORT).show();
                     }
                 });
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
             }
         });
+
+
     }
 
 

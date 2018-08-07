@@ -13,14 +13,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -39,15 +35,7 @@ import com.guohanhealth.shop.BaseActivity;
 import com.guohanhealth.shop.R;
 import com.guohanhealth.shop.adapter.RpacketListSpinnerAdapter;
 import com.guohanhealth.shop.adapter.StoreVoucherListViewAdapter;
-import com.guohanhealth.shop.bean.AddressDetails;
-import com.guohanhealth.shop.bean.BuyStep1;
-import com.guohanhealth.shop.bean.CartList;
-import com.guohanhealth.shop.bean.InvoiceInFO;
-import com.guohanhealth.shop.bean.ManSongRulesInFo;
-import com.guohanhealth.shop.bean.PlayGoodsList;
-import com.guohanhealth.shop.bean.RpacketInfo;
-import com.guohanhealth.shop.bean.StoreVoucherList;
-import com.guohanhealth.shop.bean.UpdateAddress;
+import com.guohanhealth.shop.bean.*;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.JSONParser;
@@ -60,10 +48,8 @@ import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.common.Utils;
 import com.guohanhealth.shop.custom.CustomDialog;
 import com.guohanhealth.shop.custom.HtmlTextView;
-import com.guohanhealth.shop.http.HttpHelper;
-import com.guohanhealth.shop.http.RemoteDataHandler;
+import com.guohanhealth.shop.http.*;
 import com.guohanhealth.shop.http.RemoteDataHandler.Callback;
-import com.guohanhealth.shop.http.ResponseData;
 import com.guohanhealth.shop.ncinterface.DataCallback;
 import com.guohanhealth.shop.newpackage.OrderActivity;
 import com.guohanhealth.shop.newpackage.ProgressDialog;
@@ -74,6 +60,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.constants.ConstantsAPI;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.zcw.togglebutton.ToggleButton;
 
 import org.apache.http.HttpStatus;
@@ -293,7 +281,12 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         invInfoID.setOnClickListener(this);
         noAreaInfoID.setOnClickListener(this);
         addressInFoLayoutID.setOnClickListener(this);
-
+        //红包
+        llRpacket = (LinearLayout) findViewById(R.id.llRpacket);
+        tvRpacket = (TextView) findViewById(R.id.tvRpacket);
+        tvRpacketButton = (TextView) findViewById(R.id.tvRpacketButton);
+        rpacketListUseable = new ArrayList<RpacketInfo>();
+        tvRpacketButton.setOnClickListener(view -> showRpacketWindow());
         loadingBuyStep1Data();//加载购买一数据
 
 //        availablePredepositID.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -318,48 +311,43 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
 //            }
 //        });
 
-        //红包
-        llRpacket = (LinearLayout) findViewById(R.id.llRpacket);
-        tvRpacket = (TextView) findViewById(R.id.tvRpacket);
-        tvRpacketButton = (TextView) findViewById(R.id.tvRpacketButton);
-        rpacketListUseable = new ArrayList<RpacketInfo>();
-        tvRpacketButton.setOnClickListener(view -> showRpacketWindow());
-        toggle_yck.setOnToggleChanged(on -> {
-            isyck = on;
-            if (on) {
-                if_pd_pay = "1";
-            } else {
-                if_pd_pay = "0";
-            }
-            showEiditPassword();
 
-        });
-        toggle_czk.setOnToggleChanged(on -> {
-            isczk = on;
-
-            if (on) {
-                if_rcb_pay = "1";
-            } else {
-                if_rcb_pay = "0";
-            }
-            showEiditPassword();
-        });
-        toggle_jkd.setOnToggleChanged(on -> {
-            isjkd = on;
-            if (on) {
-                healthbean_pay = "1";
-            } else {
-                healthbean_pay = "0";
-            }
-//                showToast(healthbean_pay);
-            showEiditPassword();
-        });
-        num_yck = (TextView) findViewById(R.id.textview_yck);
-        num_czk = (TextView) findViewById(R.id.textview_czk);
-        num_jkd = (TextView) findViewById(R.id.textview_jkd);
-        view_yck = findViewById(R.id.view_yck);
-        view_czk = findViewById(R.id.view_czk);
-        view_jkd = findViewById(R.id.view_jkd);
+//        toggle_yck.setOnToggleChanged(on -> {
+//            isyck = on;
+//            if (on) {
+//                if_pd_pay = "1";
+//            } else {
+//                if_pd_pay = "0";
+//            }
+//            showEiditPassword();
+//
+//        });
+//        toggle_czk.setOnToggleChanged(on -> {
+//            isczk = on;
+//
+//            if (on) {
+//                if_rcb_pay = "1";
+//            } else {
+//                if_rcb_pay = "0";
+//            }
+//            showEiditPassword();
+//        });
+//        toggle_jkd.setOnToggleChanged(on -> {
+//            isjkd = on;
+//            if (on) {
+//                healthbean_pay = "1";
+//            } else {
+//                healthbean_pay = "0";
+//            }
+////                showToast(healthbean_pay);
+//            showEiditPassword();
+//        });
+//        num_yck = (TextView) findViewById(R.id.textview_yck);
+//        num_czk = (TextView) findViewById(R.id.textview_czk);
+//        num_jkd = (TextView) findViewById(R.id.textview_jkd);
+//        view_yck = findViewById(R.id.view_yck);
+//        view_czk = findViewById(R.id.view_czk);
+//        view_jkd = findViewById(R.id.view_jkd);
 
     }
 
@@ -426,6 +414,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         params.put("key", myApplication.getLoginKey());
         params.put("cart_id", cart_id);
         params.put("ifcart", ifcart);
+        params.put("client", "android");
         if (!StringUtils.isEmpty(distri_id)) {
             params.put("dis_id", distri_id);
         }
@@ -443,8 +432,8 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                     if (buyStep1 != null) {
                         if (buyStep1.getIf_present_gold().equals("1")) {
                             showAgreement();
-                        }else{
-                            isPermission=true;
+                        } else {
+                            isPermission = true;
                         }
                         AddressDetails addressDetails = AddressDetails.newInstanceDetails(buyStep1.getAddress_info());
                         //记录运费hash
@@ -486,39 +475,39 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                             //显示发票信息
                             invInfoID.setText(inv_info.getContent() == null ? "" : inv_info.getContent());
                         }
-                        //显示预存款 充值卡 健康豆
-                        String Available_predeposit = buyStep1.getAvailable_predeposit();
-                        String Available_Rcb_pay = buyStep1.getAvailable_rc_balance();
-                        String member_available_healthbean = buyStep1.getMember_available_healthbean();
-
-
-                        if (buyStep1.getPredeposit_allow().equals("0") &&
-                                buyStep1.getRc_balance_allow().equals("0") &&
-                                buyStep1.getHealthbean_allow().equals("0")) {
-                            howtopay.setVisibility(View.GONE);
-                        } else {
-                            howtopay.setVisibility(View.VISIBLE);
-
-                            if (buyStep1.getPredeposit_allow().equals("0")) {
-                                view_yck.setVisibility(View.GONE);
-                            } else {
-                                num_yck.setText("可用余额:￥" + (Available_predeposit == null || Available_predeposit.equals("") || Available_predeposit.equals("null") ? "0.00" : buyStep1.getAvailable_predeposit()));
-                                view_yck.setVisibility(View.VISIBLE);
-                            }
-
-                            if (buyStep1.getRc_balance_allow().equals("0")) {
-                                view_czk.setVisibility(View.GONE);
-                            } else {
-                                view_czk.setVisibility(View.VISIBLE);
-                                num_czk.setText("可用余额:￥" + (Available_Rcb_pay == null | Available_Rcb_pay.equals("") || Available_Rcb_pay.equals("null") ? "0.00" : buyStep1.getAvailable_rc_balance()));
-                            }
-                            if (buyStep1.getHealthbean_allow().equals("0")) {
-                                view_jkd.setVisibility(View.GONE);
-                            } else {
-                                view_jkd.setVisibility(View.VISIBLE);
-                                num_jkd.setText("可用余额:￥" + (member_available_healthbean == null | member_available_healthbean.equals("") || member_available_healthbean.equals("null") ? "0.00" : buyStep1.getMember_available_healthbean()));
-                            }
-                        }
+//                        //显示预存款 充值卡 健康豆
+//                        String Available_predeposit = buyStep1.getAvailable_predeposit();
+//                        String Available_Rcb_pay = buyStep1.getAvailable_rc_balance();
+//                        String member_available_healthbean = buyStep1.getMember_available_healthbean();
+//
+//
+//                        if (buyStep1.getPredeposit_allow().equals("0") &&
+//                                buyStep1.getRc_balance_allow().equals("0") &&
+//                                buyStep1.getHealthbean_allow().equals("0")) {
+//                            howtopay.setVisibility(View.GONE);
+//                        } else {
+//                            howtopay.setVisibility(View.VISIBLE);
+//
+//                            if (buyStep1.getPredeposit_allow().equals("0")) {
+//                                view_yck.setVisibility(View.GONE);
+//                            } else {
+//                                num_yck.setText("可用余额:￥" + (Available_predeposit == null || Available_predeposit.equals("") || Available_predeposit.equals("null") ? "0.00" : buyStep1.getAvailable_predeposit()));
+//                                view_yck.setVisibility(View.VISIBLE);
+//                            }
+//
+//                            if (buyStep1.getRc_balance_allow().equals("0")) {
+//                                view_czk.setVisibility(View.GONE);
+//                            } else {
+//                                view_czk.setVisibility(View.VISIBLE);
+//                                num_czk.setText("可用余额:￥" + (Available_Rcb_pay == null | Available_Rcb_pay.equals("") || Available_Rcb_pay.equals("null") ? "0.00" : buyStep1.getAvailable_rc_balance()));
+//                            }
+//                            if (buyStep1.getHealthbean_allow().equals("0")) {
+//                                view_jkd.setVisibility(View.GONE);
+//                            } else {
+//                                view_jkd.setVisibility(View.VISIBLE);
+//                                num_jkd.setText("可用余额:￥" + (member_available_healthbean == null | member_available_healthbean.equals("") || member_available_healthbean.equals("null") ? "0.00" : buyStep1.getMember_available_healthbean()));
+//                            }
+//                        }
 
 //
 //                        if (!buyStep1.getHealthbean_allow().equals("1")) {
@@ -548,6 +537,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                     //更新价格UI
                     upPriceUIData();
                 } else {
+                    finish();
                     ShopHelper.showApiError(BuyStep1Activity.this, json);
                 }
             }
@@ -914,7 +904,6 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
      */
     public void sendBuyStep2Data(String password) {
         String url = Constants.URL_BUY_STEP2;
-
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("key", myApplication.getLoginKey());
         params.put("cart_id", cart_id);
@@ -929,7 +918,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         params.put("rcb_pay", if_rcb_pay);
         params.put("healthbean_pay", healthbean_pay);
         params.put("password", TextUtils.isEmpty(password) ? "" : password);
-        params.put("client", "android");
+//        params.put("client", "android");
         if (!rpacketId.equals("")) {
             params.put("rpt", rpacketId + "|" + rpacket);
         }
@@ -963,6 +952,73 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 final String jsons = data.getJson();
                 dismissProgressDialog();
                 if (data.getCode() == HttpStatus.SC_OK) {
+                    if (Utils.getValue("payment_code", jsons).equals("online")) {
+                        Utils.getPaymentListData(Utils.getValue("pay_sn", jsons), o -> {
+                            LogUtils.i(o);
+                            try {
+                                ResponseData data1 = (ResponseData) o;
+                                String json = data1.getJson();
+                                if (data1.getCode() == 200) {
+                                    PayData payData = Utils.getObject(json, PayData.class);
+                                    if (payData != null) {
+                                        popupWindow = Utils.shopPayWindown(mActivity, payData, "", v -> {
+                                            popupWindow.dismiss();
+                                            goOder(1);
+                                        }, v1 -> {
+                                            popupWindow.dismiss();
+                                        });
+
+                                        RxBus.getDefault().register(this, PayResult.class, payResult -> {
+                                            LogUtils.i(payResult.getResult());
+                                            if (payResult.getResultStatus().equals("9000")) {
+                                                showToast("支付成功");
+                                                goOder(0);
+                                                popupWindow.dismiss();
+                                                return;
+                                            } else if (payResult.getResultStatus().equals("8000")) {
+                                                showToast("支付结果确认中");
+                                            } else if (payResult.getResultStatus().equals("6001")) {
+                                                showToast("支付取消");
+                                            } else {
+                                                showToast("订单支付失败");
+                                            }
+
+                                        });
+                                        RxBus.getDefault().register(this, BaseResp.class, resp -> {
+                                            if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+
+                                                if (resp.errCode == 0) {
+                                                    showToast("支付成功");
+                                                    goOder(0);
+                                                    popupWindow.dismiss();
+                                                    return;
+                                                } else if (resp.errCode == -2) {
+                                                    showToast("取消交易");
+                                                    showToast("支付失败");
+                                                }
+                                            }
+                                        });
+
+                                        RxBus.getDefault().register(this, ObjectEvent.class, error -> {
+                                            showToast(error.msg);
+                                        });
+
+
+                                    }
+                                } else if (data1.getCode() == 400) {
+                                    showToast(Utils.getErrorString(json));
+                                }
+                            } catch (Exception e) {
+                                showToast(Utils.getErrorString(e));
+                            }
+                        });
+
+
+                    } else {
+                        showToast("订单生成成功！");
+                        goOder(1);
+                    }
+/*
                     if (JSONParser.getStringFromJsonString("pay_info", jsons).equals("true")) {
                         Utils.loadingPaymentListData(
                                 o -> {
@@ -994,14 +1050,8 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                         );
 
                     } else {
-                        showToast("订单生成成功！");
-                        Intent it = new Intent();
-                        it.putExtra(ORDERNUMBER, 1);
-                        it.putExtra(ORDERTYPE, false);
-                        it.setClass(BuyStep1Activity.this, OrderActivity.class);
-                        startActivity(it);
-                        finish();
-                    }
+                        goOder(1);
+                    }*/
                     //提交订单成功则广播显示购物车数量
                     Intent intent = new Intent(Constants.SHOW_CART_NUM);
                     BuyStep1Activity.this.sendBroadcast(intent);
@@ -1012,6 +1062,22 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.getDefault().unRegister(this);
+    }
+
+
+    private void goOder(int num) {
+        Intent it = new Intent();
+        it.putExtra(ORDERNUMBER, num);
+        it.putExtra(ORDERTYPE, false);
+        it.setClass(BuyStep1Activity.this, OrderActivity.class);
+        startActivity(it);
+        finish();
+    }
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -1020,22 +1086,12 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 if (msg.obj != null) {
                     Toast.makeText(BuyStep1Activity.this, "支付成功", Toast.LENGTH_SHORT).show();
                     LogUtils.i((String) msg.obj);
-                    Intent it = new Intent();
-                    it.putExtra(ORDERNUMBER, 0);
-                    it.putExtra(ORDERTYPE, false);
-                    it.setClass(BuyStep1Activity.this, OrderActivity.class);
-                    startActivity(it);
-                    finish();
+                    goOder(0);
                 }
             } else if (msg.what == 2) {
                 Toast.makeText(BuyStep1Activity.this, "支付成功", Toast.LENGTH_SHORT).show();
                 LogUtils.i((String) msg.obj);
-                Intent it = new Intent();
-                it.putExtra(ORDERNUMBER, 0);
-                it.putExtra(ORDERTYPE, false);
-                it.setClass(BuyStep1Activity.this, OrderActivity.class);
-                startActivity(it);
-                finish();
+                goOder(0);
             }
 
         }
@@ -1081,21 +1137,10 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                     if (TextUtils.equals(resultStatus, "8000")) {
                         Toast.makeText(mActivity, "支付结果确认中",
                                 Toast.LENGTH_SHORT).show();
-                        showToast("订单生成成功！");
-                        Intent it = new Intent();
-                        it.putExtra(ORDERNUMBER, 1);
-                        it.putExtra(ORDERTYPE, false);
-                        it.setClass(BuyStep1Activity.this, OrderActivity.class);
-                        startActivity(it);
-                        finish();
+                        goOder(1);
                     } else {
                         showToast("支付失败，已生成订单！");
-                        Intent it = new Intent();
-                        it.putExtra(ORDERNUMBER, 1);
-                        it.putExtra(ORDERTYPE, false);
-                        it.setClass(BuyStep1Activity.this, OrderActivity.class);
-                        startActivity(it);
-                        finish();
+                        goOder(1);
                     }
                 }
                 break;
@@ -1118,12 +1163,7 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                 payPopupWindow.dismiss();
             }
             showToast("订单生成成功");
-            Intent it = new Intent();
-            it.putExtra(ORDERNUMBER, 1);
-            it.putExtra(ORDERTYPE, false);
-            it.setClass(BuyStep1Activity.this, OrderActivity.class);
-            startActivity(it);
-            finish();
+            goOder(1);
         }
     };
 
@@ -1369,8 +1409,17 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
             }
         } else if (resultCode == Constants.BUNDERMOBILE) {//设置密码
             loadMobile();
+
         } else if (resultCode == Constants.BUNDERPAYPWD) {
-            T.showShort(mActivity, data == null ? "没有设置密码" : data.getStringExtra("pwd"));
+            if (data != null) {
+                if (Utils.isEmpty(data.getStringExtra("pwd"))) {
+                    sendBuyStep2Data(data.getStringExtra("pwd"));
+                } else {
+                    T.showShort(mActivity, "设置密码失败");
+                }
+            }
+
+
         }
 
     }
@@ -1392,18 +1441,19 @@ public class BuyStep1Activity extends BaseActivity implements OnClickListener {
                     showAgreement();
                     return;
                 }
-                if (isyck || isjkd || isczk) {
-                    String password = editPasswordID.getText().toString().trim();
-//                    if (StringUtil.isNoEmpty(password)) {
-                    CheackPassword(password);
-//                    } else {
-//                        showToast("亲,支付密码不能为空哟!");
-//                    }
+                sendBuyStep2Data("");
+//                if (isyck || isjkd || isczk) {
+//                    String password = editPasswordID.getText().toString().trim();
+////                    if (StringUtil.isNoEmpty(password)) {
+//                    CheackPassword(password);
+////                    } else {
+////                        showToast("亲,支付密码不能为空哟!");
+////                    }
+////                } else {
+////                    sendBuyStep2Data("");
 //                } else {
-//                    sendBuyStep2Data("");
-                } else {
-                    sendBuyStep2Data("");
-                }
+//
+//                }
 
                 break;
 

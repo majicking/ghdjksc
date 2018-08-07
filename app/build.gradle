@@ -33,7 +33,12 @@ android {
             keyPassword "shopnc"
             storePassword "shopnc"
         }
-
+        debug {
+            storeFile file("keystore.jks")//这个文件需要放在modele所在根目录下
+            keyAlias "key"
+            keyPassword "shopnc"
+            storePassword "shopnc"
+        }
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -115,7 +120,7 @@ android {
             }
         }
         debug {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
 
         }
 
@@ -140,7 +145,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
+def lib = rootProject.ext.dependencies
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api 'com.android.support:recyclerview-v7:23.+'
@@ -186,7 +191,13 @@ dependencies {
     /*滚动播放*/
     api 'com.github.danylovolokh:list-visibility-utils:0.2.0'
     /*动画*/
-    api 'io.reactivex:rxandroid:1.1.0'
+    //rx
+    implementation lib.rxjava2_rxjava
+    implementation lib.rxjava2_rxandroid
+    implementation lib.rxbinding2_rxbinding
+    //网络请求
+    implementation lib.okhttp3_okhttp
+    implementation lib.okhttp3_logging_interceptor
     api project(':AlivcBubblingAnimationViewRelease1.0.0')
     /**/
     api project(':AlivcLiveRecord-release1.0.0')

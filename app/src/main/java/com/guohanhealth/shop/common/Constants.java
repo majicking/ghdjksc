@@ -490,6 +490,10 @@ public final class Constants {
      * 可用支付方式列表
      */
     public static final String URL_ORDER_PAYMENT_LIST = URL_CONTEXTPATH + "act=member_payment&op=payment_list";
+    /**
+     * 可用支付方式列表
+     */
+    public static final String MEMBER_BUY = URL_CONTEXTPATH + "act=member_buy&op=pay";
 
     /**
      * 虚拟订单可用码列表
@@ -856,6 +860,8 @@ public final class Constants {
     public static final int BUNDERPAYPWD = 10002;
     //订单-绑定手机
     public static final String SETTINGPWD = "settingpwd";
+    //支付订单
+    public static  final  String PAY_NEW=URL_CONTEXTPATH+"act=member_payment&op=pay_new";
 
     public static final int[] BGCOLORS = new int[]{
             Color.parseColor("#ED5564"),

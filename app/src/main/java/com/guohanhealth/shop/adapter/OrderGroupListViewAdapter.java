@@ -23,9 +23,7 @@ import android.widget.Toast;
 
 import com.alipay.sdk.pay.PayResult;
 import com.guohanhealth.shop.R;
-import com.guohanhealth.shop.bean.OrderGoodsList;
-import com.guohanhealth.shop.bean.OrderGroupList;
-import com.guohanhealth.shop.bean.OrderList;
+import com.guohanhealth.shop.bean.*;
 import com.guohanhealth.shop.common.AnimateFirstDisplayListener;
 import com.guohanhealth.shop.common.Constants;
 import com.guohanhealth.shop.common.MyShopApplication;
@@ -33,9 +31,7 @@ import com.guohanhealth.shop.common.ShopHelper;
 import com.guohanhealth.shop.common.SystemHelper;
 import com.guohanhealth.shop.common.T;
 import com.guohanhealth.shop.common.Utils;
-import com.guohanhealth.shop.http.HttpHelper;
-import com.guohanhealth.shop.http.RemoteDataHandler;
-import com.guohanhealth.shop.http.ResponseData;
+import com.guohanhealth.shop.http.*;
 import com.guohanhealth.shop.ncinterface.DataCallback;
 import com.guohanhealth.shop.newpackage.ProgressDialog;
 import com.guohanhealth.shop.ui.mine.OrderDeliverDetailsActivity;
@@ -48,6 +44,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import com.tencent.mm.sdk.constants.ConstantsAPI;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +55,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * 我的订单列表适配器
@@ -123,6 +123,29 @@ public class OrderGroupListViewAdapter extends BaseAdapter {
         this.orderLists = orderLists;
     }
 
+    public <T> List<T> getSpecList(String data, Class<T> c) {
+        List<T> list = new ArrayList<>();
+        if (Utils.isEmpty(data)) {
+            try {
+                JSONObject jsonObject = new JSONObject(data);
+                Iterator<?> itName = jsonObject.keys();
+                while (itName.hasNext()) {
+                    String key = itName.next().toString();
+                    String value = jsonObject.getString(key);
+                    list.add(Utils.getObject(value, c));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+
+    }
+
+    public PopupWindow popupWindow;
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
@@ -162,37 +185,106 @@ public class OrderGroupListViewAdapter extends BaseAdapter {
                 groupList2FU = orderLists.get(position);
 //                menuDialog.show();
 //                loadingPaymentListData();
-                Utils.loadingPaymentListData(
-                        new DataCallback() {
-                            @Override
-                            public void data(Object o) {
-                                ResponseData data = (ResponseData) o;
-                                String json = data.getJson();
-                                if (data.getCode() == HttpStatus.SC_OK) {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(json);
-                                        String JosnObj = jsonObject
-                                                .getString("payment_list");
-                                        JSONArray arr = new JSONArray(JosnObj);
-
-                                        int size = null == arr ? 0 : arr.length();
-                                        if (size < 1) {
-                                            T.showShort(context, "没有支付方式，请后台配置");
+                Utils.getPaymentListData(groupList2FU.getPay_sn(), new DataCallback() {
+                    @Override
+                    public void data(Object o) {
+                        LogUtils.i(o);
+                        try {
+                            ResponseData data = (ResponseData) o;
+                            String json = data.getJson();
+                            if (data.getCode() == 200) {
+                                PayData payData = Utils.getObject(json, PayData.class);
+                                if (payData != null) {
+                                    LogUtils.i(payData.pay_info.pay_sn);
+                                    popupWindow = Utils.shopPayWindown(context, payData, "", v -> {
+                                        popupWindow.dismiss();
+                                    }, v1 -> {
+                                        popupWindow.dismiss();
+                                    });
+                                    RxBus.getDefault().register(this, PayResult.class, payResult -> {
+                                        LogUtils.i(payResult.getResult());
+                                        if (payResult.getResultStatus().equals("9000")) {
+                                            T.showShort(context,"支付成功");
+                                            popupWindow.dismiss();
+                                            Intent mIntent = new Intent(
+                                                    Constants.REFRESHLAYOUT);
+                                            context.sendBroadcast(mIntent);
                                             return;
+                                        } else if (payResult.getResultStatus().equals("8000")) {
+                                            T.showShort(context,"支付结果确认中");
+                                        } else if (payResult.getResultStatus().equals("6001")) {
+                                            T.showShort(context,"支付取消");
+                                        } else {
+                                            T.showShort(context,"订单支付失败");
                                         }
-                                        LogUtils.i("订单号--->" + groupList2FU.getPay_sn());
-                                        OrderPay(size, arr, groupList2FU.getPay_sn());
 
-                                    } catch (JSONException e1) {
-                                        e1.printStackTrace();
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                    }
-                                } else {
-                                    ShopHelper.showApiError(context, json);
+                                    });
+                                    RxBus.getDefault().register(this, BaseResp.class, resp -> {
+                                        if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+
+                                            if (resp.errCode == 0) {
+                                                T.showShort(context,"支付成功");
+                                                Intent mIntent = new Intent(
+                                                        Constants.REFRESHLAYOUT);
+                                                context.sendBroadcast(mIntent);
+                                                popupWindow.dismiss();
+                                                return;
+                                            } else if (resp.errCode == -2) {
+                                                T.showShort(context,"取消交易");
+                                                T.showShort(context,"支付失败");
+                                            }
+                                        }
+
+                                    });
+
+                                    RxBus.getDefault().register(this, ObjectEvent.class, error -> {
+                                        T.showShort(context,error.msg);
+
+                                    });
+
                                 }
+                            } else {
+                                ShopHelper.showMessage(context, Utils.getErrorString(json));
                             }
-                        });
+                        } catch (Exception e) {
+                            ShopHelper.showMessage(context, Utils.getErrorString(e));
+                        }
+                    }
+                });
+
+
+/**
+ *  Utils.loadingPaymentListData(
+ new DataCallback() {
+@Override public void data(Object o) {
+ResponseData data = (ResponseData) o;
+String json = data.getJson();
+if (data.getCode() == HttpStatus.SC_OK) {
+try {
+JSONObject jsonObject = new JSONObject(json);
+String JosnObj = jsonObject
+.getString("payment_list");
+JSONArray arr = new JSONArray(JosnObj);
+
+int size = null == arr ? 0 : arr.length();
+if (size < 1) {
+T.showShort(context, "没有支付方式，请后台配置");
+return;
+}
+LogUtils.i("订单号--->" + groupList2FU.getPay_sn());
+OrderPay(size, arr, groupList2FU.getPay_sn());
+
+} catch (JSONException e1) {
+e1.printStackTrace();
+}catch (Exception e){
+e.printStackTrace();
+}
+} else {
+ShopHelper.showApiError(context, json);
+}
+}
+});
+ **/
 
             }
         });
@@ -310,7 +402,7 @@ public class OrderGroupListViewAdapter extends BaseAdapter {
     PopupWindow.OnDismissListener listener = new PopupWindow.OnDismissListener() {
         @Override
         public void onDismiss() {
-//            showToast("popdismiss");
+//            T.showShort(context,"popdismiss");
             Utils.backgroundAlpha(context, 1f);
             if (payPopupWindow != null && payPopupWindow.isShowing()) {
                 payPopupWindow.dismiss();
